@@ -43,6 +43,7 @@
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/preset-react": "^7.0.0",
+    "aws": "^0.0.3-2",
     "aws-sdk": "^2.774.0",
     "jquery": "^3.4.0",
     "react": "^16.8.6",
