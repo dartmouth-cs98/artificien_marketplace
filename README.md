@@ -14,6 +14,12 @@ This starterpack was built in Tim Tregubov's Web Development class (http://cs52.
 ## Usage
 
 ```
+yarn install
+```
+
+Installs all packages necessary to run the app.
+
+```
 yarn start
 ```
 
@@ -23,7 +29,7 @@ Creates and runs the web app locally (localhost)
 yarn deploy
 ```
 
-Deploys the app to the surge URL specified in the `package.json` file
+Deploys the app to the surge URL specified in the `package.json` file: be sure to change this!
 
 ## Elements
 
