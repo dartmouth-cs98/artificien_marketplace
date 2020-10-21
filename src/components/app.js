@@ -1,31 +1,18 @@
 import '../style.scss';
 import React from 'react';
-// import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Route,
-  NavLink,
   Switch,
 } from 'react-router-dom';
-import Counter from '../containers/counter';
-import Controls from '../containers/controls';
 
+import DataLibrary from './DataLibrary';
+import Models from './Models';
+import SelectData from './SelectData';
+import Welcome from './Welcome';
+import Navbar from './Navbar';
 
-const Welcome = (props) => {
-  return (
-    <div>
-      Welcome
-      <Counter />
-      <Controls />
-    </div>
-  );
-};
-const About = (props) => {
-  return <div> All there is to know about me </div>;
-};
-const Test = (props) => {
-  return <div> ID: {props.match.params.id} </div>;
-};
 const FallBack = (props) => {
   return <div> URL Not Found </div>;
 };
@@ -35,11 +22,12 @@ const App = (props) => {
   return (
     <Router>
       <div>
-        <Nav />
+        <Navbar />
         <Switch>
           <Route exact path="/" component={Welcome} />
-          <Route path="/about" component={About} />
-          <Route exact path="/test/:id" component={Test} />
+          <Route path="/data_library" component={DataLibrary} />
+          <Route exact path="/models" component={Models} />
+          <Route exact path="/select_data" component={SelectData} />
           <Route component={FallBack} />
         </Switch>
       </div>
@@ -47,26 +35,6 @@ const App = (props) => {
   );
 };
 
-const Nav = (props) => {
-  return (
-    <nav>
-      <ul>
-        <li>
-          <NavLink to="/" exact> Home </NavLink>
-        </li>
-        <li>
-          <NavLink to="/about"> About </NavLink>
-        </li>
-        <li>
-          <NavLink to="/test/id1"> test id1 </NavLink>
-        </li>
-        <li>
-          <NavLink to="/test/id2"> test id2 </NavLink>
-        </li>
-      </ul>
-    </nav>
-  );
-};
 
 export default App;
 
