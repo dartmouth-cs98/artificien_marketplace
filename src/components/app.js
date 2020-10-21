@@ -1,6 +1,6 @@
 import '../style.scss';
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Route,
@@ -16,7 +16,6 @@ import Navbar from './Navbar';
 const FallBack = (props) => {
   return <div> URL Not Found </div>;
 };
-
 
 const App = (props) => {
   return (
@@ -35,11 +34,9 @@ const App = (props) => {
   );
 };
 
-
 export default App;
 
 // ReactDOM.render(<App />, document.getElementById('main'));
-
 
 const AWS = require('aws-sdk/dist/aws-sdk-react-native');
 
@@ -56,7 +53,6 @@ AWS.config.update({
 const docClient = new AWS.DynamoDB();
 
 // -------------------------- SCAN Params -----------------------------
-
 
 const scanParams = {
   TableName: 'hello_world_table', // give it your table name
@@ -126,7 +122,6 @@ const delParams = {
 
 // -------------------------- DB FUNCTIONS -----------------------------
 
-
 docClient.scan(scanParams, (err, data) => {
   if (err) {
     console.log(err, err.stack);
@@ -172,7 +167,6 @@ docClient.deleteItem(delParams, (err, data) => {
     console.log(JSON.stringify(data, null, 2));
   }
 });
-
 
 // ------------------Old Constructor --------------------
 // const path = require('path');
