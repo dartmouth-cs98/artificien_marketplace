@@ -2,14 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 // import { Button } from 'reactstrap';
 
-const SelectData = () => {
+const Login = () => {
   return (
     <div>
-      <h1>Select Data Page</h1>
-      <p>To be filled in later</p>
-      <Link to="/data_library">
+      <h1>Login Page</h1>
+      <p>Work In Progress</p>
+      <Link to="/select_data">
         <button type="button">
-          Go to Data Library
+          Go to Select Data Page
         </button>
       </Link>
     </div>
@@ -17,4 +17,4 @@ const SelectData = () => {
   );
 };
 
-export default SelectData;
+export default Login;
