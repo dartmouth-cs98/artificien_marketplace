@@ -8,7 +8,7 @@ AWS.config.update({
   secretAccessKey: 'KnfvGXHXexoA0Sj1Wq+Ox/DlrFOGzC/bv9WIy6cP',
 });
 
-const docClient = new AWS.DynamoDB();
+export const docClient = new AWS.DynamoDB();
 
 // --------------------------CRUD Operations------------------------
 
@@ -65,7 +65,7 @@ function structurePutJSON(tableName, PK, attributes) {
         num_models: {
           N: attributes[0],
         },
-        enterprise_account_email: {
+        enteprise_account_email: {
           S: attributes[1],
         },
         num_users: {
@@ -292,4 +292,14 @@ export async function makeDbRequest(operation, tableName, PK, attributes = null)
   } else { // Update?
     return null;
   }
+}
+
+export function getAllUsers(callback) {
+  docClient.scan({ TableName: 'user_table' }, (err, data) => {
+    if (err) {
+      callback(null, err);
+    } else {
+      callback(data.Items, null);
+    }
+  });
 }
