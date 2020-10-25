@@ -17,6 +17,7 @@ import CreateModel from './CreateModel';
 import UploadModel from './UploadModel';
 import ViewModel from './ViewModel';
 import ViewResults from './ViewResults';
+import * as db from '../actions/databaseCalls';
 
 const FallBack = (props) => {
   return <div> URL Not Found </div>;
