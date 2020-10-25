@@ -22,6 +22,12 @@ const FallBack = (props) => {
   return <div> URL Not Found </div>;
 };
 
+db.makeDbRequest('GET', 'user_table', 'QUILL').then((data) => {
+  console.log(data.Item.user_id);
+}).catch((err) => {
+  console.log(err);
+});
+
 const App = (props) => {
   return (
     <Router>
