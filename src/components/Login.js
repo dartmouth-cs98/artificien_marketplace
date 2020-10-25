@@ -1,19 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-// import { Button } from 'reactstrap';
+import { Input, Button } from 'reactstrap';
+import '../style.scss';
 
 const Login = () => {
   return (
     <div>
-      <h1>Login Page</h1>
-      <p>Work In Progress</p>
-      <Link to="/select_data">
-        <button type="button">
-          Go to Select Data Page
-        </button>
-      </Link>
+      <div>
+        <div>
+          <br />
+          <br />
+          <br />
+          <br />
+          <h1>Login</h1>
+          <br />
+          <br />
+          <div> Email Address</div>
+          <Input placeholder="email@gmail.com" />
+          <div> <i>We will never share your password with anyone else.</i></div>
+          <br />
+          <div> Password</div>
+          <Input type="password" placeholder="password" />
+        </div>
+        <br />
+        <div>
+          <Button>Sign In</Button>
+        </div>
+      </div>
     </div>
-
   );
 };
 
