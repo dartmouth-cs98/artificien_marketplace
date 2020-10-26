@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import '../style.scss';
 // import { Button } from 'reactstrap';
-import { getUser } from '../databaseCalls';
+import { scanUsers } from '../databaseCalls';
 
 class Models extends Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class Models extends Component {
         this.setState({ users: data });
       }
     };
-    getUser(callback, 'QUILL');
+    scanUsers(callback, 'QUILL');
     // putEnterprise(callback, 'fakeEntID', 'fakeemail');
   }
 
