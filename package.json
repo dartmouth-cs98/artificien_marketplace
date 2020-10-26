@@ -8,9 +8,8 @@
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server",
     "test": "eslint src/**.js",
-    "build": "yarn clean; NODE_ENV=production webpack --colors",
-    "clean": "rimraf dist",
-    "deploy": "yarn build; surge -p dist -d shreyas-cs52-starterpack.surge.sh; yarn clean"
+    "build": "webpack --config webpack.config.js",
+    "clean": "rimraf dist"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -42,8 +41,11 @@
     "webpack-dev-server": "^3.3.1"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^0.2.24",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/preset-react": "^7.0.0",
+    "aws-amplify": "^3.3.4",
+    "aws-amplify-react": "^4.2.8",
     "aws-sdk": "^2.775.0",
     "jquery": "^3.4.0",
     "react": "^16.8.6",

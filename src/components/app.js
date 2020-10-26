@@ -7,6 +7,8 @@ import {
   Switch,
 } from 'react-router-dom';
 
+import { withAuthenticator } from '@aws-amplify/ui-react';
+
 import DataLibrary from './DataLibrary';
 import Models from './Models';
 import SelectData from './SelectData';
@@ -43,6 +45,6 @@ const App = (props) => {
   );
 };
 
-export default App;
+export default withAuthenticator(App);
 
 // ReactDOM.render(<App />, document.getElementById('main'));
