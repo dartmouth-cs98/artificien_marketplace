@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import '../style.scss';
 // import { Button } from 'reactstrap';
-import { getAllUsers } from '../databaseCalls';
+import { getUser } from '../databaseCalls';
 
 class Models extends Component {
   constructor(props) {
@@ -15,21 +15,30 @@ class Models extends Component {
 
   componentDidMount() {
     const callback = (data, error) => {
-      if (error) { console.log(error); }
-      this.setState({ users: data });
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(data);
+        this.setState({ users: data });
+      }
     };
-    getAllUsers(callback);
+    getUser(callback, 'QUILL');
+    // putEnterprise(callback, 'fakeEntID', 'fakeemail');
   }
 
   // Render each organization's details as a card
   renderUsers = () => {
     if (!this.state.users) { return 'No users found'; }
 
+    // for array
     const renderedUsers = this.state.users.map((user) => {
       return (
         <button type="button">{ user.enterprise.S }</button>
       );
     });
+
+    // for indiv
+    // const renderedUser = (<button type="button">{ this.state.users.Item.enterprise.S }</button>);
     return renderedUsers;
   }
 

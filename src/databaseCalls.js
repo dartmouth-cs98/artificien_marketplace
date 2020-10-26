@@ -11,290 +11,185 @@ AWS.config.update({
 export const docClient = new AWS.DynamoDB();
 
 // --------------------------CRUD Operations------------------------
-
-function getKey(tableName, PK) {
-  if (tableName === 'enterprise_table') {
-    return {
-      enterprise: {
-        S: PK,
-      },
-    };
-  } else if (tableName === 'user_table') {
-    return {
-      user_id: {
-        S: PK,
-      },
-    };
-  } else if (tableName === 'app_table') {
-    return {
-      app_id: {
-        S: PK,
-      },
-    };
-  } else if (tableName === 'model_table') {
-    return {
-      model_id: {
-        S: PK,
-      },
-    };
-  } else if (tableName === 'dataset_table') {
-    return {
-      dataset_id: {
-        S: PK,
-      },
-    };
-  } else {
-    return null;
-  }
-}
-
 // ----------------------------------------------------------------
 
-function structurePutJSON(tableName, PK, attributes) {
-  const key = getKey(tableName, PK); // table-specific PK
+// function structurePutJSON(tableName, PK, attributes) {
+//   const key = getKey(tableName, PK); // table-specific PK
 
-  if (tableName === 'enterprise_table') {
-    if (attributes.length !== 4) { // WHAT EXACTLY ARE "users"???
-      console.log('Wrong attributes for enterprise');
-      return null;
-    }
+//   if (tableName === 'enterprise_table') {
+//     if (attributes.length !== 4) { // WHAT EXACTLY ARE "users"???
+//       console.log('Wrong attributes for enterprise');
+//       return null;
+//     }
 
-    const putParams = {
-      Item: {
-        key, // currently { {key}}, should be {key **FIX
-        num_models: {
-          N: attributes[0],
-        },
-        enteprise_account_email: {
-          S: attributes[1],
-        },
-        num_users: {
-          N: attributes[2],
-        },
-        users: {
-          S: '',
-        },
-      },
-      TableName: tableName,
-    };
-    return putParams;
-  } else if (tableName === 'user_table') {
-    if (attributes.length !== 8) {
-      console.log('Wrong attributes for user');
-      return null;
-    }
+//     const putParams = {
+//       Item: {
+//         key, // currently { {key}}, should be {key **FIX
+//         num_models: {
+//           N: attributes[0],
+//         },
+//         enteprise_account_email: {
+//           S: attributes[1],
+//         },
+//         num_users: {
+//           N: attributes[2],
+//         },
+//         users: {
+//           S: '',
+//         },
+//       },
+//       TableName: tableName,
+//     };
+//     return putParams;
+//   } else if (tableName === 'user_table') {
+//     if (attributes.length !== 8) {
+//       console.log('Wrong attributes for user');
+//       return null;
+//     }
 
-    const putParams = {
-      Item: {
-        key, // currently { {key}}, should be {key **FIX
-        is_developer: {
-          BOOL: attributes[0],
-        },
-        user_account_email: {
-          S: attributes[1],
-        },
-        name: {
-          S: attributes[2],
-        },
-        enterprise: {
-          S: attributes[3],
-        },
-        models: {
-          M: attributes[4],
-        },
-        bank_info: {
-          M: {
-            bank_number: {
-              N: attributes[5],
-            },
-            bank: {
-              S: attributes[6],
-            },
-          },
-        },
-      },
-      TableName: tableName,
-    };
-    return putParams;
-  } else if (tableName === 'app_table') {
-    if (attributes.length !== 2) {
-      console.log('Wrong attributes for app');
-      return null;
-    }
+//     const putParams = {
+//       Item: {
+//         key, // currently { {key}}, should be {key **FIX
+//         is_developer: {
+//           BOOL: attributes[0],
+//         },
+//         user_account_email: {
+//           S: attributes[1],
+//         },
+//         name: {
+//           S: attributes[2],
+//         },
+//         enterprise: {
+//           S: attributes[3],
+//         },
+//         models: {
+//           M: attributes[4],
+//         },
+//         bank_info: {
+//           M: {
+//             bank_number: {
+//               N: attributes[5],
+//             },
+//             bank: {
+//               S: attributes[6],
+//             },
+//           },
+//         },
+//       },
+//       TableName: tableName,
+//     };
+//     return putParams;
+//   } else if (tableName === 'app_table') {
+//     if (attributes.length !== 2) {
+//       console.log('Wrong attributes for app');
+//       return null;
+//     }
 
-    const putParams = {
-      Item: {
-        key,
-        dataset: {
-          S: attributes[0],
-        },
-        grid: {
-          M: attributes[1],
-        },
-      },
-      TableName: tableName,
-    };
-    return putParams;
-  } else if (tableName === 'model_table') {
-    if (attributes.length !== 2) {
-      console.log('Wrong attributes for model');
-      return null;
-    }
+//     const putParams = {
+//       Item: {
+//         key,
+//         dataset: {
+//           S: attributes[0],
+//         },
+//         grid: {
+//           M: attributes[1],
+//         },
+//       },
+//       TableName: tableName,
+//     };
+//     return putParams;
+//   } else if (tableName === 'model_table') {
+//     if (attributes.length !== 2) {
+//       console.log('Wrong attributes for model');
+//       return null;
+//     }
 
-    const putParams = {
-      Item: {
-        key,
-        active_status: {
-          BOOL: attributes[0],
-        },
-        owner: {
-          S: attributes[1],
-        },
-      },
-      TableName: tableName,
-    };
-    return putParams;
-  } else if (tableName === 'dataset_table') {
-    if (attributes.length !== 5) {
-      console.log('Wrong attributes for model');
-      return null;
-    }
+//     const putParams = {
+//       Item: {
+//         key,
+//         active_status: {
+//           BOOL: attributes[0],
+//         },
+//         owner: {
+//           S: attributes[1],
+//         },
+//       },
+//       TableName: tableName,
+//     };
+//     return putParams;
+//   } else if (tableName === 'dataset_table') {
+//     if (attributes.length !== 5) {
+//       console.log('Wrong attributes for model');
+//       return null;
+//     }
 
-    const putParams = {
-      Item: {
-        key,
-        app: {
-          S: attributes[0],
-        },
-        name: {
-          S: attributes[1],
-        },
-        logo_image_url: {
-          S: attributes[2],
-        },
-        category: {
-          S: attributes[3],
-        },
-        num_devices: {
-          S: attributes[4],
-        },
-      },
-      TableName: tableName,
-    };
-    return putParams;
-  } else {
-    return null;
-  }
-}
-
-// use async/await. Most legible.
-
-// ----------------------------DEL---------------------------------
-function formatDelParams(tableName, PK) {
-  const key = getKey(tableName, PK);
-  const delParams = {
-    Key: { key },
-    ReturnValues: 'ALL_OLD',
-    TableName: tableName,
-  };
-  return delParams;
-}
-
-export function delResponse(tableName, PK) {
-  const params = formatDelParams(tableName, PK); // make JSON
-
-  docClient.deleteItem(params, (err, data) => {
-    if (err) {
-      console.log(err, err.stack);
-      return null;
-    } else {
-      return data; // return server response
-    }
-  });
-}
-
-// ----------------------------GET---------------------------------
-
-function formatGetParams(tableName, PK) {
-  const key = getKey(tableName, PK); // table-specific PK
-  const getParams = {
-    Key: key,
-    TableName: tableName,
-  };
-  return getParams;
-}
-
-export function getResponse(tableName, PK) {
-  const params = formatGetParams(tableName, PK); // format JSON
-  console.log(PK);
-  return new Promise((resolve, reject) => {
-    docClient.getItem(params, (err, data) => { // send and receieve
-      if (err) {
-        console.log(err, err.stack);
-        reject(err);
-      } else {
-        // console.log(data);
-        resolve(data);
-      }
-    });
-  });
-}
+//     const putParams = {
+//       Item: {
+//         key,
+//         app: {
+//           S: attributes[0],
+//         },
+//         name: {
+//           S: attributes[1],
+//         },
+//         logo_image_url: {
+//           S: attributes[2],
+//         },
+//         category: {
+//           S: attributes[3],
+//         },
+//         num_devices: {
+//           S: attributes[4],
+//         },
+//       },
+//       TableName: tableName,
+//     };
+//     return putParams;
+//   } else {
+//     return null;
+//   }
+// }
 
 // ----------------------------PUT---------------------------------
 
-function formatPutParams(tableName, PK, attributes) {
-  const putParams = structurePutJSON(tableName, PK, attributes);
-  return putParams;
-}
+// function formatPutParams(tableName, PK, attributes) {
+//   const putParams = structurePutJSON(tableName, PK, attributes);
+//   return putParams;
+// }
 
-export function putResponse(tableName, PK, attributes) {
-  const params = formatPutParams(tableName, PK, attributes); // format JSON
+// export function putResponse(tableName, PK, attributes) {
+//   const params = formatPutParams(tableName, PK, attributes); // format JSON
 
-  return new Promise((resolve, reject) => {
-    docClient.putItem(params, (err, data) => {
-      if (err) {
-        console.log(err, err.stack);
-        reject(err);
-      } else {
-        console.log(data);
-        resolve(data);
-      }
-    });
-  });
-}
+//   return new Promise((resolve, reject) => {
+//     docClient.putItem(params, (err, data) => {
+//       if (err) {
+//         console.log(err, err.stack);
+//         reject(err);
+//       } else {
+//         console.log(data);
+//         resolve(data);
+//       }
+//     });
+//   });
+// }
 
 // ---------------------------Wrapper-----------------------------
-export async function makeDbRequest(operation, tableName, PK, attributes = null) {
-  if (operation === 'GET') {
-    const resp = await getResponse(tableName, PK).then((data) => {
-      console.log(data);
-      return data;
-    }).catch((error) => {
-      console.log(error, error.stack);
-    });
-    return resp;
-  } else if (operation === 'DEL') {
-    const resp = await delResponse(tableName, PK).then((data) => {
-      console.log(data);
-      return data;
-    }).catch((error) => {
-      console.log(error, error.stack);
-    });
-    return resp;
-  } else if (operation === 'PUT') {
-    const resp = await putResponse(tableName, PK, attributes).then((data) => {
-      console.log(data);
-      return data;
-    }).catch((error) => {
-      console.log(error, error.stack);
-    });
-    return resp;
-  } else { // Update?
-    return null;
-  }
-}
+// export async function makeDbRequest(operation, tableName, PK, attributes = null) {
+//   if (operation === 'PUT') {
+//     const resp = await putResponse(tableName, PK, attributes).then((data) => {
+//       console.log(data);
+//       return data;
+//     }).catch((error) => {
+//       console.log(error, error.stack);
+//     });
+//     return resp;
+//   } else { // Update?
+//     return null;
+//   }
+// }
 
-export function getAllUsers(callback) {
+// ----------------------------------- SCAN -------------------------------------
+export function scanUsers(callback) {
   docClient.scan({ TableName: 'user_table' }, (err, data) => {
     if (err) {
       callback(null, err);
@@ -303,3 +198,348 @@ export function getAllUsers(callback) {
     }
   });
 }
+export function scanModels(callback) {
+  docClient.scan({ TableName: 'model_table' }, (err, data) => {
+    if (err) {
+      callback(null, err);
+    } else {
+      callback(data.Items, null);
+    }
+  });
+}
+export function scanApps(callback) {
+  docClient.scan({ TableName: 'app_table' }, (err, data) => {
+    if (err) {
+      callback(null, err);
+    } else {
+      callback(data.Items, null);
+    }
+  });
+}
+export function scanEnterprises(callback) {
+  docClient.scan({ TableName: 'enterprise_table' }, (err, data) => {
+    if (err) {
+      callback(null, err);
+    } else {
+      callback(data.Items, null);
+    }
+  });
+}
+export function scanDatasets(callback) {
+  docClient.scan({ TableName: 'enterprise_table' }, (err, data) => {
+    if (err) {
+      callback(null, err);
+    } else {
+      callback(data.Items, null);
+    }
+  });
+}
+
+// --------------------------GET-----------------
+
+export function getEnterprise(callback, PK) {
+  const getParams = {
+    Key: { enterprise_id: { S: PK } },
+    TableName: 'enterprise_table',
+  };
+  docClient.getItem(getParams, (err, data) => { // send and receieve
+    if (err) {
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
+
+export function getUser(callback, PK) {
+  const getParams = {
+    Key: { user_id: { S: PK } },
+    TableName: 'user_table',
+  };
+  docClient.getItem(getParams, (err, data) => { // send and receieve
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
+
+export function getApp(callback, PK) {
+  const getParams = {
+    Key: { app_id: { S: PK } },
+    TableName: 'app_table',
+  };
+  docClient.getItem(getParams, (err, data) => { // send and receieve
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
+
+export function getDataset(callback, PK) {
+  const getParams = {
+    Key: { dataset_id: { S: PK } },
+    TableName: 'dataset_table',
+  };
+  docClient.getItem(getParams, (err, data) => { // send and receieve
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
+
+export function getModel(callback, PK) {
+  const getParams = {
+    Key: { model_id: { S: PK } },
+    TableName: 'model_table',
+  };
+  docClient.getItem(getParams, (err, data) => { // send and receieve
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
+
+// ----------------------------DEL---------------------------------
+export function delEnterprise(callback, PK) {
+  const delParams = {
+    Key: { enterprise: { S: PK } },
+    TableName: 'enterprise',
+  };
+  docClient.deleteItem(delParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data); // return server response
+    }
+  });
+}
+
+export function delUser(callback, PK) {
+  const delParams = {
+    Key: { user_id: { S: PK } },
+    TableName: 'user_table',
+  };
+  docClient.deleteItem(delParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data); // return server response
+    }
+  });
+}
+
+export function delApp(callback, PK) {
+  const delParams = {
+    Key: { app_id: { S: PK } },
+    TableName: 'app_table',
+  };
+  docClient.deleteItem(delParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data); // return server response
+    }
+  });
+}
+
+export function delModel(callback, PK) {
+  const delParams = {
+    Key: { model_id: { S: PK } },
+    TableName: 'model_table',
+  };
+  docClient.deleteItem(delParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data); // return server response
+    }
+  });
+}
+
+export function delDataset(callback, PK) {
+  const delParams = {
+    Key: { dataset_id: { S: PK } },
+    TableName: 'dataset_table',
+  };
+  docClient.deleteItem(delParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data); // return server response
+    }
+  });
+}
+
+// ---------------------------- PUT ---------------------------
+
+export async function putEnterprise(callback, PK, email) {
+  const putParams = { // works just fine
+    Item: {
+      enterprise_id: { S: PK },
+      enteprise_account_email: { S: email },
+      num_users: { N: null },
+    },
+    TableName: 'enterprise_table',
+    ReturnConsumedCapacity: 'TOTAL',
+  };
+
+  const callbacktwo = (data, error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data);
+      putParams.Item.num_users.N = String(parseInt(data.Item.num_users.N, 10) + 1);
+
+      console.log(putParams.Item.num_users.N);
+      docClient.putItem(putParams, (err, datatwo) => {
+        if (err) {
+          console.log(err, err.stack);
+          callback(err);
+        } else {
+          callback(datatwo); // return server response
+        }
+      });
+    }
+  };
+
+  getEnterprise(callbacktwo, PK);
+}
+
+export async function putUser(callback, PK, isDev, email, name, enterprise) {
+  const banks = ['Bank of America', 'Citigroup', 'Bank of New York'];
+  // still need: find models user owns through query
+
+  const putParams = { // works just fine
+    Item: {
+      user_id: { S: PK },
+      is_developer: { S: isDev },
+      user_account_email: { S: email },
+      name: { S: name },
+      enterprise: { S: enterprise },
+      bank_info: { bank_number: { N: Math.floor(Math.random() * 9999) }, bank: { S: banks[Math.floor(Math.random() * banks.length)] } },
+    },
+    TableName: 'user_table',
+    ReturnConsumedCapacity: 'TOTAL',
+  };
+
+  docClient.putItem(putParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
+
+export async function putApp(callback, PK, dataset, url) {
+  const putParams = {
+    Item: {
+      app_id: { S: PK },
+      dataset: { S: null },
+      grid: { S: 'test' },
+      logo_image_url: { S: url }, // where to keep this?
+    },
+    TableName: 'app_table',
+    ReturnConsumedCapacity: 'TOTAL',
+  };
+
+  docClient.putItem(putParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data); // return server response
+    }
+  });
+  // get the dataset whose app is this app's PK
+}
+
+export async function putModel(callback, PK, owner) {
+  const date = Date.now();
+  const putParams = { // works just fine
+    Item: {
+      model_id: { S: PK },
+      active_status: { BOOL: true },
+      owner: { S: owner },
+      date_submitted: { S: date }, // not sure if this is in the db schema? should be.
+    },
+    TableName: 'model_table',
+    ReturnConsumedCapacity: 'TOTAL',
+  };
+
+  docClient.putItem(putParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data); // return server response
+    }
+  });
+}
+
+export async function putDataset(callback, PK, app, name, category, numDevices) {
+  const putParams = { // works just fine
+    Item: {
+      dataset_id: { S: PK },
+      app: { S: app },
+      name: { S: name },
+      logo_image_url: { S: null },
+      category: { S: category },
+      num_devices: { N: numDevices },
+
+    },
+    TableName: 'dataset_table',
+    ReturnConsumedCapacity: 'TOTAL',
+  };
+
+  const callbacktwo = (data, error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data);
+      putParams.Item.logo_image_url.S = data.Item.logo_image_url.S;
+      console.log(putParams.Item.logo_image_url.S); // should no longer be null
+
+      docClient.putItem(putParams, (err, datatwo) => {
+        if (err) {
+          console.log(err, err.stack);
+          callback(err);
+        } else {
+          callback(datatwo); // return server response
+        }
+      });
+    }
+  };
+  // query the app table for the logo belonging to the app to whcih this dataset belongs.
+  getApp(callbacktwo, putParams.Item.app.S);
+}
+
+// TODO
+// add secondary key: -> do so in dynamo_db_stack.py
+// - owner for models
+// - app for datasets (^may not work)
+
+// Testing todo
+// update app DB table with one entry that has a "logo_image_url" field
+// test putDataset
+// test putUser for general functionality
+// write update functionality. Specific method only for user table. Only need to update:
+// - bank info, name, email, enterprise.
