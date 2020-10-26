@@ -2,10 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
+import Amplify from 'aws-amplify';
+import awsconfig from './aws-exports';
 
 import reducers from './reducers';
 
 import App from './components/app';
+
+// Configure AWS Amplify
+Amplify.configure(awsconfig);
 
 // this creates the store with the reducers, and does some other stuff to initialize devtools
 // boilerplate to copy, don't have to know
