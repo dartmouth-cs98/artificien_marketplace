@@ -65,7 +65,7 @@ export function scanEnterprises(callback) {
   });
 }
 export function scanDatasets(callback) {
-  docClient.scan({ TableName: 'enterprise_table' }, (err, data) => {
+  docClient.scan({ TableName: 'dataset_table' }, (err, data) => {
     if (err) {
       callback(null, err);
     } else {
@@ -317,7 +317,7 @@ export async function putModel(callback, PK, owner) {
     Item: {
       model_id: { S: PK },
       active_status: { BOOL: true },
-      owner: { S: owner },
+      owner_name: { S: owner },
       date_submitted: { S: date }, // not sure if this is in the db schema? should be.
     },
     TableName: 'model_table',
@@ -371,10 +371,47 @@ export async function putDataset(callback, PK, app, name, category, numDevices) 
   getApp(callbacktwo, putParams.Item.app.S);
 }
 
-// TODO
-// add secondary key: -> do so in dynamo_db_stack.py
-// - owner for models
-// - app for datasets (^may not work)
+// ----------------------- Query ----------------------
+
+export function queryModels(callback, PK) {
+  const queryParams = { // works just fine
+    // AttributesToGet: ['model_id', 'owner'],
+    IndexName: 'owner_name-active_status-index',
+    ScanIndexForward: false,
+    ExpressionAttributeValues: { ':partitionKeyVal': { S: PK } },
+    KeyConditionExpression: 'owner_name = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
+    TableName: 'model_table',
+  };
+
+  docClient.query(queryParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
+
+export function queryDatasets(callback, category) {
+  const queryParams = { // works just fine
+    // AttributesToGet: ['model_id', 'owner'],
+    IndexName: 'category-num_devices-index',
+    ScanIndexForward: false,
+    ExpressionAttributeValues: { ':partitionKeyVal': { S: category } },
+    KeyConditionExpression: 'category = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
+    TableName: 'dataset_table',
+  };
+
+  docClient.query(queryParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
 
 // Testing todo
 // update app DB table with one entry that has a "logo_image_url" field
