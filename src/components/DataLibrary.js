@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
-import * as ReactBootstrap from 'react-bootstrap';// import { Button } from 'reactstrap';
+import * as ReactBootstrap from 'react-bootstrap';
+// import { Button } from 'reactstrap';
+// import DropdownButton from 'react-bootstrap/DropdownButton';
 import { queryDatasets, scanDatasets } from '../databaseCalls';
 
 class DataLibrary extends Component {
@@ -44,14 +46,16 @@ class DataLibrary extends Component {
     const renderedDatasets = this.state.inCategory.Items.map((dataset) => {
       if (dataset.category.S === this.state.sortedCategory) {
         return (
-          <ReactBootstrap.Card style={{ width: '18rem' }}>
-            <ReactBootstrap.Card.Img className="cardimg" variant="top" src="./Artificien.png" />
+          <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
             <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title>{dataset.app.S}</ReactBootstrap.Card.Title>
+              <ReactBootstrap.Card.Title as="h1">{dataset.app.S}</ReactBootstrap.Card.Title>
               <ReactBootstrap.Card.Text>
-                A dataset pulled from {dataset.app.S} on {dataset.num_devices.N} devices
+                {dataset.num_devices.N} Users
               </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button variant="primary">Use this data</ReactBootstrap.Button>
+              <ReactBootstrap.Card.Text>
+                {dataset.category.S}
+              </ReactBootstrap.Card.Text>
+              <ReactBootstrap.Button>View Model</ReactBootstrap.Button>
             </ReactBootstrap.Card.Body>
           </ReactBootstrap.Card>
         );
@@ -62,7 +66,7 @@ class DataLibrary extends Component {
     const renderedDatasetTable = (
       <div>
         <h1 align="left">From Category {this.state.sortedCategory}</h1>
-        <div className="cardHolder">
+        <div>
           {renderedDatasets}
         </div>
       </div>
@@ -77,14 +81,16 @@ class DataLibrary extends Component {
     const renderedDatasets = this.state.outCategory.map((dataset) => {
       if (dataset.category.S !== this.state.sortedCategory) {
         return (
-          <ReactBootstrap.Card style={{ width: '18rem' }}>
-            <ReactBootstrap.Card.Img className="cardimg" variant="top" src="./Artificien.png" />
+          <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
             <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title>{dataset.app.S}</ReactBootstrap.Card.Title>
+              <ReactBootstrap.Card.Title as="h1">{dataset.app.S}</ReactBootstrap.Card.Title>
               <ReactBootstrap.Card.Text>
-                A dataset pulled from {dataset.app.S} on {dataset.num_devices.N} devices
+                {dataset.num_devices.N} Users
               </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button variant="primary">Use this data</ReactBootstrap.Button>
+              <ReactBootstrap.Card.Text>
+                {dataset.category.S}
+              </ReactBootstrap.Card.Text>
+              <ReactBootstrap.Button>View Model</ReactBootstrap.Button>
             </ReactBootstrap.Card.Body>
           </ReactBootstrap.Card>
         );
@@ -94,8 +100,8 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <h1 align="left">Other datasets</h1>
-        <div className="cardHolder">
+        <h1 align="left">Other Datasets</h1>
+        <div>
           {renderedDatasets}
         </div>
       </div>
@@ -105,10 +111,10 @@ class DataLibrary extends Component {
 
   render() {
     return (
-      <div>
+      <div className="body">
         <br />
         <br />
-        <h1 align="center">Data Library</h1>
+        <h1>Data Library</h1>
         <br />
         <div>{this.renderDatasetsInCategory()}</div>
         <div>{this.renderDatasetsOutOfCategory()}</div>
