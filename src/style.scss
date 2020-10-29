@@ -51,3 +51,25 @@ button {
     font-size: 1.2;
     border: 0;
 }
+.cardholder {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card {
+    width: 30%;
+    height: 80%;
+    border: 1px;
+    border-style: solid;
+    margin: 15px;
+    display: inline-block;
+}
+.card-body {
+    margin: 10px;
+}
+
+.cardimg{
+    margin: 2px;
+    width : 70%;
+    height: 20%;
+}
