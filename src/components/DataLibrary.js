@@ -55,7 +55,7 @@ class DataLibrary extends Component {
               <ReactBootstrap.Card.Text>
                 {dataset.category.S}
               </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button>View Model</ReactBootstrap.Button>
+              <ReactBootstrap.Button>Select Data</ReactBootstrap.Button>
             </ReactBootstrap.Card.Body>
           </ReactBootstrap.Card>
         );
@@ -90,7 +90,7 @@ class DataLibrary extends Component {
               <ReactBootstrap.Card.Text>
                 {dataset.category.S}
               </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button>View Model</ReactBootstrap.Button>
+              <ReactBootstrap.Button>Select Data</ReactBootstrap.Button>
             </ReactBootstrap.Card.Body>
           </ReactBootstrap.Card>
         );
