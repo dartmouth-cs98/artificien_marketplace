@@ -12,8 +12,12 @@ class CreateModel extends Component {
 
   render() {
     return (
-      <div>
-        <iframe title="jupyterembedded">https://jupyter.artificien.com/hub/login</iframe>
+      <div className="body">
+        <br />
+        <br />
+        <h1>Data Library</h1>
+        <br />
+        <a href="https://jupyter.artificien.com/hub/login">click here</a>
       </div>
     );
   }
