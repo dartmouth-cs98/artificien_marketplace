@@ -34,12 +34,12 @@ class Models extends Component {
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '1') {
         return (
-          <ReactBootstrap.Card>
-            <ReactBootstrap.Card.Header as="h3">{model.model_id.S}</ReactBootstrap.Card.Header>
+          <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
+            <ReactBootstrap.Card.Header as="h1">{model.model_id.S}</ReactBootstrap.Card.Header>
             <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title>Submitted on {model.date_submitted.S}</ReactBootstrap.Card.Title>
+              <ReactBootstrap.Card.Title>Submission Date: {model.date_submitted.S}</ReactBootstrap.Card.Title>
               <ReactBootstrap.Card.Text>
-                Model {String(Math.floor(Math.random() * 100)).concat('%')} complete
+                Complete: {String(Math.floor(Math.random() * 100)).concat('%')}
               </ReactBootstrap.Card.Text>
               <ReactBootstrap.Button variant="primary">View Model</ReactBootstrap.Button>
             </ReactBootstrap.Card.Body>
@@ -65,8 +65,8 @@ class Models extends Component {
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '0') {
         return (
-          <ReactBootstrap.Card>
-            <ReactBootstrap.Card.Header as="h3">{model.model_id.S}</ReactBootstrap.Card.Header>
+          <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
+            <ReactBootstrap.Card.Header as="h1">{model.model_id.S}</ReactBootstrap.Card.Header>
             <ReactBootstrap.Card.Body>
               <ReactBootstrap.Card.Title>Submitted on {model.date_submitted.S}</ReactBootstrap.Card.Title>
               <ReactBootstrap.Card.Text>
@@ -95,7 +95,7 @@ class Models extends Component {
         <div>
           <br />
           <br />
-          <h1 align="center">Models Page</h1>
+          <h1>Models Page</h1>
           <div>{this.renderModelsInProgress()}</div>
           <div>{this.renderModelsCompleted()}</div>
         </div>

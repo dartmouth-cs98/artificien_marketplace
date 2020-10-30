@@ -1,5 +1,5 @@
 import '../style.scss';
-import React from 'react';
+import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
@@ -24,26 +24,36 @@ const FallBack = (props) => {
   return <div> URL Not Found </div>;
 };
 
-const App = (props) => {
-  return (
-    <Router>
-      <Navbar />
-      <Switch>
-        <Route exact path="/" component={Welcome} />
-        <Route path="/data_library" component={DataLibrary} />
-        <Route exact path="/models" component={Models} />
-        <Route exact path="/select_data" component={SelectData} />
-        <Route exact path="/login" component={Login} />
-        <Route path="/data_library" component={DataLibrary} />
-        <Route exact path="/create_model" component={CreateModel} />
-        <Route exact path="/upload_model" component={UploadModel} />
-        <Route exact path="/view_model" component={ViewModel} />
-        <Route exact path="/view_results" component={ViewResults} />
-        <Route component={FallBack} />
-      </Switch>
-    </Router>
-  );
-};
+// Root component: creates router and displays the navbar
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <Router>
+        <div>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={Welcome} />
+            <Route exact path="/data_library" component={DataLibrary} />
+            <Route exact path="/models" component={Models} />
+            <Route exact path="/select_data" component={SelectData} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/data_library" component={DataLibrary} />
+            <Route exact path="/create_model" component={CreateModel} />
+            <Route exact path="/upload_model" component={UploadModel} />
+            <Route exact path="/view_model" component={ViewModel} />
+            <Route exact path="/view_results" component={ViewResults} />
+            <Route component={FallBack} />
+          </Switch>
+        </div>
+      </Router>
+    );
+  }
+}
 
 export default withAuthenticator(App);
 
