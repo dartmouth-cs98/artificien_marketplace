@@ -16,6 +16,13 @@ const Welcome = () => {
           </i>
         </p>
       </div>
+      <div>
+        <Link to="/Login">
+          <button type="button">
+            Client Login &rarr;
+          </button>
+        </Link>
+      </div>
       <div className="landing" />
     </>
   );

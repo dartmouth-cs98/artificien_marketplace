@@ -1,179 +1,277 @@
 body, html {
-    font-family: "Roboto", sans-serif;
-    position: center;
-    height: 100%;
-    width: 100%;
-    text-align: center;
+  font-family: "Avenir";
+  position: center;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  overflow-x: hidden; // to prevent scrolling from side to side. thank you stack overflow for the advice here!
 }
 
 .logo {
-    float: left;
-    background-image: url('img/Artificien.png'); // team logo
-    width: 10vw;
-    height: 5vw;
-    margin-right: 50px;
-    background-repeat: no-repeat;
-    background-size: contain;
+  float: left;
+  background-image: url('img/NavbarLogo.png'); // team logo
+  width: 5vw;
+  height: 2.5vw;
+  margin-right: 50px;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .landing {
-    background: url('img/LoginPage.png') no-repeat center fixed; // team logo
-    width: 100vw;
-    height: 50vw;
-    top: 100%;
-    // background-color: purple; need to figure out how to add purple coloring!
+  background: url('img/LoginPage.png') no-repeat center fixed; // team logo
+  position: fixed;
+  width: 100vw;
+  height: 50vw;
+  top: 100%;
+  // background-color: purple; need to figure out how to add purple coloring!
+}
+
+.flex-container {
+padding: 0;
+margin: 0;
+display: flex;
 }
 
 .active {
-    color: purple;
+  color: purple;
 }
 
-
 ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: left;
-    margin: 50px;
-    padding: 0;
-    overflow: hidden;
-    background-color: white;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
 }
 
 li {
-    float: left;
+  float: left;
+}
+
+li a {
+  display: block;
+  color: #011627;
+  text-align: center;
+  padding: 14px 50px;
+}
+  display: flex;
+  justify-content: left;
+  // margin: 50px;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+li {
+  float: left;
 }
 li a {
-    display: block;
-    color: black;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
 }
 
 li a:hover {
-    background-color: rgb(184, 179, 179);
-  }
+  background-color: rgb(184, 179, 179);
+}
+
+li a:hover {
+  background-color: rgb(184, 179, 179);
+}
 
 button {
-    background-color: #3C096C; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 20px;
-    text-align: center;
-    margin: 10px;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-}
-.card-holder {
-    width: 100%;
-    display: flex;
-    padding: 0;
-    margin: 0;
-    // justify-content: space-around;
-    // background-color: #011627; // using color from Figma
-    // color: #FDFFFC;
-    // border-radius: 25px;
-    overflow-x: scroll;
-    // justify-content: space-around;
+  background-image: linear-gradient(to right, #580D93, #AF71EB); /* Artificien purple */
+  border: none;
+  border-radius: 15px;
+  color: white;
+  padding: 18px 32px;
+  text-align: center;
+  margin: 10px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }
 
+.block {
+display: block;
+width: 70%;
+margin: auto;
+}
+
+iframe {
+position: left;
+width: 75vw;
+height: 40vw;
+}
+
+.openbtn {
+position: relative;
+bottom: 4px;
+left: 0px;
+}
+
+.openbtn2 {
+position: relative;
+bottom: -1px;
+left: 0px;
+}
+
+.card-holder {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background-color: #011627; // using color from Figma
+  color: #FDFFFC;
+  border-radius: 25px;
+  padding: 0;
+  margin: 0;
+  // justify-content: space-around;
+  // background-color: #011627; // using color from Figma
+  // color: #FDFFFC;
+  // border-radius: 25px;
+  overflow-x: scroll;
+  // justify-content: space-around;
+}
+
+.wrap { 
+-webkit-flex-wrap: wrap;
+flex-wrap: wrap;
+} 
+
 .card {
-    width: 30%;
-    height: 80%;
-    border: 1px;
-    border-style: solid;
-    margin: 15px;
-    display: inline-block;
-    background-color: #041424; 
-    color: white;
-    border-radius: 25px;
+  width: 30%;
+  height: 80%;
+  border: 1px;
+  border-style: solid;
+  margin: 15px;
+  display: inline-block;
+  background-color: #011627; 
+  color: #FDFFFC;
+  border-radius: 25px;
 }
 .card-body {
-    margin: 10px;
+  margin: 10px;
 }
 
 .cardimg{
-    margin: 2px;
-    width : 70%;
-    height: 20%;
+  margin: 2px;
+  width : 70%;
+  height: 20%;
 }
 
+.categoryButton {
+  background-color: #3C096C; // Purple
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  margin: 5px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
 
-  .categoryButton {
-    background-color: #3C096C; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    margin: 5px;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-  }
-
-  .model-holder {
-      display: flex;
-  }
+.model-holder {
+    display: flex;
+}
 
 // ----------------------------------------
-  .overlay {
-    height: 100%;
-    width: 25%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    background-color: rgb(0,0,0);
-    overflow-x: hidden;
-    transition: 0.2s;
+.overlay {
+  height: 100%;
+  width: 25%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: rgb(0,0,0);
+  overflow-x: hidden;
+  transition: 0.2s;
 }
 
 .overlay-content {
-    position: relative;
-    top: 25%;
-    width: 90%;
-    text-align: center;
-    margin-top: 30px;
+  position: relative;
+  top: 25%;
+  width: 90%;
+  text-align: center;
+  margin-top: 30px;
 }
 
 .overlay a {
-    padding: 8px;
-    text-decoration: none;
-    font-size: 36px;
-    color: #818181;
-    display: block;
-    transition: 0.2s;
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block;
+  transition: 0.2s;
 }
 
 .overlay a:hover, .overlay a:focus {
-    color: #f1f1f1;
+  color: #f1f1f1;
 }
 
 .closebtn {
-    position: relative;
-    top: 0px;
-    left: 0px;
+  position: relative;
+  bottom: -5px;
+  left: 0px;
 }
 
 @media screen and (max-height: 450px) {
-  .overlay a {font-size: 20px}
-  .overlay .closebtn {
-    font-size: 40px;
-    top: 15px;
-    right: 35px;
-  }
+.overlay a {font-size: 20px}
+.overlay .closebtn {
+  font-size: 40px;
+  top: 15px;
+  right: 35px;
+}
 }
 
 .overlay h2, .overlay p {
-  color:white;
-  }
+color:white;
+}
 
 .dataLists {
-  display: flex;
-  justify-content: center;
+display: flex;
+justify-content: center;
 }
 
 .attribute {
-  margin: 15px;
+margin: 15px;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+}
+// ----------------------------------------
+.overlay {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0, 0.9);
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.overlay-content {
+  position: relative;
+  top: 25%;
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block;
 }

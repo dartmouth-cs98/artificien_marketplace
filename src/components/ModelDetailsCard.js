@@ -15,11 +15,11 @@ class ModelDetailsCard extends Component {
     return (
       <div>
         <ReactBootstrap.Card key={Math.random()} style={{ width: '22rem' }}>
-          <ReactBootstrap.Card.Header as="h3">{this.props.model_id}</ReactBootstrap.Card.Header>
+          <ReactBootstrap.Card.Header as="h3">{this.props.model_id} on {this.props.dataset}</ReactBootstrap.Card.Header>
           <ReactBootstrap.Card.Body>
             <ReactBootstrap.Card.Title>Submitted on {this.props.date_submitted}</ReactBootstrap.Card.Title>
             <ReactBootstrap.Card.Text>Model {this.props.percent_complete}% complete</ReactBootstrap.Card.Text>
-            <button type="button" className="openbtn" tabIndex={0} onClick={() => this.props.onClick(this.props.model_id)}>Learn More</button>
+            <button type="button" className="openbtn2" tabIndex={0} onClick={() => this.props.onClick(this.props.model_id)}>View Model &rarr;</button>
           </ReactBootstrap.Card.Body>
         </ReactBootstrap.Card>
       </div>

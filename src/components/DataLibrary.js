@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
+import * as ReactBootstrap from 'react-bootstrap';
+// import { Button } from 'reactstrap';
+// import DropdownButton from 'react-bootstrap/DropdownButton';
 import { queryDatasetsMount, queryDatasetsCategory, scanDatasets } from '../databaseCalls';
 import DataLibraryCard from './DataLibraryCard';
 import DatasetSideNav from './DatasetSideNav';
@@ -67,7 +70,7 @@ class DataLibrary extends Component {
     const renderedDatasetTable = (
       <div>
         <h2 align="left">All Datasets</h2>
-        <span className="card-holder">
+        <span className="card-holder wrap">
           {renderedDatasets}
         </span>
       </div>
@@ -120,7 +123,7 @@ class DataLibrary extends Component {
     const renderedDatasetTable = (
       <div>
         <h2 align="left">From Category: <i>{this.state.sortedCategory}</i></h2>
-        <div className="card-holder">
+        <div className="card-holder wrap">
           {renderedDatasets}
         </div>
       </div>
@@ -145,7 +148,7 @@ class DataLibrary extends Component {
     const renderedDatasetTable = (
       <div>
         <h2 align="left">Remaining Datasets</h2>
-        <div className="card-holder">
+        <div className="card-holder wrap">
           {renderedDatasets}
         </div>
       </div>
