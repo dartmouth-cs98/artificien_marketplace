@@ -63,6 +63,9 @@ button {
     border-style: solid;
     margin: 15px;
     display: inline-block;
+    background-color: #041424; 
+    color: white;
+    border-radius: 25px;
 }
 .card-body {
     margin: 10px;
@@ -73,3 +76,22 @@ button {
     width : 70%;
     height: 20%;
 }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: block;
+    position: absolute;
+    background-color: #041424;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
