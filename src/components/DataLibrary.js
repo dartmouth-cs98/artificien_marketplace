@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
-import * as ReactBootstrap from 'react-bootstrap';
 import { queryDatasetsMount, queryDatasetsCategory, scanDatasets } from '../databaseCalls';
+import DataLibraryCard from './DataLibraryCard';
 
 class DataLibrary extends Component {
   constructor(props) {
@@ -13,6 +13,7 @@ class DataLibrary extends Component {
       outCategory: null,
       sortedCategory: null,
       allDatasets: null,
+      categoryIsChosen: false,
     };
   }
 
@@ -21,7 +22,7 @@ class DataLibrary extends Component {
       if (error) {
         console.log(error);
       } else {
-        console.log(data);
+        // console.log(data);
         this.setState({ allDatasets: data });
       }
     };
@@ -34,18 +35,7 @@ class DataLibrary extends Component {
     // for array
     const renderedDatasets = this.state.allDatasets.Items.map((dataset) => {
       return (
-        <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
-          <ReactBootstrap.Card.Body>
-            <ReactBootstrap.Card.Title as="h1">{dataset.app.S}</ReactBootstrap.Card.Title>
-            <ReactBootstrap.Card.Text>
-              {dataset.num_devices.N} Users
-            </ReactBootstrap.Card.Text>
-            <ReactBootstrap.Card.Text>
-              {dataset.category.S}
-            </ReactBootstrap.Card.Text>
-            <ReactBootstrap.Button>Learn More</ReactBootstrap.Button>
-          </ReactBootstrap.Card.Body>
-        </ReactBootstrap.Card>
+        <DataLibraryCard app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} />
       );
     });
 
@@ -68,18 +58,7 @@ class DataLibrary extends Component {
     const renderedDatasets = this.state.inCategory.Items.map((dataset) => {
       if (dataset.category.S === this.state.sortedCategory) {
         return (
-          <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
-            <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title as="h1">{dataset.app.S}</ReactBootstrap.Card.Title>
-              <ReactBootstrap.Card.Text>
-                {dataset.num_devices.N} Users
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Card.Text>
-                {dataset.category.S}
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button>Learn More</ReactBootstrap.Button>
-            </ReactBootstrap.Card.Body>
-          </ReactBootstrap.Card>
+          <DataLibraryCard app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} />
         );
       }
       return null;
@@ -87,7 +66,7 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <h1 align="left">From Category {this.state.sortedCategory}</h1>
+        <h1 align="left">From Category: <i>{this.state.sortedCategory}</i></h1>
         <div>
           {renderedDatasets}
         </div>
@@ -98,23 +77,13 @@ class DataLibrary extends Component {
 
   renderDatasetsOutOfCategory = () => {
     if (!this.state.outCategory) { return 'No datasets found out of category'; }
+    if (!this.state.sortedCategory) { return null; }
 
     // for array
     const renderedDatasets = this.state.outCategory.map((dataset) => {
       if (dataset.category.S !== this.state.sortedCategory) {
         return (
-          <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
-            <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title as="h1">{dataset.app.S}</ReactBootstrap.Card.Title>
-              <ReactBootstrap.Card.Text>
-                {dataset.num_devices.N} Users
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Card.Text>
-                {dataset.category.S}
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button>Learn More</ReactBootstrap.Button>
-            </ReactBootstrap.Card.Body>
-          </ReactBootstrap.Card>
+          <DataLibraryCard app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} />
         );
       }
       return null;
@@ -122,7 +91,7 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <h1 align="left">Other Datasets</h1>
+        <h1 align="left">Remaining Datasets</h1>
         <div>
           {renderedDatasets}
         </div>
@@ -138,7 +107,7 @@ class DataLibrary extends Component {
       if (error) {
         console.log(error);
       } else {
-        console.log(data);
+        // console.log(data);
         this.setState({ inCategory: data });
       }
     };
@@ -148,7 +117,7 @@ class DataLibrary extends Component {
       if (error) {
         console.log(error);
       } else {
-        console.log(data);
+        // console.log(data);
         this.setState({ outCategory: data });
       }
     };
@@ -162,38 +131,15 @@ class DataLibrary extends Component {
     );
   }
 
-  activateLasers = (e) => {
-    e.preventDefault();
-    console.log('bingus');
-  }
-
-  // renderDropDownTest = () => {
-  //   return (
-  //     <ReactBootstrap.DropdownButton menuAlign="right" title="Dropdown right" id="dropdown-menu-align-right">
-  //       <ReactBootstrap.Dropdown.Item eventKey="1">Action</ReactBootstrap.Dropdown.Item>
-  //       <ReactBootstrap.Dropdown.Item eventKey="2">Another action</ReactBootstrap.Dropdown.Item>
-  //       <ReactBootstrap.Dropdown.Item eventKey="3">Something else here</ReactBootstrap.Dropdown.Item>
-  //       <ReactBootstrap.Dropdown.Divider />
-  //       <ReactBootstrap.Dropdown.Item eventKey="4">Separated link</ReactBootstrap.Dropdown.Item>
-  //     </ReactBootstrap.DropdownButton>
-  //   );
-  // }
-
-  // renderDropdown = () => {
-  //   const categoryDropdown = (
-  //     <div className="dropdown">
-  //       <span>Mouse over me</span>
-  //       <div className="dropdown-content">
-  //         <p>Hello World!</p>
-  //       </div>
-  //     </div>
-  //   );
-  //   return categoryDropdown;
-  // }
-
   categoryOnClickFunction = (category) => {
     console.log(category);
-    this.setState({ sortedCategory: category });
+    if (category === 'No Category') {
+      this.setState({ categoryIsChosen: false });
+      this.setState({ sortedCategory: null });
+    } else {
+      this.setState({ categoryIsChosen: true });
+      this.setState({ sortedCategory: category });
+    }
   }
 
   renderUniqueCategories = () => {
@@ -203,11 +149,11 @@ class DataLibrary extends Component {
       return (dataset.category.S);
     });
     const allUniqueCategories = [...new Set(allCategories)];
-    console.log(allUniqueCategories);
+    allUniqueCategories.push('No Category');
 
     const allCategoryButtons = allUniqueCategories.map((category) => {
       return (
-        <button type="button" onClick={() => this.categoryOnClickFunction(category)}>{category}</button>
+        <button type="button" className="categoryButton" onClick={() => this.categoryOnClickFunction(category)}>{category}</button>
       );
     });
 
@@ -216,20 +162,27 @@ class DataLibrary extends Component {
   }
 
   render() {
-    return (
-      <div className="body">
-        <br />
-        <br />
-        <h1>Data Library</h1>
-        {/* <ReactBootstrap.Button variant="primary" onClick={(e) => this.activateLasers(e)}>Activate Lasers</ReactBootstrap.Button> */}
-        <br />
-        {/* <div>{this.renderDatasetsInCategory()}</div>
-        <div>{this.renderDatasetsOutOfCategory()}</div> */}
-        <div>{this.mountDisplayDatasets()}</div>
-        <div>{this.renderUniqueCategories()}</div>
-        <div>{this.renderAllDatasets()}</div>
-      </div>
-    );
+    if (!this.state.categoryIsChosen) {
+      return (
+        <div className="body">
+          <br />
+          <h1>Data Library</h1>
+          <h3><i>Categories</i></h3>
+          <div>{this.renderUniqueCategories()}</div>
+          <div>{this.mountDisplayDatasets()}</div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="body">
+          <br />
+          <h1>Data Library</h1>
+          <h3><i>Categories</i></h3>
+          <div>{this.renderUniqueCategories()}</div>
+          <div>{this.renderAllDatasets()}</div>
+        </div>
+      );
+    }
   }
 }
 

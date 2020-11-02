@@ -1,128 +1,92 @@
-import React, { Component } from 'react';
+// import React, { Component } from 'react';
+import React from 'react';
+
 // import { Link } from 'react-router-dom';
-import '../style.scss';
-import * as ReactBootstrap from 'react-bootstrap';
-// import { Button } from 'reactstrap';
-// import DropdownButton from 'react-bootstrap/DropdownButton';
-import { queryDatasets, scanDatasets } from '../databaseCalls';
-
 // import { Button } from 'reactstrap';
 
-class SelectData extends Component {
+// class SelectData extends Component {
+//   constructor(props) {
+//     super(props);
+
+//     this.state = {
+//     };
+//   }
+
+//   render() {
+//     return (
+//       <div>
+//         <h1>Select Data Page</h1>
+//         <p>To be filled in later</p>
+//         <Link to='/data_library'>
+//           <button type='button'>
+//             Go to Data Library
+//           </button>
+//         </Link>
+//       </div>
+//     );
+//   }
+// }
+
+class Test extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      inCategory: null,
-      outCategory: null,
-      sortedCategory: 'Health',
+      style: {
+        width: 0,
+      },
     };
+    this.openNav = this.openNav.bind(this);
+    this.closeNav = this.closeNav.bind(this);
   }
 
   componentDidMount() {
-    const callbackQuery = (data, error) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(data);
-        this.setState({ inCategory: data });
-      }
-    };
-    queryDatasets(callbackQuery, this.state.sortedCategory);
-
-    const callbackScan = (data, error) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(data);
-        this.setState({ outCategory: data });
-      }
-    };
-    scanDatasets(callbackScan);
+    document.addEventListener('click', this.closeNav);
   }
 
-  renderDatasetsInCategory = () => {
-    if (!this.state.inCategory) { return 'No datasets found in category'; }
-
-    // for array
-    const renderedDatasets = this.state.inCategory.Items.map((dataset) => {
-      if (dataset.category.S === this.state.sortedCategory) {
-        return (
-          <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
-            <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title as="h1">{dataset.app.S}</ReactBootstrap.Card.Title>
-              <ReactBootstrap.Card.Text>
-                {dataset.num_devices.N} Users
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Card.Text>
-                {dataset.category.S}
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button>Select Data</ReactBootstrap.Button>
-            </ReactBootstrap.Card.Body>
-          </ReactBootstrap.Card>
-        );
-      }
-      return null;
-    });
-
-    const renderedDatasetTable = (
-      <div>
-        <h1 align="left">From Category {this.state.sortedCategory}</h1>
-        <div>
-          {renderedDatasets}
-        </div>
-      </div>
-    );
-    return renderedDatasetTable;
+  componentWillUnmount() {
+    document.removeEventListener('click', this.closeNav);
   }
 
-  renderDatasetsOutOfCategory = () => {
-    if (!this.state.outCategory) { return 'No datasets found out of category'; }
+  openNav() {
+    this.setState({ style: { width: 350 } });
+    console.log('bingus');
+    // document.body.style.backgroundColor = 'rgba(0,0,0,0.2)';
+    // document.addEventListener('click', this.closeNav);
+  }
 
-    // for array
-    const renderedDatasets = this.state.outCategory.map((dataset) => {
-      if (dataset.category.S !== this.state.sortedCategory) {
-        return (
-          <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
-            <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title as="h1">{dataset.app.S}</ReactBootstrap.Card.Title>
-              <ReactBootstrap.Card.Text>
-                {dataset.num_devices.N} Users
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Card.Text>
-                {dataset.category.S}
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button>Select Data</ReactBootstrap.Button>
-            </ReactBootstrap.Card.Body>
-          </ReactBootstrap.Card>
-        );
-      }
-      return null;
-    });
-
-    const renderedDatasetTable = (
-      <div>
-        <h1 align="left">Other Datasets</h1>
-        <div>
-          {renderedDatasets}
-        </div>
-      </div>
-    );
-    return renderedDatasetTable;
+  closeNav() {
+    document.removeEventListener('click', this.closeNav);
+    console.log('bongo');
+    const style = { width: 0 };
+    this.setState({ style });
+    document.body.style.backgroundColor = '#F3F3F3';
   }
 
   render() {
     return (
-      <div className="body">
-        <br />
-        <br />
-        <h1>New Model</h1>
-        <br />
-        <div>{this.renderDatasetsInCategory()}</div>
-        <div>{this.renderDatasetsOutOfCategory()}</div>
+      <div>
+        <h2>Fullscreen Overlay Nav Example</h2>
+        <p>Click on the element below to open the fullscreen overlay navigation menu.</p>
+        <p>In this example, the navigation menu will slide in, from right to left:</p>
+        <span role="button" className="openbtn" tabIndex={0} style={{ fontSize: 30 }} onClick={this.openNav}> open</span>
+        <div className="overlay" style={this.state.style}>
+          <div className="sidenav-container">
+            <button type="button" className="closebtn" onClick={this.closeNav}>x</button>
+            <div className="text-center">
+              <h2>Form</h2>
+              <p>This is a sample input form</p>
+            </div>
+            <div className="list-group">
+              {/* your form component goes here */}
+              {this.props.children}
+            </div>
+          </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react.min.js" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-dom.min.js" />
       </div>
     );
   }
 }
 
-export default SelectData;
+export default Test;
