@@ -11,7 +11,7 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
 
 import DataLibrary from './DataLibrary';
 import Models from './Models';
-import Test from './SelectData';
+import SelectData from './SelectData';
 import Welcome from './Welcome';
 import Navbar from './Navbar';
 import Login from './Login';
@@ -32,7 +32,7 @@ const App = (props) => {
         <Route exact path="/" component={Welcome} />
         <Route path="/data_library" component={DataLibrary} />
         <Route exact path="/models" component={Models} />
-        <Route exact path="/select_data" component={Test} />
+        <Route exact path="/select_data" component={SelectData} />
         <Route exact path="/login" component={Login} />
         <Route path="/data_library" component={DataLibrary} />
         <Route exact path="/create_model" component={CreateModel} />

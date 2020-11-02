@@ -13,14 +13,16 @@ class DataLibraryCard extends Component {
 
   render() {
     return (
-      <ReactBootstrap.Card key={Math.random()} className="cardholder" style={{ width: '22rem' }}>
-        <ReactBootstrap.Card.Body>
-          <ReactBootstrap.Card.Title as="h1">{this.props.app}</ReactBootstrap.Card.Title>
-          <ReactBootstrap.Card.Text>{this.props.num_devices} Users</ReactBootstrap.Card.Text>
-          <ReactBootstrap.Card.Text>Category: {this.props.category}</ReactBootstrap.Card.Text>
-          <ReactBootstrap.Button>Learn More</ReactBootstrap.Button>
-        </ReactBootstrap.Card.Body>
-      </ReactBootstrap.Card>
+      <div>
+        <ReactBootstrap.Card key={Math.random()} style={{ width: '22rem' }}>
+          <ReactBootstrap.Card.Body>
+            <ReactBootstrap.Card.Title as="h1">{this.props.app}</ReactBootstrap.Card.Title>
+            <ReactBootstrap.Card.Text>{this.props.num_devices} Users</ReactBootstrap.Card.Text>
+            <ReactBootstrap.Card.Text>Category: {this.props.category}</ReactBootstrap.Card.Text>
+            <ReactBootstrap.Button>Learn More</ReactBootstrap.Button>
+          </ReactBootstrap.Card.Body>
+        </ReactBootstrap.Card>
+      </div>
     );
   }
 }

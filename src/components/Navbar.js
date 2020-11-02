@@ -15,7 +15,7 @@ class Navbar extends Component {
       <>
         <div className="logo" active />
         <nav>
-          <ul>
+          <ul className="nav-ul">
             <li>
               <NavLink to="/" exact> Home </NavLink>
             </li>
