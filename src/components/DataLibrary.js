@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import '../style.scss';
 import { queryDatasetsMount, queryDatasetsCategory, scanDatasets } from '../databaseCalls';
 import DataLibraryCard from './DataLibraryCard';
+import DatasetSideNav from './DatasetSideNav';
 
 class DataLibrary extends Component {
   constructor(props) {
@@ -14,7 +15,13 @@ class DataLibrary extends Component {
       sortedCategory: null,
       allDatasets: null,
       categoryIsChosen: false,
+      style: {
+        width: 0,
+      },
+      clickedDataset: null,
     };
+    this.openNav = this.openNav.bind(this);
+    this.closeNav = this.closeNav.bind(this);
   }
 
   componentDidMount() {
@@ -22,11 +29,26 @@ class DataLibrary extends Component {
       if (error) {
         console.log(error);
       } else {
-        // console.log(data);
         this.setState({ allDatasets: data });
       }
     };
     queryDatasetsMount(callbackMount);
+    document.addEventListener('click', this.closeNav);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.closeNav);
+  }
+
+  categoryOnClickFunction = (category) => {
+    console.log(category);
+    if (category === 'No Category') {
+      this.setState({ categoryIsChosen: false });
+      this.setState({ sortedCategory: null });
+    } else {
+      this.setState({ categoryIsChosen: true });
+      this.setState({ sortedCategory: category });
+    }
   }
 
   mountDisplayDatasets = () => {
@@ -35,7 +57,7 @@ class DataLibrary extends Component {
     // for array
     const renderedDatasets = this.state.allDatasets.Items.map((dataset) => {
       return (
-        <DataLibraryCard app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} />
+        <DataLibraryCard key={Math.random()} onClick={this.openNav} app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} dataset_id={dataset.dataset_id.S} />
       );
     });
 
@@ -50,7 +72,18 @@ class DataLibrary extends Component {
     return renderedDatasetTable;
   }
 
-  // original componentDidMount method:
+  openNav(datasetId) {
+    this.setState({ style: { width: 350 } });
+    console.log(datasetId);
+    this.setState({ clickedDataset: datasetId });
+  }
+
+  closeNav() {
+    document.removeEventListener('click', this.closeNav);
+    console.log('bongo');
+    const style = { width: 0 };
+    this.setState({ style });
+  }
 
   renderDatasetsInCategory = () => {
     if (!this.state.inCategory) { return 'No datasets found in category'; }
@@ -59,7 +92,7 @@ class DataLibrary extends Component {
     const renderedDatasets = this.state.inCategory.Items.map((dataset) => {
       if (dataset.category.S === this.state.sortedCategory) {
         return (
-          <DataLibraryCard app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} />
+          <DataLibraryCard key={Math.random()} onClick={this.openNav} app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} dataset_id={dataset.dataset_id.S} />
         );
       }
       return null;
@@ -84,7 +117,7 @@ class DataLibrary extends Component {
     const renderedDatasets = this.state.outCategory.map((dataset) => {
       if (dataset.category.S !== this.state.sortedCategory) {
         return (
-          <DataLibraryCard app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} />
+          <DataLibraryCard key={Math.random()} onClick={this.openNav} app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} dataset_id={dataset.dataset_id.S} />
         );
       }
       return null;
@@ -132,17 +165,6 @@ class DataLibrary extends Component {
     );
   }
 
-  categoryOnClickFunction = (category) => {
-    console.log(category);
-    if (category === 'No Category') {
-      this.setState({ categoryIsChosen: false });
-      this.setState({ sortedCategory: null });
-    } else {
-      this.setState({ categoryIsChosen: true });
-      this.setState({ sortedCategory: category });
-    }
-  }
-
   renderUniqueCategories = () => {
     if (!this.state.allDatasets) { return ('No datasets found'); }
 
@@ -163,6 +185,17 @@ class DataLibrary extends Component {
   }
 
   render() {
+    let clickedDataset = null;
+    if (this.state.clickedDataset) {
+      console.log('finding clicked content');
+      for (let i = 0; i < this.state.allDatasets.Items.length; i += 1) {
+        // console.log(this.state.allDatasets.Items[i]);
+        if (this.state.allDatasets.Items[i].dataset_id.S === this.state.clickedDataset) {
+          console.log('found it');
+          clickedDataset = this.state.allDatasets.Items[i];
+        }
+      }
+    }
     if (!this.state.categoryIsChosen) {
       return (
         <div className="body">
@@ -171,6 +204,9 @@ class DataLibrary extends Component {
           <div>{this.renderUniqueCategories()}</div>
           <br />
           <div>{this.mountDisplayDatasets()}</div>
+          <div>
+            <DatasetSideNav content={clickedDataset} onClick={this.closeNav} style={this.state.style} />
+          </div>
         </div>
       );
     } else {
@@ -181,6 +217,9 @@ class DataLibrary extends Component {
           <div>{this.renderUniqueCategories()}</div>
           <br />
           <div>{this.renderAllDatasets()}</div>
+          <div>
+            <DatasetSideNav content={clickedDataset} onClick={this.closeNav} style={this.state.style} />
+          </div>
         </div>
       );
     }

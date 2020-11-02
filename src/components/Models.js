@@ -15,6 +15,7 @@ class Models extends Component {
       style: {
         width: 0,
       },
+      clickedModel: null,
     };
     this.openNav = this.openNav.bind(this);
     this.closeNav = this.closeNav.bind(this);
@@ -37,10 +38,10 @@ class Models extends Component {
     document.removeEventListener('click', this.closeNav);
   }
 
-  openNav() {
+  openNav(modelId) {
     this.setState({ style: { width: 350 } });
-    console.log('bingus');
-    // document.addEventListener('click', this.closeNav);
+    console.log(modelId);
+    this.setState({ clickedModel: modelId });
   }
 
   closeNav() {
@@ -48,7 +49,6 @@ class Models extends Component {
     console.log('bongo');
     const style = { width: 0 };
     this.setState({ style });
-    // document.body.style.backgroundColor = '#F3F3F3';
   }
 
   renderModelsInProgress = () => {
@@ -110,15 +110,27 @@ class Models extends Component {
   }
 
   render() {
+    let clickedModel = null;
+    if (this.state.clickedModel) {
+      console.log('finding clicked content');
+      console.log(this.state.models.Items.length);
+      for (let i = 0; i < this.state.models.Items.length; i += 1) {
+        console.log(this.state.models.Items[i]);
+        if (this.state.models.Items[i].model_id.S === this.state.clickedModel) {
+          console.log('found it');
+          clickedModel = this.state.models.Items[i];
+        }
+      }
+    }
     return (
       <div className="body">
         <div>
-          <h1 align="center">Models Page</h1>
+          <h1 align="center">My Models</h1>
           <div>{this.renderModelsInProgress()}</div>
           <div>{this.renderModelsCompleted()}</div>
         </div>
         <div>
-          <ModelSideNav onClick={this.closeNav} style={this.state.style} />
+          <ModelSideNav content={clickedModel} onClick={this.closeNav} style={this.state.style} />
         </div>
       </div>
     );
