@@ -2,6 +2,7 @@ body, html {
     font-family: "Roboto", sans-serif;
     position: center;
     height: 100%;
+    width: 100%;
     text-align: center;
 }
 
@@ -10,6 +11,7 @@ body, html {
     background-image: url('img/Artificien.png'); // team logo
     width: 10vw;
     height: 5vw;
+    margin-right: 50px;
     background-repeat: no-repeat;
     background-size: contain;
 }
@@ -63,9 +65,11 @@ button {
     display: inline-block;
     font-size: 16px;
 }
-.cardholder {
+.card-holder {
+    width: 100%;
     display: flex;
-    justify-content: space-around;
+    overflow-x: scroll;
+    // justify-content: space-around;
 }
 
 .card {
@@ -101,10 +105,15 @@ button {
     display: inline-block;
     font-size: 16px;
   }
+
+  .model-holder {
+      display: flex;
+  }
+
 // ----------------------------------------
   .overlay {
     height: 100%;
-    width: 0;
+    width: 25%;
     position: fixed;
     z-index: 1;
     top: 0;

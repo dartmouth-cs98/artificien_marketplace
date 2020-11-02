@@ -41,9 +41,10 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <div>
+        <h2 align="left">All Datasets</h2>
+        <span className="card-holder">
           {renderedDatasets}
-        </div>
+        </span>
       </div>
     );
     return renderedDatasetTable;
@@ -66,8 +67,8 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <h1 align="left">From Category: <i>{this.state.sortedCategory}</i></h1>
-        <div>
+        <h2 align="left">From Category: <i>{this.state.sortedCategory}</i></h2>
+        <div className="card-holder">
           {renderedDatasets}
         </div>
       </div>
@@ -91,8 +92,8 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <h1 align="left">Remaining Datasets</h1>
-        <div>
+        <h2 align="left">Remaining Datasets</h2>
+        <div className="card-holder">
           {renderedDatasets}
         </div>
       </div>
@@ -165,20 +166,20 @@ class DataLibrary extends Component {
     if (!this.state.categoryIsChosen) {
       return (
         <div className="body">
-          <br />
           <h1>Data Library</h1>
           <h3><i>Categories</i></h3>
           <div>{this.renderUniqueCategories()}</div>
+          <br />
           <div>{this.mountDisplayDatasets()}</div>
         </div>
       );
     } else {
       return (
         <div className="body">
-          <br />
           <h1>Data Library</h1>
           <h3><i>Categories</i></h3>
           <div>{this.renderUniqueCategories()}</div>
+          <br />
           <div>{this.renderAllDatasets()}</div>
         </div>
       );
