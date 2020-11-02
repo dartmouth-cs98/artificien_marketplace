@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
-// import { Button } from 'reactstrap';
-import * as ReactBootstrap from 'react-bootstrap';// import { Button } from 'reactstrap';
 import { queryModels } from '../databaseCalls';
+import ModelDetailsCard from './ModelDetailsCard';
 
 class Models extends Component {
   constructor(props) {
@@ -11,6 +10,7 @@ class Models extends Component {
 
     this.state = {
       models: null,
+      current_user: 'QUILL',
     };
   }
 
@@ -23,7 +23,7 @@ class Models extends Component {
         this.setState({ models: data });
       }
     };
-    queryModels(callback, 'QUILL');
+    queryModels(callback, this.state.current_user);
   }
 
   // Render each organization's details as a card
@@ -34,16 +34,7 @@ class Models extends Component {
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '1') {
         return (
-          <ReactBootstrap.Card>
-            <ReactBootstrap.Card.Header as="h3">{model.model_id.S}</ReactBootstrap.Card.Header>
-            <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title>Submitted on {model.date_submitted.S}</ReactBootstrap.Card.Title>
-              <ReactBootstrap.Card.Text>
-                Model {String(Math.floor(Math.random() * 100)).concat('%')} complete
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button variant="primary">View Model</ReactBootstrap.Button>
-            </ReactBootstrap.Card.Body>
-          </ReactBootstrap.Card>
+          <ModelDetailsCard key={Math.random()} model_id={model.model_id.S} date_submitted={model.date_submitted.S} in_progress="true" />
         );
       }
       return null;
@@ -65,16 +56,7 @@ class Models extends Component {
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '0') {
         return (
-          <ReactBootstrap.Card>
-            <ReactBootstrap.Card.Header as="h3">{model.model_id.S}</ReactBootstrap.Card.Header>
-            <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title>Submitted on {model.date_submitted.S}</ReactBootstrap.Card.Title>
-              <ReactBootstrap.Card.Text>
-                Model 100% complete
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button variant="primary">View Model</ReactBootstrap.Button>
-            </ReactBootstrap.Card.Body>
-          </ReactBootstrap.Card>
+          <ModelDetailsCard key={Math.random()} model_id={model.model_id.S} date_submitted={model.date_submitted.S} in_progress="false" />
         );
       }
       return null;
@@ -98,6 +80,20 @@ class Models extends Component {
           <h1 align="center">Models Page</h1>
           <div>{this.renderModelsInProgress()}</div>
           <div>{this.renderModelsCompleted()}</div>
+        </div>
+        <span role="button" className="openbtn" tabIndex={0} style={{ fontSize: 30 }} onClick={this.openNav}> open</span>
+        <div className="overlay" style={this.state.style}>
+          <div className="sidenav-container">
+            <button type="button" className="closebtn" onClick={this.closeNav}>x</button>
+            <div className="text-center">
+              <h2>Form</h2>
+              <p>This is a sample input form</p>
+            </div>
+            <div className="list-group">
+              {/* your form component goes here */}
+              {this.props.children}
+            </div>
+          </div>
         </div>
       </div>
 
