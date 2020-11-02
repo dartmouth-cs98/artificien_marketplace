@@ -19,7 +19,7 @@ class ModelDetailsCard extends Component {
           <ReactBootstrap.Card.Body>
             <ReactBootstrap.Card.Title>Submitted on {this.props.date_submitted}</ReactBootstrap.Card.Title>
             <ReactBootstrap.Card.Text>Model {this.props.percent_complete}% complete</ReactBootstrap.Card.Text>
-            <button type="button" className="openbtn" tabIndex={0} onClick={this.props.onClick}>Learn More</button>
+            <button type="button" className="openbtn" tabIndex={0} onClick={() => this.props.onClick(this.props.model_id)}>Learn More</button>
           </ReactBootstrap.Card.Body>
         </ReactBootstrap.Card>
       </div>

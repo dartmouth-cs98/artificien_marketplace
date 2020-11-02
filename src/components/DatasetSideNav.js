@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
 
-class ModelSideNav extends Component {
+class DatasetSideNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,11 +13,11 @@ class ModelSideNav extends Component {
     if (!this.props.content) {
       return (
         <div className="overlay" style={this.props.style}>
+          <button type="button" className="closebtn" onClick={this.props.onClick}>-</button>
           <div className="sidenav-container">
-            <button type="button" className="closebtn" onClick={this.props.onClick}>x</button>
             <div className="text-center">
-              <h2>Blar</h2>
-              <p>Model details go here</p>
+              <h2>Dataset X</h2>
+              <p>Dataset details go here</p>
             </div>
             <div className="list-group" />
           </div>
@@ -26,14 +26,13 @@ class ModelSideNav extends Component {
     } else {
       return (
         <div className="overlay" style={this.props.style}>
+          <button type="button" className="closebtn" onClick={this.props.onClick}>x</button>
           <div className="sidenav-container">
-            <button type="button" className="closebtn" onClick={this.props.onClick}>x</button>
             <div className="text-center">
-              <h2>{this.props.content.model_id.S}</h2>
-              <p>Model started: {this.props.content.date_submitted.S}</p>
-              <p>Training on: {this.props.content.dataset.S}</p>
-              <p>Predicting: {this.props.content.attribute_predicted.S}</p>
-              <p>Percent Complete: {this.props.content.percent_complete.N}</p>
+              <h2>{this.props.content.dataset_id.S}</h2>
+              <p>Pulled From: {this.props.content.app.S}</p>
+              <p>Category: {this.props.content.category.S}</p>
+              <p>Predictable Attributes: {this.props.content.predictable_attributes.S}</p>
             </div>
             <div className="list-group" />
           </div>
@@ -43,4 +42,4 @@ class ModelSideNav extends Component {
   }
 }
 
-export default ModelSideNav;
+export default DatasetSideNav;

@@ -19,7 +19,7 @@ class DataLibraryCard extends Component {
             <ReactBootstrap.Card.Title as="h1">{this.props.app}</ReactBootstrap.Card.Title>
             <ReactBootstrap.Card.Text>{this.props.num_devices} Users</ReactBootstrap.Card.Text>
             <ReactBootstrap.Card.Text>Category: {this.props.category}</ReactBootstrap.Card.Text>
-            <ReactBootstrap.Button>Learn More</ReactBootstrap.Button>
+            <button type="button" className="openbtn" tabIndex={0} onClick={() => this.props.onClick(this.props.dataset_id)}>Learn More</button>
           </ReactBootstrap.Card.Body>
         </ReactBootstrap.Card>
       </div>
