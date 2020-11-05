@@ -26,7 +26,7 @@ class Navbar extends Component {
               <NavLink to="/models"> Models </NavLink>
             </li>
             <li>
-              <NavLink to="/select_data"> Select Data </NavLink>
+              <NavLink to="/select_data"> Upload Data </NavLink>
             </li>
           </ul>
         </nav>
