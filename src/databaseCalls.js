@@ -334,15 +334,17 @@ export async function putModel(callback, PK, owner) {
   });
 }
 
-export async function putDataset(callback, PK, app, name, category, numDevices) {
+export async function putDataset(callback, PK, app, name, category, numDevices) { //  attributes, attributeTypes) {
   const putParams = { // works just fine
     Item: {
       dataset_id: { S: PK },
       app: { S: app },
       name: { S: name },
-      logo_image_url: { S: null },
+      logo_image_url: { S: 'bingus' },
       category: { S: category },
       num_devices: { N: numDevices },
+      // attributes: { L: attributes },
+      // attributeTypes: { L: attributeTypes },
 
     },
     TableName: 'dataset_table',
@@ -354,8 +356,6 @@ export async function putDataset(callback, PK, app, name, category, numDevices) 
       console.log(error);
     } else {
       console.log(data);
-      putParams.Item.logo_image_url.S = data.Item.logo_image_url.S;
-      console.log(putParams.Item.logo_image_url.S); // should no longer be null
 
       docClient.putItem(putParams, (err, datatwo) => {
         if (err) {
