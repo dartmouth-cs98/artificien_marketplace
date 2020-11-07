@@ -16,7 +16,6 @@ class UploadData extends Component {
       attributeNameList: [],
       attributeTypeList: [],
       numUsers: null,
-      // datasetSubmitted: false,
       // readyToGo: true,
     };
   }
@@ -29,13 +28,13 @@ class UploadData extends Component {
   addAttributeName = (event) => {
     if (event.key === 'Enter') {
       console.log(event.target.value);
-      this.state.attributeNameList.push(event.target.value);
+      this.state.attributeNameList.push({ S: event.target.value });
     }
   }
 
   addAttributeType = (event) => {
     console.log(event.target.value);
-    this.state.attributeTypeList.push(event.target.value);
+    this.state.attributeTypeList.push({ S: event.target.value });
   }
 
   submitAttributes = () => {
@@ -51,7 +50,6 @@ class UploadData extends Component {
 
     // Use this if we want apps to have categories as well.
     // let appCategory = null;
-
     // const categoryCallback = (data, error) => {
     //   if (error) {
     //     console.log(error);
@@ -62,8 +60,15 @@ class UploadData extends Component {
     //   }
     // };
     // getApp(categoryCallback, this.state.appName);
-    putDataset(callback, this.state.datasetName, this.state.appName, 'bingus', this.state.appCategory, this.state.numUsers); // this.attributeNameList, this.attributeTypeList);
-    // this.setState({ datasetSubmitted: true });
+
+    putDataset(callback, this.state.datasetName, this.state.appName, 'bingus', this.state.appCategory, this.state.numUsers, this.state.attributeNameList, this.state.attributeTypeList);
+    this.setState({ appName: null });
+    this.setState({ appCategory: null });
+    this.setState({ datasetName: null });
+    this.setState({ numAttributes: null });
+    this.setState({ attributeNameList: [] });
+    this.setState({ attributeTypeList: [] });
+    this.setState({ numUsers: null });
   }
 
   addDatasetName = (event) => {
@@ -134,7 +139,7 @@ class UploadData extends Component {
         <div className="dataLists">
           <div className="typesList">
             {inputDatatypeFormList}
-            <button type="submit" onClick={this.submitAttributes()}>Finish</button>
+            <button type="submit" onClick={() => { this.submitAttributes(); }}>Finish</button>
           </div>
         </div>
       );
@@ -149,7 +154,6 @@ class UploadData extends Component {
   //   this.setState({ attributeNameList: [] });
   //   this.setState({ attributeTypeList: [] });
   //   this.setState({ numUsers: null });
-  //   this.setState({ readyToGo: false });
 
   //   return (
   //     <div>
@@ -160,7 +164,7 @@ class UploadData extends Component {
   // }
 
   render() {
-    // if (this.state.datasetSubmitted && this.state.readyToGo) {
+    // if (this.state.datasetSubmitted) {
     //   console.log('wowoweewow');
     //   return (
     //     <div>

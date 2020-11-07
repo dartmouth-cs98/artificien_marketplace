@@ -334,8 +334,12 @@ export async function putModel(callback, PK, owner) {
   });
 }
 
-export async function putDataset(callback, PK, app, name, category, numDevices) { //  attributes, attributeTypes) {
-  const putParams = { // works just fine
+export async function putDataset(callback, PK, app, name, category, numDevices, attributes, attributeTypes) {
+  console.log('attributes');
+  console.log(attributes);
+  console.log(attributeTypes);
+
+  const putParams = {
     Item: {
       dataset_id: { S: PK },
       app: { S: app },
@@ -343,9 +347,8 @@ export async function putDataset(callback, PK, app, name, category, numDevices) 
       logo_image_url: { S: 'bingus' },
       category: { S: category },
       num_devices: { N: numDevices },
-      // attributes: { L: attributes },
-      // attributeTypes: { L: attributeTypes },
-
+      attributes: { L: attributes },
+      attributeTypes: { L: attributeTypes },
     },
     TableName: 'dataset_table',
     ReturnConsumedCapacity: 'TOTAL',

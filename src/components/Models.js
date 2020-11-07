@@ -52,7 +52,7 @@ class Models extends Component {
   }
 
   renderModelsInProgress = () => {
-    if (!this.state.models) { return 'No in progress models found'; }
+    if (!this.state.models) { return 'You have no Models in progress. Go to Create Model to make one'; }
 
     // for array
     const renderedModels = this.state.models.Items.map((model) => {
@@ -81,7 +81,7 @@ class Models extends Component {
   }
 
   renderModelsCompleted = () => {
-    if (!this.state.models) { return 'No finished models found'; }
+    if (!this.state.models) { return 'You have no completeds models'; }
 
     // for array
     const renderedModels = this.state.models.Items.map((model) => {
