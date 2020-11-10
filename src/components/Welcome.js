@@ -1,6 +1,6 @@
 import React from 'react';
 import '../style.scss';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import { Button } from 'reactstrap';
 
 const Welcome = () => {
@@ -15,6 +15,13 @@ const Welcome = () => {
             Build, iterate, and access the exact datasets you need to generate insights.
           </i>
         </p>
+      </div>
+      <div>
+        <Link to="/Login">
+          <button type="button">
+            Client Login &rarr;
+          </button>
+        </Link>
       </div>
       <div className="landing" />
     </>

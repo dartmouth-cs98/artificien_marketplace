@@ -33,7 +33,7 @@ class ModelSideNav extends Component {
               <p>Model started: {this.props.content.date_submitted.S}</p>
               <p>Training on: {this.props.content.dataset.S}</p>
               <p>Predicting: {this.props.content.attribute_predicted.S}</p>
-              <p>Percent Complete: {this.props.content.percent_complete.N}</p>
+              <p>Percent Complete: {this.props.content.percent_complete.N}%</p>
             </div>
             <div className="list-group" />
           </div>

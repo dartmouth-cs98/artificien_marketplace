@@ -114,9 +114,9 @@ class UploadData extends Component {
             <div>
               <select onChange={(e) => this.addAppCategory(e)}>
                 <option value="none">None</option>
-                <option value="health">Health</option>
-                <option value="location">Location</option>
-                <option value="consumer">Consumer</option>
+                <option value="Health">Health</option>
+                <option value="Location">Location</option>
+                <option value="Consumer">Consumer</option>
               </select>
             </div>
             <h4><i>Valid app category!</i></h4>
