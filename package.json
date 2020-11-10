@@ -9,7 +9,8 @@
     "start": "NODE_ENV=development webpack-dev-server",
     "test": "eslint src/**.js",
     "build": "webpack --config webpack.config.js",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "deploy": "yarn build; surge -p dist -d artificien.surge.sh; yarn clean"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
