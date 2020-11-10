@@ -334,16 +334,18 @@ export async function putModel(callback, PK, owner) {
   });
 }
 
-export async function putDataset(callback, PK, app, name, category, numDevices) {
-  const putParams = { // works just fine
+export async function putDataset(callback, PK, app, name, category, numDevices, attributes, attributeTypes) {
+  const putParams = {
     Item: {
       dataset_id: { S: PK },
       app: { S: app },
       name: { S: name },
-      logo_image_url: { S: null },
+      placeholder: 'placeholder',
+      logo_image_url: { S: 'bingus' },
       category: { S: category },
       num_devices: { N: numDevices },
-
+      attributes: { L: attributes },
+      attributeTypes: { L: attributeTypes },
     },
     TableName: 'dataset_table',
     ReturnConsumedCapacity: 'TOTAL',
@@ -354,8 +356,6 @@ export async function putDataset(callback, PK, app, name, category, numDevices) 
       console.log(error);
     } else {
       console.log(data);
-      putParams.Item.logo_image_url.S = data.Item.logo_image_url.S;
-      console.log(putParams.Item.logo_image_url.S); // should no longer be null
 
       docClient.putItem(putParams, (err, datatwo) => {
         if (err) {
@@ -393,13 +393,33 @@ export function queryModels(callback, PK) {
   });
 }
 
-export function queryDatasets(callback, category) {
+export function queryDatasetsCategory(callback, category) {
   const queryParams = { // works just fine
     // AttributesToGet: ['model_id', 'owner'],
     IndexName: 'category-num_devices-index',
     ScanIndexForward: false,
     ExpressionAttributeValues: { ':partitionKeyVal': { S: category } },
     KeyConditionExpression: 'category = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
+    TableName: 'dataset_table',
+  };
+
+  docClient.query(queryParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
+
+export function queryDatasetsMount(callback) {
+  const queryParams = { // works just fine
+    // AttributesToGet: ['model_id', 'owner'],
+    IndexName: 'placeholder-num_devices-index',
+    ScanIndexForward: false,
+    ExpressionAttributeValues: { ':partitionKeyVal': { S: 'placeholder' } },
+    KeyConditionExpression: 'placeholder = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
     TableName: 'dataset_table',
   };
 

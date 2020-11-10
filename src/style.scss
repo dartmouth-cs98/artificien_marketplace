@@ -2,6 +2,7 @@ body, html {
     font-family: "Roboto", sans-serif;
     position: center;
     height: 100%;
+    width: 100%;
     text-align: center;
 }
 
@@ -10,6 +11,7 @@ body, html {
     background-image: url('img/Artificien.png'); // team logo
     width: 10vw;
     height: 5vw;
+    margin-right: 50px;
     background-repeat: no-repeat;
     background-size: contain;
 }
@@ -26,45 +28,54 @@ body, html {
     color: purple;
 }
 
-nav {
-    float: right;
-}
 
 ul {
     list-style-type: none;
-    margin: 0;
+    display: flex;
+    justify-content: left;
+    margin: 50px;
     padding: 0;
     overflow: hidden;
     background-color: white;
-    position: -webkit-sticky; /* Safari */
-    position: sticky;
-    top: 0;
-  }
-  
-  li {
+}
+
+li {
     float: left;
-  }
-  
-  li a {
+}
+li a {
     display: block;
-    color: #011627;
+    color: black;
     text-align: center;
-    padding: 14px 50px;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: rgb(184, 179, 179);
   }
 
 button {
-    background: #3C096C;
+    background-color: #3C096C; /* Green */
+    border: none;
     color: white;
-    font-family: "Avenir";
-    font-size: 1.2;
-    border: 0;
+    padding: 15px 20px;
+    text-align: center;
+    margin: 10px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
 }
-.cardholder {
+.card-holder {
+    width: 100%;
     display: flex;
-    justify-content: space-around;
-    background-color: #011627; // using color from Figma
-    color: #FDFFFC;
-    border-radius: 25px;
+    padding: 0;
+    margin: 0;
+    // justify-content: space-around;
+    // background-color: #011627; // using color from Figma
+    // color: #FDFFFC;
+    // border-radius: 25px;
+    overflow-x: scroll;
+    // justify-content: space-around;
 }
 
 .card {
@@ -74,6 +85,9 @@ button {
     border-style: solid;
     margin: 15px;
     display: inline-block;
+    background-color: #041424; 
+    color: white;
+    border-radius: 25px;
 }
 .card-body {
     margin: 10px;
@@ -83,4 +97,83 @@ button {
     margin: 2px;
     width : 70%;
     height: 20%;
+}
+
+
+  .categoryButton {
+    background-color: #3C096C; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    margin: 5px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+
+  .model-holder {
+      display: flex;
+  }
+
+// ----------------------------------------
+  .overlay {
+    height: 100%;
+    width: 25%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: rgb(0,0,0);
+    overflow-x: hidden;
+    transition: 0.2s;
+}
+
+.overlay-content {
+    position: relative;
+    top: 25%;
+    width: 90%;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block;
+    transition: 0.2s;
+}
+
+.overlay a:hover, .overlay a:focus {
+    color: #f1f1f1;
+}
+
+.closebtn {
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+
+@media screen and (max-height: 450px) {
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
+}
+
+.overlay h2, .overlay p {
+  color:white;
+  }
+
+.dataLists {
+  display: flex;
+  justify-content: center;
+}
+
+.attribute {
+  margin: 15px;
 }

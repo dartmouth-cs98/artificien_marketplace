@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
-// import { Button } from 'reactstrap';
-import * as ReactBootstrap from 'react-bootstrap';// import { Button } from 'reactstrap';
 import { queryModels } from '../databaseCalls';
+import ModelDetailsCard from './ModelDetailsCard';
+import ModelSideNav from './ModelSideNav';
 
 class Models extends Component {
   constructor(props) {
@@ -11,7 +11,14 @@ class Models extends Component {
 
     this.state = {
       models: null,
+      current_user: 'QUILL',
+      style: {
+        width: 0,
+      },
+      clickedModel: null,
     };
+    this.openNav = this.openNav.bind(this);
+    this.closeNav = this.closeNav.bind(this);
   }
 
   componentDidMount() {
@@ -23,27 +30,40 @@ class Models extends Component {
         this.setState({ models: data });
       }
     };
-    queryModels(callback, 'QUILL');
+    queryModels(callback, this.state.current_user);
+    document.addEventListener('click', this.closeNav);
   }
 
-  // Render each organization's details as a card
+  componentWillUnmount() {
+    document.removeEventListener('click', this.closeNav);
+  }
+
+  openNav(modelId) {
+    this.setState({ style: { width: 350 } });
+    console.log(modelId);
+    this.setState({ clickedModel: modelId });
+  }
+
+  closeNav() {
+    document.removeEventListener('click', this.closeNav);
+    console.log('bongo');
+    const style = { width: 0 };
+    this.setState({ style });
+  }
+
   renderModelsInProgress = () => {
-    if (!this.state.models) { return 'No in progress models found'; }
+    if (!this.state.models) { return 'You have no Models in progress. Go to Create Model to make one'; }
 
     // for array
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '1') {
         return (
-          <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
-            <ReactBootstrap.Card.Header as="h1">{model.model_id.S}</ReactBootstrap.Card.Header>
-            <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title>Submission Date: {model.date_submitted.S}</ReactBootstrap.Card.Title>
-              <ReactBootstrap.Card.Text>
-                Complete: {String(Math.floor(Math.random() * 100)).concat('%')}
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button variant="primary">View Model</ReactBootstrap.Button>
-            </ReactBootstrap.Card.Body>
-          </ReactBootstrap.Card>
+          <ModelDetailsCard onClick={this.openNav}
+            key={Math.random()}
+            model_id={model.model_id.S}
+            date_submitted={model.date_submitted.S}
+            percent_complete={model.percent_complete.N}
+          />
         );
       }
       return null;
@@ -51,30 +71,28 @@ class Models extends Component {
 
     const renderedModelTable = (
       <div>
-        <h1 align="center">In Progress</h1>
-        {renderedModels}
+        <h2 align="left">In Progress</h2>
+        <div className="card-holder">
+          {renderedModels}
+        </div>
       </div>
     );
     return renderedModelTable;
   }
 
   renderModelsCompleted = () => {
-    if (!this.state.models) { return 'No finished models found'; }
+    if (!this.state.models) { return 'You have no completeds models'; }
 
     // for array
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '0') {
         return (
-          <ReactBootstrap.Card className="cardholder" style={{ width: '22rem' }}>
-            <ReactBootstrap.Card.Header as="h1">{model.model_id.S}</ReactBootstrap.Card.Header>
-            <ReactBootstrap.Card.Body>
-              <ReactBootstrap.Card.Title>Submitted on {model.date_submitted.S}</ReactBootstrap.Card.Title>
-              <ReactBootstrap.Card.Text>
-                Model 100% complete
-              </ReactBootstrap.Card.Text>
-              <ReactBootstrap.Button variant="primary">View Model</ReactBootstrap.Button>
-            </ReactBootstrap.Card.Body>
-          </ReactBootstrap.Card>
+          <ModelDetailsCard onClick={this.openNav}
+            key={Math.random()}
+            model_id={model.model_id.S}
+            date_submitted={model.date_submitted.S}
+            percent_complete={model.percent_complete.N}
+          />
         );
       }
       return null;
@@ -82,25 +100,39 @@ class Models extends Component {
 
     const renderedModelTable = (
       <div>
-        <h1 align="center">Completed</h1>
-        {renderedModels}
+        <h2 align="left">Completed</h2>
+        <div className="card-holder">
+          {renderedModels}
+        </div>
       </div>
     );
     return renderedModelTable;
   }
 
   render() {
+    let clickedModel = null;
+    if (this.state.clickedModel) {
+      console.log('finding clicked content');
+      console.log(this.state.models.Items.length);
+      for (let i = 0; i < this.state.models.Items.length; i += 1) {
+        console.log(this.state.models.Items[i]);
+        if (this.state.models.Items[i].model_id.S === this.state.clickedModel) {
+          console.log('found it');
+          clickedModel = this.state.models.Items[i];
+        }
+      }
+    }
     return (
-      <div>
+      <div className="body">
         <div>
-          <br />
-          <br />
-          <h1>Models Page</h1>
+          <h1 align="center">My Models</h1>
           <div>{this.renderModelsInProgress()}</div>
           <div>{this.renderModelsCompleted()}</div>
         </div>
+        <div>
+          <ModelSideNav content={clickedModel} onClick={this.closeNav} style={this.state.style} />
+        </div>
       </div>
-
     );
   }
 }

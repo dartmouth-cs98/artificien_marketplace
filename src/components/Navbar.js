@@ -15,7 +15,7 @@ class Navbar extends Component {
       <>
         <div className="logo" active />
         <nav>
-          <ul>
+          <ul className="nav-ul">
             <li>
               <NavLink to="/" exact> Home </NavLink>
             </li>
@@ -26,7 +26,7 @@ class Navbar extends Component {
               <NavLink to="/models"> Models </NavLink>
             </li>
             <li>
-              <NavLink to="/select_data"> Select Data </NavLink>
+              <NavLink to="/select_data"> Upload Data </NavLink>
             </li>
           </ul>
         </nav>
