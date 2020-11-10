@@ -15,10 +15,12 @@ class DataLibrary extends Component {
       sortedCategory: null,
       allDatasets: null,
       categoryIsChosen: false,
+      categoriesNotSet: true,
       style: {
         width: 0,
       },
       clickedDataset: null,
+      toDisplayDataset: null,
     };
     this.openNav = this.openNav.bind(this);
     this.closeNav = this.closeNav.bind(this);
@@ -46,6 +48,7 @@ class DataLibrary extends Component {
       this.setState({ categoryIsChosen: false });
       this.setState({ sortedCategory: null });
     } else {
+      this.setState({ categoriesNotSet: true });
       this.setState({ categoryIsChosen: true });
       this.setState({ sortedCategory: category });
     }
@@ -70,6 +73,22 @@ class DataLibrary extends Component {
       </div>
     );
     return renderedDatasetTable;
+  }
+
+  getDisplayDataset = () => {
+    if (this.state.clickedDataset) {
+      console.log('---------------');
+      console.log(this.state.clickedDataset);
+      let toDisplayTemp = null;
+      for (let i = 0; i < this.state.allDatasets.Items.length; i += 1) {
+        if (this.state.allDatasets.Items[i].dataset_id.S === this.state.clickedDataset) {
+          console.log('found it');
+          toDisplayTemp = this.state.allDatasets.Items[i];
+          this.setState({ toDisplayDataset: toDisplayTemp });
+          this.setState({ clickedDataset: null });
+        }
+      }
+    }
   }
 
   openNav(datasetId) {
@@ -137,25 +156,27 @@ class DataLibrary extends Component {
   renderAllDatasets = () => {
     if (!this.state.sortedCategory) { return null; }
 
-    const callbackQuery = (data, error) => {
-      if (error) {
-        console.log(error);
-      } else {
-        // console.log(data);
-        this.setState({ inCategory: data });
-      }
-    };
-    queryDatasetsCategory(callbackQuery, this.state.sortedCategory);
-
-    const callbackScan = (data, error) => {
-      if (error) {
-        console.log(error);
-      } else {
-        // console.log(data);
-        this.setState({ outCategory: data });
-      }
-    };
-    scanDatasets(callbackScan);
+    if (this.state.categoriesNotSet) {
+      const callbackQuery = (data, error) => {
+        if (error) {
+          console.log(error);
+        } else {
+          // console.log(data);
+          this.setState({ inCategory: data });
+        }
+      };
+      queryDatasetsCategory(callbackQuery, this.state.sortedCategory);
+      const callbackScan = (data, error) => {
+        if (error) {
+          console.log(error);
+        } else {
+          // console.log(data);
+          this.setState({ outCategory: data });
+        }
+      };
+      scanDatasets(callbackScan);
+      this.setState({ categoriesNotSet: false });
+    }
 
     return (
       <div>
@@ -185,17 +206,8 @@ class DataLibrary extends Component {
   }
 
   render() {
-    let clickedDataset = null;
-    if (this.state.clickedDataset) {
-      console.log('finding clicked content');
-      for (let i = 0; i < this.state.allDatasets.Items.length; i += 1) {
-        // console.log(this.state.allDatasets.Items[i]);
-        if (this.state.allDatasets.Items[i].dataset_id.S === this.state.clickedDataset) {
-          console.log('found it');
-          clickedDataset = this.state.allDatasets.Items[i];
-        }
-      }
-    }
+    this.getDisplayDataset();
+    console.log(this.state.toDisplayDataset);
     if (!this.state.categoryIsChosen) {
       return (
         <div className="body">
@@ -205,11 +217,12 @@ class DataLibrary extends Component {
           <br />
           <div>{this.mountDisplayDatasets()}</div>
           <div>
-            <DatasetSideNav content={clickedDataset} onClick={this.closeNav} style={this.state.style} />
+            <DatasetSideNav content={this.state.toDisplayDataset} onClick={this.closeNav} style={this.state.style} />
           </div>
         </div>
       );
     } else {
+      console.log('bad');
       return (
         <div className="body">
           <h1>Data Library</h1>
@@ -218,7 +231,7 @@ class DataLibrary extends Component {
           <br />
           <div>{this.renderAllDatasets()}</div>
           <div>
-            <DatasetSideNav content={clickedDataset} onClick={this.closeNav} style={this.state.style} />
+            <DatasetSideNav content={this.state.toDisplayDataset} onClick={this.closeNav} style={this.state.style} />
           </div>
         </div>
       );
