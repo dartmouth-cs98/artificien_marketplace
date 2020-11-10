@@ -69,6 +69,7 @@ class UploadData extends Component {
     this.setState({ attributeNameList: [] });
     this.setState({ attributeTypeList: [] });
     this.setState({ numUsers: null });
+    console.log('put!');
   }
 
   addNumUsers = (event) => {
