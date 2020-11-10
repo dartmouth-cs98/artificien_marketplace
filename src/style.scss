@@ -38,25 +38,6 @@ display: flex;
 
 ul {
   list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: white;
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  top: 0;
-}
-
-li {
-  float: left;
-}
-
-li a {
-  display: block;
-  color: #011627;
-  text-align: center;
-  padding: 14px 50px;
-}
   display: flex;
   justify-content: left;
   // margin: 50px;
@@ -124,17 +105,12 @@ left: 0px;
 .card-holder {
   width: 100%;
   display: flex;
-  justify-content: space-around;
-  background-color: #011627; // using color from Figma
-  color: #FDFFFC;
-  border-radius: 25px;
   padding: 0;
   margin: 0;
-  // justify-content: space-around;
+  justify-content: space-around;
   // background-color: #011627; // using color from Figma
-  // color: #FDFFFC;
-  // border-radius: 25px;
-  overflow-x: scroll;
+  color: #FDFFFC;
+  border-radius: 25px;
   // justify-content: space-around;
 }
 
@@ -151,7 +127,7 @@ flex-wrap: wrap;
   margin: 15px;
   display: inline-block;
   background-color: #011627; 
-  color: #FDFFFC;
+  color: #FDFFFC; 
   border-radius: 25px;
 }
 .card-body {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
-import * as ReactBootstrap from 'react-bootstrap';
+// import * as ReactBootstrap from 'react-bootstrap';
 // import { Button } from 'reactstrap';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 import { queryDatasetsMount, queryDatasetsCategory, scanDatasets } from '../databaseCalls';
