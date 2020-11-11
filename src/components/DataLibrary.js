@@ -225,7 +225,6 @@ class DataLibrary extends Component {
         </div>
       );
     } else {
-      console.log('bad');
       return (
         <div className="body">
           <h1>Data Library</h1>

@@ -19,7 +19,12 @@ class UploadData extends Component {
       numAttributes: null,
       attributeNameList: [],
       attributeTypeList: [],
+      attributeRangeMins: [],
+      attributeRangeMaxes: [],
+      attributeRangeInputs: [],
       numUsers: null,
+      inputDatatypeFormList: [],
+      readyForSubmit: false,
     };
   }
 
@@ -35,8 +40,34 @@ class UploadData extends Component {
     }
   }
 
-  addAttributeType = (event) => {
+  addAttributeRangeMin = (event) => {
+    if (event.key === 'Enter') {
+      console.log(event.target.value);
+      this.state.attributeRangeMins.push({ S: event.target.value });
+    }
+  }
+
+  addAttributeRangeMax = (event) => {
+    if (event.key === 'Enter') {
+      console.log(event.target.value);
+      this.state.attributeRangeMaxes.push({ S: event.target.value });
+    }
+  }
+
+  addAttributeType = (event, i) => {
     console.log(event.target.value);
+    if (event.target.value === 'N') {
+      console.log('range pushed');
+      this.state.attributeRangeInputs.push(
+        <div className="attribute">
+          <h3>{this.state.attributeNameList[i].S}</h3>
+          <label className="attrLabel" htmlFor="rangeMin">   Attribute Min: </label>
+          <input key={Math.random()} id="rangeMin" type="number" size="6" onKeyDown={(e) => this.addAttributeRangeMin(e)} />
+          <label className="attrLabel" htmlFor="rangeMax">   Attribute Max: </label>
+          <input key={Math.random()} id="rangeMax" type="number" size="6" onKeyDown={(e) => this.addAttributeRangeMax(e)} />
+        </div>,
+      );
+    }
     this.state.attributeTypeList.push({ S: event.target.value });
   }
 
@@ -48,27 +79,25 @@ class UploadData extends Component {
         console.log(data);
       }
     };
-    // Use this if we want apps to have categories as well.
-    // let appCategory = null;
-    // const categoryCallback = (data, error) => {
-    //   if (error) {
-    //     console.log(error);
-    //   } else {
-    //     console.log('got category');
-    //     console.log(data);
-    //     appCategory = data.Item.category.S;
-    //   }
-    // };
-    // getApp(categoryCallback, this.state.appName);
+    putDataset(callback, this.state.datasetName, this.state.appName,
+      'bingus', this.state.appCategory, this.state.numUsers,
+      this.state.attributeNameList, this.state.attributeTypeList,
+      this.state.attributeRangeMins, this.state.attributeRangeMaxes);
 
-    putDataset(callback, this.state.datasetName, this.state.appName, 'bingus', this.state.appCategory, this.state.numUsers, this.state.attributeNameList, this.state.attributeTypeList);
     this.setState({ appName: null });
     this.setState({ appCategory: null });
     this.setState({ datasetName: null });
     this.setState({ numAttributes: null });
     this.setState({ attributeNameList: [] });
     this.setState({ attributeTypeList: [] });
+    this.setState({ attributeRangeMins: [] });
+    this.setState({ attributeRangeMaxes: [] });
     this.setState({ numUsers: null });
+    this.setState({ inputDatatypeFormList: null });
+    this.setState({ attributeRangeInputs: [] });
+    this.setState({ readyForSubmit: false });
+    this.setState({ readyForButton: false });
+
     console.log('put!');
   }
 
@@ -195,6 +224,10 @@ class UploadData extends Component {
     }
   }
 
+  readyForSubmit = () => {
+    this.setState({ readyForSubmit: true });
+  }
+
   renderAttributeFields = () => {
     if (!this.state.numAttributes) {
       return (
@@ -213,12 +246,11 @@ class UploadData extends Component {
         </div>
       );
     } else {
-      const inputDatatypeFormList = [];
       for (let i = 0; i < this.state.numAttributes; i += 1) {
-        inputDatatypeFormList.push(
+        this.state.inputDatatypeFormList.push(
           <div className="attribute">
             <input key={Math.random()} type="text" placeholder="Attribute Name" onKeyDown={(e) => this.addAttributeName(e)} />
-            <select onChange={(e) => this.addAttributeType(e)}>
+            <select onChange={(e) => this.addAttributeType(e, i)}>
               <option value="O">None</option>
               <option value="S">String</option>
               <option value="N">Number</option>
@@ -232,8 +264,8 @@ class UploadData extends Component {
           <div className="dataLists">
             <div className="typesList">
               <h2>Add Your Attributes</h2>
-              {inputDatatypeFormList}
-              <button type="submit" onClick={() => { this.submitAttributes(); }}>Finish</button>
+              {this.state.inputDatatypeFormList}
+              <button type="submit" onClick={() => { this.readyForSubmit(); }}>Ranges</button>
             </div>
           </div>
         );
@@ -242,12 +274,32 @@ class UploadData extends Component {
           <div className="dataLists">
             <div className="typesList">
               <h2>Add Your Attributes</h2>
-              {inputDatatypeFormList}
+              {this.state.inputDatatypeFormList}
               <h3><i>Submit all forms to enter dataset</i></h3>
             </div>
           </div>
         );
       }
+    }
+  }
+
+  renderAttributeRanges = () => {
+    console.log(this.state.attributeNameList);
+    console.log(this.state.numAttributes);
+    if (this.state.readyForSubmit) {
+      console.log('ready');
+      return (
+        <div>
+          {this.state.attributeRangeInputs}
+          <button type="submit" onClick={() => { this.submitAttributes(); }}>Finish</button>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          {this.stateattributeRangeInputs}
+        </div>
+      );
     }
   }
 
@@ -272,6 +324,7 @@ class UploadData extends Component {
           {this.renderNumUsersInput()}
           {this.renderAppCategory()}
           {this.renderAttributeFields()}
+          {this.renderAttributeRanges()}
         </div>
       </div>
     );

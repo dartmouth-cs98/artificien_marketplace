@@ -334,7 +334,7 @@ export async function putModel(callback, PK, owner) {
   });
 }
 
-export async function putDataset(callback, PK, app, name, category, numDevices, attributes, attributeTypes) {
+export async function putDataset(callback, PK, app, name, category, numDevices, attributes, attributeTypes, attributeRangeMins, attributeRangeMaxes) {
   const putParams = {
     Item: {
       dataset_id: { S: PK },
@@ -346,6 +346,8 @@ export async function putDataset(callback, PK, app, name, category, numDevices, 
       num_devices: { N: numDevices },
       attributes: { L: attributes },
       attributeTypes: { L: attributeTypes },
+      attributeRangeMins: { L: attributeRangeMins },
+      attributeRangeMaxes: { L: attributeRangeMaxes },
     },
     TableName: 'dataset_table',
     ReturnConsumedCapacity: 'TOTAL',
@@ -355,8 +357,6 @@ export async function putDataset(callback, PK, app, name, category, numDevices, 
     if (error) {
       console.log(error);
     } else {
-      console.log(data);
-
       docClient.putItem(putParams, (err, datatwo) => {
         if (err) {
           console.log(err, err.stack);

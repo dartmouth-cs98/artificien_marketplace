@@ -216,6 +216,10 @@ justify-content: center;
 .attribute {
 margin: 15px;
 }
+
+.attribute > label {
+margin: 10px;
+}
 .dropdown {
   position: relative;
   display: inline-block;

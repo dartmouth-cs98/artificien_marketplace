@@ -127,12 +127,12 @@ class Models extends Component {
     return (
       <div className="body">
         <div>
+          <h1 align="center">My Models</h1>
           <Link to="/create_model" style={{ textDecoration: 'none' }}>
             <button type="button" className="block">
               Upload New Model <span>&#43;</span>
             </button>
           </Link>
-          <h1 align="center">My Models</h1>
           <div>{this.renderModelsInProgress()}</div>
           <div>{this.renderModelsCompleted()}</div>
         </div>
