@@ -97,7 +97,6 @@ class UploadData extends Component {
     this.setState({ attributeRangeInputs: [] });
     this.setState({ readyForSubmit: false });
     this.setState({ readyForButton: false });
-
     console.log('put!');
   }
 
