@@ -25,6 +25,9 @@ class UploadData extends Component {
       numUsers: null,
       inputDatatypeFormList: [],
       readyForSubmit: false,
+      addAttributeForms: true,
+      readyForRanges: false,
+      numberAttributes: [],
     };
   }
 
@@ -33,10 +36,18 @@ class UploadData extends Component {
     this.setState({ numAttributes: event.target.value });
   }
 
-  addAttributeName = (event) => {
+  addAttributeName = (event, i) => {
     if (event.key === 'Enter') {
-      console.log(event.target.value);
-      this.state.attributeNameList.push({ S: event.target.value });
+      let repeat = false;
+      for (let j = 0; j < this.state.attributeNameList.length; j += 1) {
+        // console.log(this.state.attributeNameList[i].S);
+        if (this.state.attributeNameList[i].S === event.target.value) { repeat = true; }
+      }
+      if (!repeat) {
+        console.log(event.target.value);
+        this.state.attributeNameList.push({ S: event.target.value });
+        this.setState({ addAttributeForms: false });
+      }
     }
   }
 
@@ -51,24 +62,27 @@ class UploadData extends Component {
     if (event.key === 'Enter') {
       console.log(event.target.value);
       this.state.attributeRangeMaxes.push({ S: event.target.value });
+      this.setState({ addAttributeForms: false });
     }
   }
 
   addAttributeType = (event, i) => {
     console.log(event.target.value);
     if (event.target.value === 'N') {
+      this.state.numberAttributes.push(i);
       console.log('range pushed');
       this.state.attributeRangeInputs.push(
         <div className="attribute">
           <h3>{this.state.attributeNameList[i].S}</h3>
           <label className="attrLabel" htmlFor="rangeMin">   Attribute Min: </label>
-          <input key={Math.random()} id="rangeMin" type="number" size="6" onKeyDown={(e) => this.addAttributeRangeMin(e)} />
+          <input id="rangeMin" type="number" size="6" onKeyDown={(e) => this.addAttributeRangeMin(e)} />
           <label className="attrLabel" htmlFor="rangeMax">   Attribute Max: </label>
-          <input key={Math.random()} id="rangeMax" type="number" size="6" onKeyDown={(e) => this.addAttributeRangeMax(e)} />
+          <input id="rangeMax" type="number" size="6" onKeyDown={(e) => this.addAttributeRangeMax(e)} />
         </div>,
       );
     }
     this.state.attributeTypeList.push({ S: event.target.value });
+    this.setState({ addAttributeForms: false });
   }
 
   submitAttributes = () => {
@@ -96,12 +110,16 @@ class UploadData extends Component {
     this.setState({ inputDatatypeFormList: null });
     this.setState({ attributeRangeInputs: [] });
     this.setState({ readyForSubmit: false });
+    this.setState({ readyForRanges: false });
     this.setState({ readyForButton: false });
+    this.setState({ addAttributeForms: true });
+    this.setState({ numberAttributes: [] });
     console.log('put!');
   }
 
   addNumUsers = (event) => {
     console.log(typeof event.target.value);
+    console.log(event.target.value);
     if (!Number.isNaN(parseInt(event.target.value, 10))) {
       console.log('num users submitted');
       this.setState({ numUsers: event.target.value });
@@ -112,9 +130,6 @@ class UploadData extends Component {
     console.log('category submitted');
     this.setState({ appCategory: event.target.value });
     this.setState({ categorySubmitted: true });
-    if (this.state.datasetNameSubmitted && this.state.appNameSubmitted) {
-      this.setState({ readyForButton: true });
-    }
   }
 
   renderAppCategory = () => {
@@ -124,7 +139,7 @@ class UploadData extends Component {
           <h2>What category is your app in?</h2>
           <div>
             <div>
-              <select onChange={(e) => this.addAppCategory(e)}>
+              <select value={this.state.appCategory} onChange={(e) => this.addAppCategory(e)}>
                 <option value="None">None</option>
                 <option value="Health">Health</option>
                 <option value="Location">Location</option>
@@ -142,7 +157,7 @@ class UploadData extends Component {
           <div>
             <div>
               <select onChange={(e) => this.addAppCategory(e)}>
-                <option value="none">None</option>
+                <option value="None">None</option>
                 <option value="Health">Health</option>
                 <option value="Location">Location</option>
                 <option value="Consumer">Consumer</option>
@@ -227,13 +242,18 @@ class UploadData extends Component {
     this.setState({ readyForSubmit: true });
   }
 
+  readyForRanges = () => {
+    this.setState({ readyForRanges: true });
+  }
+
   renderAttributeFields = () => {
+    console.log('renderattributefields');
     if (!this.state.numAttributes) {
       return (
         <div>
           <h2>Add Your Attributes</h2>
           <label htmlFor="attrNum">Number of Attributes:  </label>
-          <select key={Math.random()} id="attrNum" onChange={(e) => this.numAttributesOnChange(e)}>
+          <select id="attrNum" onChange={(e) => this.numAttributesOnChange(e)}>
             <option value="1">0</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -245,29 +265,44 @@ class UploadData extends Component {
         </div>
       );
     } else {
-      for (let i = 0; i < this.state.numAttributes; i += 1) {
-        this.state.inputDatatypeFormList.push(
-          <div className="attribute">
-            <input key={Math.random()} type="text" placeholder="Attribute Name" onKeyDown={(e) => this.addAttributeName(e)} />
-            <select onChange={(e) => this.addAttributeType(e, i)}>
-              <option value="O">None</option>
-              <option value="S">String</option>
-              <option value="N">Number</option>
-              <option value="B">Binary</option>
-            </select>
-          </div>,
-        );
+      if (this.state.addAttributeForms) {
+        for (let i = 0; i < this.state.numAttributes; i += 1) {
+          this.state.inputDatatypeFormList.push(
+            <div className="attribute">
+              <input type="text" placeholder="Attribute Name" onKeyDown={(e) => this.addAttributeName(e, i)} />
+              <select onChange={(e) => this.addAttributeType(e, i)}>
+                <option value="O">None</option>
+                <option value="S">String</option>
+                <option value="N">Number</option>
+                <option value="B">Binary</option>
+              </select>
+            </div>,
+          );
+        }
+        this.setState({ addAttributeForms: false });
       }
       if (this.state.readyForButton) {
-        return (
-          <div className="dataLists">
-            <div className="typesList">
-              <h2>Add Your Attributes</h2>
-              {this.state.inputDatatypeFormList}
-              <button type="submit" onClick={() => { this.readyForSubmit(); }}>Ranges</button>
+        if (this.state.attributeNameList.length < this.state.numAttributes || this.state.attributeTypeList.length < this.state.numAttributes) {
+          return (
+            <div className="dataLists">
+              <div className="typesList">
+                <h2>Add Your Attributes</h2>
+                {this.state.inputDatatypeFormList}
+                <h3><i>Submit attribute names and types to see ranges</i></h3>
+              </div>
             </div>
-          </div>
-        );
+          );
+        } else {
+          return (
+            <div className="dataLists">
+              <div className="typesList">
+                <h2>Add Your Attributes</h2>
+                {this.state.inputDatatypeFormList}
+                <button type="submit" onClick={() => { this.readyForRanges(); }}>Ranges</button>
+              </div>
+            </div>
+          );
+        }
       } else {
         return (
           <div className="dataLists">
@@ -282,17 +317,41 @@ class UploadData extends Component {
     }
   }
 
+  checkForSubmit = () => {
+    if ((this.state.attributeRangeMaxes.length === this.state.attributeRangeInputs && !this.state.readyForSubmit) // all our number attributes have ranges
+    || ((this.state.attributeTypeList.length === Number.parseInt(this.state.numAttributes, 10) && this.state.attributeNameList.length === Number.parseInt(this.state.numAttributes, 10))
+      && this.state.numberAttributes.length < 1)) { // all our types are set but none is a number
+      console.log('submit!');
+      this.readyForSubmit();
+    }
+  }
+
   renderAttributeRanges = () => {
-    console.log(this.state.attributeNameList);
-    console.log(this.state.numAttributes);
-    if (this.state.readyForSubmit) {
+    if (this.state.readyForRanges) {
       console.log('ready');
-      return (
-        <div>
-          {this.state.attributeRangeInputs}
-          <button type="submit" onClick={() => { this.submitAttributes(); }}>Finish</button>
-        </div>
-      );
+      if (this.state.readyForSubmit) {
+        if (this.state.numberAttributes.length < 1) {
+          return (
+            <div>
+              <h4><i>No number type fields, please submit</i></h4>
+              <button type="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
+            </div>
+          );
+        }
+        return (
+          <div>
+            {this.state.attributeRangeInputs}
+            <button type="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
+          </div>
+        );
+      } else {
+        this.checkForSubmit();
+        return (
+          <div>
+            {this.state.attributeRangeInputs}
+          </div>
+        );
+      }
     } else {
       return (
         <div>
@@ -307,13 +366,18 @@ class UploadData extends Component {
       <div>
         <h2>How many users does this app have?</h2>
         <div>
-          <input id="numUsersInput" type="text" placeholder="name" onChange={(e) => this.addNumUsers(e)} />
+          <input id="numUsersInput" type="number" onChange={(e) => this.addNumUsers(e)} />
         </div>
       </div>
     );
   }
 
   render() {
+    if (!this.state.readyForButton) {
+      if (this.state.datasetNameSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
+        this.setState({ readyForButton: true });
+      }
+    }
     return (
       <div>
         <h1>Upload Your Data</h1>
