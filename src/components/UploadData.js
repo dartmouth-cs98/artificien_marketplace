@@ -41,7 +41,7 @@ class UploadData extends Component {
       let repeat = false;
       for (let j = 0; j < this.state.attributeNameList.length; j += 1) {
         // console.log(this.state.attributeNameList[i].S);
-        if (this.state.attributeNameList[i].S === event.target.value) { repeat = true; }
+        if (this.state.attributeNameList[j].S === event.target.value) { repeat = true; }
       }
       if (!repeat) {
         console.log(event.target.value);
@@ -115,6 +115,7 @@ class UploadData extends Component {
     this.setState({ addAttributeForms: true });
     this.setState({ numberAttributes: [] });
     console.log('put!');
+    window.location.reload(false);
   }
 
   addNumUsers = (event) => {
