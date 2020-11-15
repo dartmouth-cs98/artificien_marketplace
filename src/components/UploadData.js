@@ -28,6 +28,7 @@ class UploadData extends Component {
       addAttributeForms: true,
       readyForRanges: false,
       numberAttributes: [],
+      attributeTypeDict: {},
     };
   }
 
@@ -81,8 +82,24 @@ class UploadData extends Component {
         </div>,
       );
     }
+    this.state.attributeTypeDict[i] = event.target.value; // { indexOfInput : Type }
     this.state.attributeTypeList.push({ S: event.target.value });
     this.setState({ addAttributeForms: false });
+  }
+
+  checkValidRanges = () => {
+    if (this.state.numberAttributes) { // there are numbers
+      for (let i = 0; i < this.state.numberAttributes.length; i += 1) {
+        const supposedMin = this.state.attributeRangeMins[i];
+        const supposedMax = this.state.attributeRangeMaxes[i];
+        if (supposedMin > supposedMax) {
+          console.log('swap min and max');
+          this.state.attributeRangeMins[i] = supposedMax;
+          this.state.attributeRangeMaxes[i] = supposedMin;
+        }
+        if (supposedMin === supposedMax) this.state.attributeRangeMins[i] = String(Number.parseInt(supposedMin, 10) - 0.1);
+      }
+    }
   }
 
   submitAttributes = () => {
@@ -93,10 +110,16 @@ class UploadData extends Component {
         console.log(data);
       }
     };
+
+    this.checkValidRanges();
     putDataset(callback, this.state.datasetName, this.state.appName,
       'bingus', this.state.appCategory, this.state.numUsers,
       this.state.attributeNameList, this.state.attributeTypeList,
       this.state.attributeRangeMins, this.state.attributeRangeMaxes);
+
+    document.getElementById('appNameInput').value = '';
+    document.getElementById('nameInput').value = '';
+    document.getElementById('numUsersInput').value = '';
 
     this.setState({ appName: null });
     this.setState({ appCategory: null });
@@ -106,6 +129,11 @@ class UploadData extends Component {
     this.setState({ attributeTypeList: [] });
     this.setState({ attributeRangeMins: [] });
     this.setState({ attributeRangeMaxes: [] });
+
+    this.setState({ appNameSubmitted: false });
+    this.setState({ categorySubmitted: false });
+    this.setState({ datasetNameSubmitted: false });
+
     this.setState({ numUsers: null });
     this.setState({ inputDatatypeFormList: null });
     this.setState({ attributeRangeInputs: [] });
@@ -115,7 +143,7 @@ class UploadData extends Component {
     this.setState({ addAttributeForms: true });
     this.setState({ numberAttributes: [] });
     console.log('put!');
-    window.location.reload(false);
+    // window.location.reload(false);
   }
 
   addNumUsers = (event) => {
@@ -140,7 +168,7 @@ class UploadData extends Component {
           <h2>What category is your app in?</h2>
           <div>
             <div>
-              <select value={this.state.appCategory} onChange={(e) => this.addAppCategory(e)}>
+              <select id="categoryInput" value={this.state.appCategory} onChange={(e) => this.addAppCategory(e)}>
                 <option value="None">None</option>
                 <option value="Health">Health</option>
                 <option value="Location">Location</option>
@@ -319,7 +347,7 @@ class UploadData extends Component {
   }
 
   checkForSubmit = () => {
-    if ((this.state.attributeRangeMaxes.length === this.state.attributeRangeInputs && !this.state.readyForSubmit) // all our number attributes have ranges
+    if ((this.state.attributeRangeMaxes.length === this.state.attributeRangeInputs.length && !this.state.readyForSubmit) // all our number attributes have ranges
     || ((this.state.attributeTypeList.length === Number.parseInt(this.state.numAttributes, 10) && this.state.attributeNameList.length === Number.parseInt(this.state.numAttributes, 10))
       && this.state.numberAttributes.length < 1)) { // all our types are set but none is a number
       console.log('submit!');
@@ -329,8 +357,8 @@ class UploadData extends Component {
 
   renderAttributeRanges = () => {
     if (this.state.readyForRanges) {
-      console.log('ready');
       if (this.state.readyForSubmit) {
+        console.log('readyForSubmit');
         if (this.state.numberAttributes.length < 1) {
           return (
             <div>
@@ -341,7 +369,7 @@ class UploadData extends Component {
         }
         return (
           <div>
-            {this.state.attributeRangeInputs}
+            <h4><i>Ranges entered, please submit dataset</i></h4>
             <button type="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
           </div>
         );
