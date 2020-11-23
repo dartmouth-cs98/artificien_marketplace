@@ -10,44 +10,44 @@ class UploadData extends Component {
 
     this.state = {
       appName: null,
-      appNameSubmitted: false,
       appCategory: null,
-      categorySubmitted: false,
       datasetName: null,
-      datasetNameSubmitted: false,
-      readyForButton: false,
       numAttributes: null,
+      numUsers: null,
+
+      appNameSubmitted: false,
+      categorySubmitted: false,
+      datasetNameSubmitted: false,
+      readyForRangesButton: false,
+      readyForRanges: false,
+      addAttributeForms: true,
+      readyForSubmit: false,
+
       attributeNameList: [],
       attributeTypeList: [],
+      attributeTypeDict: {},
+      attributeNameDict: {},
+
       attributeRangeMins: [],
       attributeRangeMaxes: [],
       attributeRangeInputs: [],
-      numUsers: null,
       inputDatatypeFormList: [],
-      readyForSubmit: false,
-      addAttributeForms: true,
-      readyForRanges: false,
-      attributeTypeDict: {},
-      attributeNameDict: {},
     };
   }
 
   numAttributesOnChange = (event) => {
-    console.log(event.target.value);
     this.setState({ numAttributes: event.target.value });
   }
 
   addAttributeName = (event, i) => {
-    if (event.key === 'Enter') {
-      let repeat = false;
-      for (const attribute in this.state.attributeNameDict) {
-        if (attribute.S === event.target.value) { repeat = true; }
-      }
-      if (!repeat) {
-        console.log(event.target.value);
-        this.state.attributeNameDict[i] = { S: event.target.value };
-        this.setState({ addAttributeForms: false });
-      }
+    let repeat = false;
+    for (const attribute in this.state.attributeNameDict) {
+      if (attribute.S === event.target.value) { repeat = true; }
+    }
+    if (!repeat) {
+      console.log(event.target.value);
+      this.state.attributeNameDict[i] = { S: event.target.value };
+      this.setState({ addAttributeForms: false });
     }
   }
 
@@ -117,6 +117,9 @@ class UploadData extends Component {
     this.buildAttributeNameAndTypeLists();
     this.checkValidRanges();
 
+    console.log('names');
+    console.log(this.state.attributeNameList);
+
     putDataset(callback, this.state.datasetName, this.state.appName,
       'bingus', this.state.appCategory, this.state.numUsers,
       this.state.attributeNameList, this.state.attributeTypeList,
@@ -144,14 +147,13 @@ class UploadData extends Component {
     this.setState({ attributeRangeInputs: [] });
     this.setState({ readyForSubmit: false });
     this.setState({ readyForRanges: false });
-    this.setState({ readyForButton: false });
+    this.setState({ readyForRangesButton: false });
     this.setState({ addAttributeForms: true });
     console.log('put!');
     // window.location.reload(false);
   }
 
   addNumUsers = (event) => {
-    console.log(typeof event.target.value);
     console.log(event.target.value);
     if (!Number.isNaN(parseInt(event.target.value, 10))) {
       console.log('num users submitted');
@@ -293,7 +295,6 @@ class UploadData extends Component {
   }
 
   renderAttributeFields = () => {
-    console.log('renderattributefields');
     if (!this.state.numAttributes) {
       return (
         <div>
@@ -315,7 +316,7 @@ class UploadData extends Component {
         for (let i = 0; i < this.state.numAttributes; i += 1) {
           this.state.inputDatatypeFormList.push(
             <div className="attribute">
-              <input type="text" placeholder="Attribute Name" onKeyDown={(e) => this.addAttributeName(e, i)} />
+              <input type="text" placeholder="Attribute Name" onChange={(e) => this.addAttributeName(e, i)} />
               <select onChange={(e) => this.addAttributeType(e, i)}>
                 <option value="O">None</option>
                 <option value="S">String</option>
@@ -327,7 +328,7 @@ class UploadData extends Component {
         }
         this.setState({ addAttributeForms: false });
       }
-      if (this.state.readyForButton) {
+      if (this.state.readyForRangesButton) {
         if (Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes) {
           return (
             <div className="dataLists">
@@ -368,7 +369,6 @@ class UploadData extends Component {
     || ((Object.keys(this.state.attributeTypeDict).length === Number.parseInt(this.state.numAttributes, 10)
     && Object.keys(this.state.attributeNameDict).length === Number.parseInt(this.state.numAttributes, 10))
       && this.getNumNumberAttributes() < 1)) { // all our types are set but none is a number
-      console.log('submit!');
       this.readyForSubmit();
     }
   }
@@ -420,9 +420,9 @@ class UploadData extends Component {
   }
 
   render() {
-    if (!this.state.readyForButton) {
+    if (!this.state.readyForRangesButton) {
       if (this.state.datasetNameSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
-        this.setState({ readyForButton: true });
+        this.setState({ readyForRangesButton: true });
       }
     }
     return (

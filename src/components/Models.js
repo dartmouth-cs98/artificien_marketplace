@@ -38,6 +38,10 @@ class Models extends Component {
     document.removeEventListener('click', this.closeNav);
   }
 
+  retrieveModel = () => {
+    console.log('RETRIEVE model');
+  }
+
   openNav(modelId) {
     this.setState({ style: { width: 350 } });
     console.log(modelId);
@@ -114,10 +118,9 @@ class Models extends Component {
   render() {
     let clickedModel = null;
     if (this.state.clickedModel) {
-      console.log('finding clicked content');
-      console.log(this.state.models.Items.length);
+      // console.log(this.state.models.Items.length);
       for (let i = 0; i < this.state.models.Items.length; i += 1) {
-        console.log(this.state.models.Items[i]);
+        // console.log(this.state.models.Items[i]);
         if (this.state.models.Items[i].model_id.S === this.state.clickedModel) {
           console.log('found it');
           clickedModel = this.state.models.Items[i];
@@ -137,7 +140,7 @@ class Models extends Component {
           <div>{this.renderModelsCompleted()}</div>
         </div>
         <div>
-          <ModelSideNav content={clickedModel} onClick={this.closeNav} style={this.state.style} />
+          <ModelSideNav content={clickedModel} retrieveFunction={this.retrieveModel} onClick={this.closeNav} style={this.state.style} />
         </div>
       </div>
     );

@@ -35,6 +35,7 @@ class ModelSideNav extends Component {
               <p>Predicting: {this.props.content.attribute_predicted.S}</p>
               <p>Percent Complete: {this.props.content.percent_complete.N}%</p>
             </div>
+            <button type="button" className="dwnldbtn" onClick={this.props.retrieveFunction}>Retrieve Model &darr;</button>
             <div className="list-group" />
           </div>
         </div>
