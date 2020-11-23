@@ -22,6 +22,7 @@ class UploadData extends Component {
       readyForRanges: false,
       addAttributeForms: true,
       readyForSubmit: false,
+      finalRangesEntered: false,
 
       attributeNameList: [],
       attributeTypeList: [],
@@ -31,6 +32,8 @@ class UploadData extends Component {
       attributeRangeMins: [],
       attributeRangeMaxes: [],
       attributeRangeInputs: [],
+      attributeRangeMinDict: {},
+      attributeRangeMaxDict: {},
       inputDatatypeFormList: [],
     };
   }
@@ -51,19 +54,18 @@ class UploadData extends Component {
     }
   }
 
-  addAttributeRangeMin = (event) => {
-    if (event.key === 'Enter') {
-      console.log(event.target.value);
-      this.state.attributeRangeMins.push({ S: event.target.value });
-    }
+  addAttributeRangeMin = (event, i) => {
+    console.log(event.target.value);
+    console.log(i);
+    // this.state.attributeRangeMins.push({ S: event.target.value });
+    this.state.attributeRangeMinDict[i] = { S: event.target.value };
   }
 
-  addAttributeRangeMax = (event) => {
-    if (event.key === 'Enter') {
-      console.log(event.target.value);
-      this.state.attributeRangeMaxes.push({ S: event.target.value });
-      this.setState({ addAttributeForms: false });
-    }
+  addAttributeRangeMax = (event, i) => {
+    console.log(event.target.value);
+    // this.state.attributeRangeMaxes.push({ S: event.target.value });
+    this.state.attributeRangeMaxDict[i] = { S: event.target.value };
+    this.setState({ addAttributeForms: false });
   }
 
   addAttributeType = (event, i) => {
@@ -83,6 +85,7 @@ class UploadData extends Component {
   checkValidRanges = () => {
     const numNumberAttributes = this.getNumNumberAttributes();
     if (numNumberAttributes > 0) {
+      console.log(this.state.attributeRangeMins);
       for (let i = 0; i < numNumberAttributes; i += 1) {
         const supposedMin = this.state.attributeRangeMins[i];
         const supposedMax = this.state.attributeRangeMaxes[i];
@@ -105,6 +108,15 @@ class UploadData extends Component {
     }
   }
 
+  buildAttributeRangeLists = () => {
+    for (let i = 0; i < Object.keys(this.state.attributeRangeMinDict).length; i += 1) {
+      console.log('building: //');
+      console.log(this.state.attributeRangeMinDict[i]);
+      this.state.attributeRangeMins.push(this.state.attributeRangeMinDict[i]);
+      this.state.attributeRangeMaxes.push(this.state.attributeRangeMaxDict[i]);
+    }
+  }
+
   submitAttributes = () => {
     const callback = (data, error) => {
       if (error) {
@@ -115,6 +127,7 @@ class UploadData extends Component {
     };
 
     this.buildAttributeNameAndTypeLists();
+    this.buildAttributeRangeLists();
     this.checkValidRanges();
 
     console.log('names');
@@ -134,9 +147,16 @@ class UploadData extends Component {
     this.setState({ datasetName: null });
     this.setState({ numAttributes: null });
     this.setState({ attributeNameList: [] });
+    this.setState({ attributeNameDict: {} });
+
     this.setState({ attributeTypeList: [] });
+    this.setState({ attributeTypeDict: {} });
+
     this.setState({ attributeRangeMins: [] });
+    this.setState({ attributeRangeMinDict: {} });
+
     this.setState({ attributeRangeMaxes: [] });
+    this.setState({ attributeRangeMaxDict: {} });
 
     this.setState({ appNameSubmitted: false });
     this.setState({ categorySubmitted: false });
@@ -149,6 +169,7 @@ class UploadData extends Component {
     this.setState({ readyForRanges: false });
     this.setState({ readyForRangesButton: false });
     this.setState({ addAttributeForms: true });
+    this.setState({ finalRangesEntered: false });
     console.log('put!');
     // window.location.reload(false);
   }
@@ -277,17 +298,26 @@ class UploadData extends Component {
     this.setState({ readyForSubmit: true });
   }
 
+  checkIfRangesReady = () => {
+    if ((Object.keys(this.state.attributeRangeMaxDict).length === this.state.attributeRangeInputs.length && !this.state.readyForSubmit) // all our number attributes have ranges
+    || ((Object.keys(this.state.attributeTypeDict).length === Number.parseInt(this.state.numAttributes, 10)
+    && Object.keys(this.state.attributeNameDict).length === Number.parseInt(this.state.numAttributes, 10)) && this.getNumNumberAttributes() < 1)) {
+      console.log('ranges ready');
+      this.setState({ finalRangesEntered: true });
+    }
+  }
+
   readyForRanges = () => {
     this.setState({ readyForRanges: true });
-    for (const datatypeKey in this.state.attributeTypeDict) {
-      if (this.state.attributeTypeDict[datatypeKey].S === 'N') {
+    for (let i = 0; i < Object.keys(this.state.attributeTypeDict).length; i += 1) {
+      if (this.state.attributeTypeDict[i].S === 'N') {
         this.state.attributeRangeInputs.push(
           <div className="attribute">
-            <h3>{this.state.attributeNameDict[datatypeKey].S}</h3>
+            <h3>{this.state.attributeNameDict[i].S}</h3>
             <label className="attrLabel" htmlFor="rangeMin">   Attribute Min: </label>
-            <input id="rangeMin" type="number" size="6" onKeyDown={(e) => this.addAttributeRangeMin(e)} />
+            <input id="rangeMin" type="number" onChange={(e) => this.addAttributeRangeMin(e, i)} />
             <label className="attrLabel" htmlFor="rangeMax">   Attribute Max: </label>
-            <input id="rangeMax" type="number" size="6" onKeyDown={(e) => this.addAttributeRangeMax(e)} />
+            <input id="rangeMax" type="number" onChange={(e) => this.addAttributeRangeMax(e, i)} />
           </div>,
         );
       }
@@ -365,10 +395,8 @@ class UploadData extends Component {
   }
 
   checkForSubmit = () => {
-    if ((this.state.attributeRangeMaxes.length === this.state.attributeRangeInputs.length && !this.state.readyForSubmit) // all our number attributes have ranges
-    || ((Object.keys(this.state.attributeTypeDict).length === Number.parseInt(this.state.numAttributes, 10)
-    && Object.keys(this.state.attributeNameDict).length === Number.parseInt(this.state.numAttributes, 10))
-      && this.getNumNumberAttributes() < 1)) { // all our types are set but none is a number
+    if (this.state.finalRangesEntered) {
+      console.log('run readyForSubmit()');
       this.readyForSubmit();
     }
   }
@@ -396,6 +424,7 @@ class UploadData extends Component {
         return (
           <div>
             {this.state.attributeRangeInputs}
+            <button type="button" onClick={() => this.checkIfRangesReady()}>Submit Ranges</button>
           </div>
         );
       }
