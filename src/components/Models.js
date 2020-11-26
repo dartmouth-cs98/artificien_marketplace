@@ -16,6 +16,7 @@ class Models extends Component {
         width: 0,
       },
       clickedModel: null,
+      retrievedModelURL: null,
     };
     this.openNav = this.openNav.bind(this);
     this.closeNav = this.closeNav.bind(this);
@@ -38,8 +39,27 @@ class Models extends Component {
     document.removeEventListener('click', this.closeNav);
   }
 
-  retrieveModel = () => {
-    console.log('RETRIEVE model');
+  retrieveModel = (clickedModel) => {
+    const path = 'retrieve';
+    const ownerName = '?ownerName='.concat('', clickedModel.owner_name.S);
+    const modelId = '&modelId='.concat('', clickedModel.model_id.S);
+    const version = '&version='.concat('', clickedModel.version.S);
+    const url = '&nodeURL='.concat('', clickedModel.node_URL.S);
+
+    const queryParamArray = [path, ownerName, modelId, version, url];
+    const queryParams = queryParamArray.join('');
+
+    const endpoint = 'https://mxxq8l6m48.execute-api.us-east-1.amazonaws.com/prod/';
+    const paramArray = [endpoint, queryParams];
+    const queryString = paramArray.join('');
+    console.log(queryString);
+
+    fetch(queryString)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.bucket_url);
+        this.setState({ retrievedModelURL: data.bucket_url });
+      });
   }
 
   openNav(modelId) {
@@ -92,7 +112,7 @@ class Models extends Component {
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '0') {
         return (
-          <ModelDetailsCard onClick={this.openNav}
+          <ModelDetailsCard onClick={() => this.openNav()}
             key={Math.random()}
             model_id={model.model_id.S}
             dataset={model.dataset.S}
@@ -118,9 +138,7 @@ class Models extends Component {
   render() {
     let clickedModel = null;
     if (this.state.clickedModel) {
-      // console.log(this.state.models.Items.length);
       for (let i = 0; i < this.state.models.Items.length; i += 1) {
-        // console.log(this.state.models.Items[i]);
         if (this.state.models.Items[i].model_id.S === this.state.clickedModel) {
           console.log('found it');
           clickedModel = this.state.models.Items[i];
@@ -140,7 +158,12 @@ class Models extends Component {
           <div>{this.renderModelsCompleted()}</div>
         </div>
         <div>
-          <ModelSideNav content={clickedModel} retrieveFunction={this.retrieveModel} onClick={this.closeNav} style={this.state.style} />
+          <ModelSideNav content={clickedModel}
+            retrievedURL={this.state.retrievedModelURL}
+            retrieveFunction={() => this.retrieveModel(clickedModel)}
+            onClick={() => this.closeNav()}
+            style={this.state.style}
+          />
         </div>
       </div>
     );
