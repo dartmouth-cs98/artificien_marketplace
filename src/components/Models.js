@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import '../style.scss';
+import { Auth } from 'aws-amplify';
 import { queryModels } from '../databaseCalls';
 import ModelDetailsCard from './ModelDetailsCard';
 import ModelSideNav from './ModelSideNav';
@@ -11,7 +12,8 @@ class Models extends Component {
 
     this.state = {
       models: null,
-      current_user: 'QUILL',
+      currentUser: null,
+      userNotSet: true,
       style: {
         width: 0,
       },
@@ -23,6 +25,36 @@ class Models extends Component {
   }
 
   componentDidMount() {
+    // const callback = (data, error) => {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log(data);
+    //     this.setState({ models: data });
+    //   }
+    // };
+    // queryModels(callback, this.state.currentUser);
+    document.addEventListener('click', this.closeNav);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.closeNav);
+  }
+
+  getCurrentUser = () => {
+    if (this.state.userNotSet) {
+      Auth.currentSession()
+        .then((data) => {
+          console.log(data);
+          console.log(data.accessToken.payload.username);
+          this.setState({ currentUser: data.accessToken.payload.username });
+          this.setState({ userNotSet: false });
+          this.queryUserModels();
+        });
+    }
+  }
+
+  queryUserModels = () => {
     const callback = (data, error) => {
       if (error) {
         console.log(error);
@@ -31,12 +63,7 @@ class Models extends Component {
         this.setState({ models: data });
       }
     };
-    queryModels(callback, this.state.current_user);
-    document.addEventListener('click', this.closeNav);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.closeNav);
+    queryModels(callback, this.state.currentUser);
   }
 
   retrieveModel = (clickedModel) => {
@@ -57,6 +84,7 @@ class Models extends Component {
     fetch(queryString)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         console.log(data.bucket_url);
         this.setState({ retrievedModelURL: data.bucket_url });
       });
@@ -77,8 +105,8 @@ class Models extends Component {
 
   renderModelsInProgress = () => {
     if (!this.state.models) { return 'You have no Models in progress. Go to Create Model to make one'; }
+    if (!this.state.models.Items) { return null; }
 
-    // for array
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '1') {
         return (
@@ -107,12 +135,18 @@ class Models extends Component {
 
   renderModelsCompleted = () => {
     if (!this.state.models) { return 'You have no completeds models'; }
+    if (this.state.userNotSet) { return null; }
 
-    // for array
+    if (!this.state.models.Items) {
+      return (
+        <h3>You have no completed models</h3>
+      );
+    }
+
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '0') {
         return (
-          <ModelDetailsCard onClick={() => this.openNav()}
+          <ModelDetailsCard onClick={this.openNav}
             key={Math.random()}
             model_id={model.model_id.S}
             dataset={model.dataset.S}
@@ -135,6 +169,19 @@ class Models extends Component {
     return renderedModelTable;
   }
 
+  renderCreateModelButton = () => {
+    return (
+      <div>
+        <h1 align="center">My Models</h1>
+        <Link to="/create_model" style={{ textDecoration: 'none' }}>
+          <button type="button" className="block">
+            Upload New Model <span>&#43;</span>
+          </button>
+        </Link>
+      </div>
+    );
+  }
+
   render() {
     let clickedModel = null;
     if (this.state.clickedModel) {
@@ -145,15 +192,11 @@ class Models extends Component {
         }
       }
     }
+    this.getCurrentUser();
     return (
       <div className="body">
         <div>
-          <h1 align="center">My Models</h1>
-          <Link to="/create_model" style={{ textDecoration: 'none' }}>
-            <button type="button" className="block">
-              Upload New Model <span>&#43;</span>
-            </button>
-          </Link>
+          <div>{this.renderCreateModelButton()}</div>
           <div>{this.renderModelsInProgress()}</div>
           <div>{this.renderModelsCompleted()}</div>
         </div>

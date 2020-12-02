@@ -36,7 +36,7 @@ class ModelSideNav extends Component {
               <p>Predicting: {this.props.content.attribute_predicted.S}</p>
               <p>Percent Complete: {this.props.content.percent_complete.N}%</p>
             </div>
-            <p><strong>Download at: {this.props.retrievedURL}</strong></p>
+            <a href={this.props.retrievedURL} className="rtrvbtn" rel="noreferrer" target="_blank">Download Model</a>
             <div className="list-group" />
           </div>
         </div>

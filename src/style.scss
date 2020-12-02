@@ -61,10 +61,6 @@ li a:hover {
   background-color: rgb(184, 179, 179);
 }
 
-li a:hover {
-  background-color: rgb(184, 179, 179);
-}
-
 button {
   background-image: linear-gradient(to right, #580D93, #AF71EB); /* Artificien purple */
   border: none;
@@ -100,12 +96,25 @@ left: 0px;
   position: relative;
   bottom: 4px;
   left: 0px;
-  }
+}
+
+.rtrvbtn {
+  background-image: linear-gradient(to right, rgb(58, 18, 206), rgb(20, 0, 94)); /* Artificien purple */
+  border: none;
+  border-radius: 15px;
+  color: white;
+  padding: 18px 32px;
+  text-align: center;
+  margin: 10px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
 
 .openbtn2 {
-position: relative;
-bottom: -1px;
-left: 0px;
+  position: relative;
+  bottom: -1px;
+  left: 0px;
 }
 
 .card-holder {
@@ -182,15 +191,6 @@ flex-wrap: wrap;
   margin-top: 30px;
 }
 
-.overlay a {
-  padding: 8px;
-  text-decoration: none;
-  font-size: 36px;
-  color: #818181;
-  display: block;
-  transition: 0.2s;
-}
-
 .overlay a:hover, .overlay a:focus {
   color: #f1f1f1;
 }
@@ -254,10 +254,10 @@ margin: 10px;
   margin-top: 30px;
 }
 
-.overlay a {
-  padding: 8px;
-  text-decoration: none;
-  font-size: 36px;
-  color: #818181;
-  display: block;
-}
+// .overlay a {
+//   padding: 8px;
+//   text-decoration: none;
+//   font-size: 36px;
+//   color: #818181;
+//   display: block;
+// }
