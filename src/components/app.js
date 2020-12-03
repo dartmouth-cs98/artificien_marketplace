@@ -18,7 +18,6 @@ import Login from './Login';
 import CreateModel from './CreateModel';
 import UploadModel from './UploadModel';
 import ViewModel from './ViewModel';
-import ViewResults from './ViewResults';
 
 const FallBack = (props) => {
   return <div> URL Not Found </div>;
@@ -38,7 +37,6 @@ const App = (props) => {
         <Route exact path="/create_model" component={CreateModel} />
         <Route exact path="/upload_model" component={UploadModel} />
         <Route exact path="/view_model" component={ViewModel} />
-        <Route exact path="/view_results" component={ViewResults} />
         <Route component={FallBack} />
       </Switch>
     </Router>

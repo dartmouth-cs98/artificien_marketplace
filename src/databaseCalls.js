@@ -375,7 +375,6 @@ export async function putDataset(callback, PK, app, name, category, numDevices, 
 
 export function queryModels(callback, PK) {
   const queryParams = { // works just fine
-    // AttributesToGet: ['model_id', 'owner'],
     IndexName: 'owner_name-active_status-index',
     ScanIndexForward: false,
     ExpressionAttributeValues: { ':partitionKeyVal': { S: PK } },
