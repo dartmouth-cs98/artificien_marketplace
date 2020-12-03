@@ -25,15 +25,6 @@ class Models extends Component {
   }
 
   componentDidMount() {
-    // const callback = (data, error) => {
-    //   if (error) {
-    //     console.log(error);
-    //   } else {
-    //     console.log(data);
-    //     this.setState({ models: data });
-    //   }
-    // };
-    // queryModels(callback, this.state.currentUser);
     document.addEventListener('click', this.closeNav);
   }
 
@@ -63,7 +54,8 @@ class Models extends Component {
         this.setState({ models: data });
       }
     };
-    queryModels(callback, this.state.currentUser);
+    // console.log(this.state.currentUser.toLowerCase());
+    queryModels(callback, this.state.currentUser.toLowerCase());
   }
 
   retrieveModel = (clickedModel) => {
@@ -79,13 +71,11 @@ class Models extends Component {
     const endpoint = 'https://mxxq8l6m48.execute-api.us-east-1.amazonaws.com/prod/';
     const paramArray = [endpoint, queryParams];
     const queryString = paramArray.join('');
-    console.log(queryString);
+    // console.log(queryString);
 
     fetch(queryString)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        console.log(data.bucket_url);
         this.setState({ retrievedModelURL: data.bucket_url });
       });
   }
@@ -98,7 +88,6 @@ class Models extends Component {
 
   closeNav() {
     document.removeEventListener('click', this.closeNav);
-    console.log('bongo');
     const style = { width: 0 };
     this.setState({ style });
   }
@@ -109,6 +98,7 @@ class Models extends Component {
 
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '1') {
+        console.log(model);
         return (
           <ModelDetailsCard onClick={this.openNav}
             key={Math.random()}
@@ -187,7 +177,6 @@ class Models extends Component {
     if (this.state.clickedModel) {
       for (let i = 0; i < this.state.models.Items.length; i += 1) {
         if (this.state.models.Items[i].model_id.S === this.state.clickedModel) {
-          console.log('found it');
           clickedModel = this.state.models.Items[i];
         }
       }
