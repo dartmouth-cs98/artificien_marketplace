@@ -76,6 +76,7 @@ class Models extends Component {
     fetch(queryString)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data.bucket_url);
         this.setState({ retrievedModelURL: data.bucket_url });
       });
   }

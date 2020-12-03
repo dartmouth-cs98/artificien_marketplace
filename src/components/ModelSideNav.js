@@ -32,7 +32,7 @@ class ModelSideNav extends Component {
             <div className="text-center">
               <h2>{this.props.content.model_id.S}</h2>
               <p>Model started: {this.props.content.date_submitted.S}</p>
-              <p>Training on: {this.props.dataset.S}</p>
+              <p>Training on: {this.props.content.dataset.S}</p>
               {/* <p>Predicting: {this.props.content.attribute_predicted.S}</p> */}
               <p>Percent Complete: {this.props.content.percent_complete.N}%</p>
             </div>
@@ -49,7 +49,7 @@ class ModelSideNav extends Component {
             <div className="text-center">
               <h2>{this.props.content.model_id.S}</h2>
               <p>Model started: {this.props.content.date_submitted.S}</p>
-              <p>Training on: {this.props.dataset.S}</p>
+              <p>Training on: {this.props.content.dataset.S}</p>
               {/* <p>Predicting: {this.props.content.attribute_predicted.S}</p> */}
               <p>Percent Complete: {this.props.content.percent_complete.N}%</p>
             </div>
