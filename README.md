@@ -2,9 +2,28 @@
 
 This repository contains the front-end code for the web marketplace platform of Artificien: a place where clients can create, submit, and retrieve models trained on the platform's distributed datasets.
 
-TODO: super short project description, some sample screenshots or mockups that you keep up-to-date.
+<i>See below for sample screenshots</i>
+Data Library Page:
+![ss2](https://i.ibb.co/B4CB5fT/datalib.png)
+- Customers can explore and learn about datasets available for training. These datasets are sorted by category, and contain information about predictable attributes, number of devices, and the app from which data comes 
+
+Models Page:
+![](https://i.imgur.com/1mCO2TZ.png)
+- Contains cards for each active and inactive model belonging to current user. Contains information about the dataset the model is training on, percent complete
+
+Data Upload Page:
+![ss1](https://i.ibb.co/hYp34HX/dataupload.png)
+- Input form for uploading a dataset for developers. leads to creation of a "fake" dataset on which developers can then optimize models in jupyterhub. 
 
 ## Architecture
+- The marketplace is written in React, and is deployed via AWS Amplify
+- We authenticate users using Cognito
+    - Data Library is the same for all users (this is data they can purchase, which is a feature we will implement later)
+    - Models is user specific, since our enterprise user
+    - Data Upload is for App Developers to make new datasets
+    - Model Upload simply points the user to our Jupyterhub
+- All data is stored in DynamoDB, and the information displayed on the front end is based on calls to the database
+- Our Database has four tables - apps, models, datasets, and users. Dynamo is a noSQL database. Database is constructed and deployed via the AWS CDK in the artificien_infrastructure repo
 
 ### Development Setup
 
