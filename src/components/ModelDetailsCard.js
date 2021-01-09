@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 import '../style.scss';
-import * as ReactBootstrap from 'react-bootstrap';// import { Button } from 'reactstrap';
-// import { queryModels } from '../databaseCalls';
+import * as ReactBootstrap from 'react-bootstrap';
 
+/*
+Simple component that displays specifics of model selected from user model dashboard
+*/
 class ModelDetailsCard extends Component {
   constructor(props) {
     super(props);
@@ -11,8 +12,10 @@ class ModelDetailsCard extends Component {
     };
   }
 
+  // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
     return (
+      // onclick, function will initiate recall of model from PyGrid node
       <div>
         <ReactBootstrap.Card key={Math.random()} style={{ width: '22rem' }}>
           <ReactBootstrap.Card.Header as="h3">{this.props.model_id} on {this.props.dataset}</ReactBootstrap.Card.Header>

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 import '../style.scss';
-import * as ReactBootstrap from 'react-bootstrap';// import { Button } from 'reactstrap';
-// import { queryModels } from '../databaseCalls';
+import * as ReactBootstrap from 'react-bootstrap';
 
+/*
+Simple component that displays card-level details for each dataset available
+*/
 class DataLibraryCard extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +12,7 @@ class DataLibraryCard extends Component {
     };
   }
 
+  // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
     return (
       <div>

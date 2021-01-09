@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Input, Button } from 'reactstrap';
 import '../style.scss';
 
+/*
+User login page, no longer in use - replaced by AWS Cognito process
+*/
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -10,6 +14,7 @@ class Login extends Component {
     };
   }
 
+  // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
     return (
       <div>

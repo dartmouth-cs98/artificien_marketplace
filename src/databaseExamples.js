@@ -1,6 +1,8 @@
 const AWS = require('aws-sdk/dist/aws-sdk-react-native');
 
-console.log('HELLO');
+/*
+Successful query examples to serve as reference for writing queries in databaseCalls.js
+*/
 
 // -------------------------- Imports -----------------------------
 

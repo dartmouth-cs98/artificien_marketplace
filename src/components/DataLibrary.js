@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 import '../style.scss';
-// import * as ReactBootstrap from 'react-bootstrap';
-// import { Button } from 'reactstrap';
-// import DropdownButton from 'react-bootstrap/DropdownButton';
-import { queryDatasetsMount, queryDatasetsCategory, scanDatasets } from '../databaseCalls';
+import {
+  queryDatasetsMount,
+  queryDatasetsCategory,
+  scanDatasets,
+} from '../databaseCalls';
 import DataLibraryCard from './DataLibraryCard';
 import DatasetSideNav from './DatasetSideNav';
+
+/*
+Component that renders library of all available datasets to shoppers
+Calls on subcomponents of:
+  - DatasetSideNav
+  - DataLibraryCard
+*/
 
 class DataLibrary extends Component {
   constructor(props) {
@@ -34,7 +41,7 @@ class DataLibrary extends Component {
       if (error) {
         console.log(error);
       } else {
-        this.setState({ allDatasets: data });
+        this.setState({ allDatasets: data }); // display all datasets in db as catalog
       }
     };
     queryDatasetsMount(callbackMount);
@@ -46,54 +53,60 @@ class DataLibrary extends Component {
   }
 
   categoryOnClickFunction = (category) => {
-    console.log(category);
-    if (category === 'No Category') {
+    if (category === 'No Category') { // get rid of display when user wants no organization
       this.setState({ categoryIsChosen: false });
       this.setState({ sortedCategory: null });
-    } else {
+    } else { // we have chosen a category by which to sort
       this.setState({ categoriesNotSet: true });
       this.setState({ categoryIsChosen: true });
       this.setState({ sortedCategory: category });
     }
-  }
+  };
 
   mountDisplayDatasets = () => {
-    if (!this.state.allDatasets) { return 'No datasets found in category'; }
+    if (!this.state.allDatasets) {
+      return 'No datasets found in category';
+    }
 
     // for array
-    const renderedDatasets = this.state.allDatasets.Items.map((dataset) => {
+    const renderedDatasets = this.state.allDatasets.Items.map((dataset) => { // make a card for all datasets
       return (
-        <DataLibraryCard key={Math.random()} onClick={this.openNav} app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} dataset_id={dataset.dataset_id.S} />
+        <DataLibraryCard
+          key={Math.random()}
+          onClick={this.openNav}
+          app={dataset.app.S}
+          num_devices={dataset.num_devices.N}
+          category={dataset.category.S}
+          dataset_id={dataset.dataset_id.S}
+        />
       );
     });
 
     const renderedDatasetTable = (
       <div>
         <h2 align="left">All Datasets</h2>
-        <span className="card-holder wrap">
-          {renderedDatasets}
-        </span>
+        <span className="card-holder wrap">{renderedDatasets}</span>
       </div>
     );
     return renderedDatasetTable;
-  }
+  };
 
   getDisplayDataset = () => {
     if (this.state.clickedDataset) {
-      console.log('---------------');
-      console.log(this.state.clickedDataset);
       let toDisplayTemp = null;
       for (let i = 0; i < this.state.allDatasets.Items.length; i += 1) {
-        if (this.state.allDatasets.Items[i].dataset_id.S === this.state.clickedDataset) {
-          console.log('found it');
+        if (
+          this.state.allDatasets.Items[i].dataset_id.S === this.state.clickedDataset // iterating over all datasets, we've found the currently-clicked-on dataset
+        ) {
           toDisplayTemp = this.state.allDatasets.Items[i];
           this.setState({ toDisplayDataset: toDisplayTemp });
           this.setState({ clickedDataset: null });
         }
       }
     }
-  }
+  };
 
+  // side nav
   openNav(datasetId) {
     this.setState({ style: { width: 350 } });
     console.log(datasetId);
@@ -108,13 +121,21 @@ class DataLibrary extends Component {
   }
 
   renderDatasetsInCategory = () => {
-    if (!this.state.inCategory) { return 'No datasets found in category'; }
-
-    // for array
+    if (!this.state.inCategory) {
+      return 'No datasets found in category';
+    }
+    // make cards for datasets in category by sort
     const renderedDatasets = this.state.inCategory.Items.map((dataset) => {
       if (dataset.category.S === this.state.sortedCategory) {
         return (
-          <DataLibraryCard key={Math.random()} onClick={this.openNav} app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} dataset_id={dataset.dataset_id.S} />
+          <DataLibraryCard
+            key={Math.random()}
+            onClick={this.openNav}
+            app={dataset.app.S}
+            num_devices={dataset.num_devices.N}
+            category={dataset.category.S}
+            dataset_id={dataset.dataset_id.S}
+          />
         );
       }
       return null;
@@ -122,24 +143,35 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <h2 align="left">From Category: <i>{this.state.sortedCategory}</i></h2>
-        <div className="card-holder wrap">
-          {renderedDatasets}
-        </div>
+        <h2 align="left">
+          From Category: <i>{this.state.sortedCategory}</i>
+        </h2>
+        <div className="card-holder wrap">{renderedDatasets}</div>
       </div>
     );
     return renderedDatasetTable;
-  }
+  };
 
   renderDatasetsOutOfCategory = () => {
-    if (!this.state.outCategory) { return 'No datasets found out of category'; }
-    if (!this.state.sortedCategory) { return null; }
+    if (!this.state.outCategory) {
+      return 'No datasets found out of category';
+    }
+    if (!this.state.sortedCategory) {
+      return null;
+    }
 
-    // for array
+    // make cards for datasets out of category by sort
     const renderedDatasets = this.state.outCategory.map((dataset) => {
       if (dataset.category.S !== this.state.sortedCategory) {
         return (
-          <DataLibraryCard key={Math.random()} onClick={this.openNav} app={dataset.app.S} num_devices={dataset.num_devices.N} category={dataset.category.S} dataset_id={dataset.dataset_id.S} />
+          <DataLibraryCard
+            key={Math.random()}
+            onClick={this.openNav}
+            app={dataset.app.S}
+            num_devices={dataset.num_devices.N}
+            category={dataset.category.S}
+            dataset_id={dataset.dataset_id.S}
+          />
         );
       }
       return null;
@@ -148,16 +180,16 @@ class DataLibrary extends Component {
     const renderedDatasetTable = (
       <div>
         <h2 align="left">Remaining Datasets</h2>
-        <div className="card-holder wrap">
-          {renderedDatasets}
-        </div>
+        <div className="card-holder wrap">{renderedDatasets}</div>
       </div>
     );
     return renderedDatasetTable;
-  }
+  };
 
   renderAllDatasets = () => {
-    if (!this.state.sortedCategory) { return null; }
+    if (!this.state.sortedCategory) {
+      return null;
+    }
 
     if (this.state.categoriesNotSet) {
       const callbackQuery = (data, error) => {
@@ -187,53 +219,76 @@ class DataLibrary extends Component {
         <div>{this.renderDatasetsOutOfCategory()}</div>
       </div>
     );
-  }
+  };
 
+  // get all unique categories for all datasets available
   renderUniqueCategories = () => {
-    if (!this.state.allDatasets) { return ('No datasets found'); }
+    if (!this.state.allDatasets) {
+      return 'No datasets found';
+    }
 
     const allCategories = this.state.allDatasets.Items.map((dataset) => {
-      return (dataset.category.S);
+      return dataset.category.S;
     });
     const allUniqueCategories = [...new Set(allCategories)];
     allUniqueCategories.push('No Category');
 
     const allCategoryButtons = allUniqueCategories.map((category) => {
+      // each category goes to a button
       return (
-        <button type="button" className="categoryButton" onClick={() => this.categoryOnClickFunction(category)}>{category}</button>
+        <button
+          type="button"
+          className="categoryButton"
+          onClick={() => this.categoryOnClickFunction(category)} // onclick will revamp catalog as sorted
+        >
+          {category}
+        </button>
       );
     });
+    return <div>{allCategoryButtons}</div>;
+  };
 
-    const allCategoriesDiv = (<div>{allCategoryButtons}</div>);
-    return allCategoriesDiv;
-  }
+  // -------------------------------------------------------- RENDER -------------------------------------------------------- //
 
   render() {
     this.getDisplayDataset();
-    console.log(this.state.toDisplayDataset);
     if (!this.state.categoryIsChosen) {
+      // if we have a category, render in-category and out-of-category datasets separately.
       return (
         <div className="body">
           <h1>Data Library</h1>
-          <h3><i>Categories</i></h3>
+          <h3>
+            <i>Categories</i>
+          </h3>
           <div>{this.renderUniqueCategories()}</div>
           <br />
           <div>{this.mountDisplayDatasets()}</div>
           <div>
-            <DatasetSideNav content={this.state.toDisplayDataset} onClick={this.closeNav} style={this.state.style} />
+            <DatasetSideNav
+              content={this.state.toDisplayDataset}
+              onClick={this.closeNav}
+              style={this.state.style}
+            />
           </div>
         </div>
       );
     } else {
+      // if we don't have a category yet, just render all datasets
       return (
         <div className="body">
           <h1>Data Library</h1>
-          <h3><i>Categories</i></h3>
+          <h3>
+            <i>Categories</i>
+          </h3>
           <div>{this.renderUniqueCategories()}</div>
           <br />
           <div>{this.renderAllDatasets()}</div>
           <div>
-            <DatasetSideNav content={this.state.toDisplayDataset} onClick={this.closeNav} style={this.state.style} />
+            <DatasetSideNav
+              content={this.state.toDisplayDataset}
+              onClick={this.closeNav}
+              style={this.state.style}
+            />
           </div>
         </div>
       );
