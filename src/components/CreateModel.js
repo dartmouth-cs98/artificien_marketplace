@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-// import { Input, Button } from 'reactstrap';
 import '../style.scss';
+
+/*
+Simple component that links to user-specific jupyterhub instance
+*/
 
 class CreateModel extends Component {
   constructor(props) {
@@ -10,6 +13,7 @@ class CreateModel extends Component {
     };
   }
 
+  // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
     return (
       <div className="body">

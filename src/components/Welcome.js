@@ -1,6 +1,8 @@
 import React from 'react';
 import '../style.scss';
 
+// welcome variable on homepage
+
 const Welcome = () => {
   return (
     <>

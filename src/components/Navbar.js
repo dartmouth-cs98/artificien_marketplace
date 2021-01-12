@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import '../style.scss';
 
+/*
+Simple top navigation bar
+*/
+
 class Navbar extends Component {
   constructor(props) {
     super(props);
@@ -9,6 +13,8 @@ class Navbar extends Component {
     this.state = {
     };
   }
+
+  // -------------------------------------------------------- RENDER -------------------------------------------------------- //
 
   render() {
     return (

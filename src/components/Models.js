@@ -6,6 +6,16 @@ import { queryModels } from '../databaseCalls';
 import ModelDetailsCard from './ModelDetailsCard';
 import ModelSideNav from './ModelSideNav';
 
+/*
+Component that displays all user models, both active and inactive (in different sections)
+When each model is clicked on, a menu will slide out from the right hand slide, giving more information about the model...
+and allowing the user to recall the model if it is completed.
+
+Uses the subcomponents:
+  - ModelDetailsCard
+  - ModelSideNav
+  - CreateModel
+*/
 class Models extends Component {
   constructor(props) {
     super(props);
@@ -24,6 +34,7 @@ class Models extends Component {
     this.closeNav = this.closeNav.bind(this);
   }
 
+  // mounting methods for slideout menu
   componentDidMount() {
     document.addEventListener('click', this.closeNav);
   }
@@ -32,6 +43,7 @@ class Models extends Component {
     document.removeEventListener('click', this.closeNav);
   }
 
+  // figure out which user is currently logged in and query their models
   getCurrentUser = () => {
     if (this.state.userNotSet) {
       Auth.currentSession()
@@ -45,6 +57,7 @@ class Models extends Component {
     }
   }
 
+  // even if user revisiting page, must re-query their models
   queryUserModels = () => {
     const callback = (data, error) => {
       if (error) {
@@ -54,24 +67,20 @@ class Models extends Component {
         this.setState({ models: data });
       }
     };
-    // console.log(this.state.currentUser.toLowerCase());
     queryModels(callback, this.state.currentUser.toLowerCase());
   }
 
+  // actually get model with simple API call to aws endpoint. All necessary parameters included
   retrieveModel = (clickedModel) => {
     const path = 'retrieve';
     const ownerName = '?ownerName='.concat('', clickedModel.owner_name.S);
     const modelId = '&modelId='.concat('', clickedModel.model_id.S);
     const version = '&version='.concat('', clickedModel.version.S);
     const url = '&nodeURL='.concat('', clickedModel.node_URL.S);
-
-    const queryParamArray = [path, ownerName, modelId, version, url];
-    const queryParams = queryParamArray.join('');
+    const queryParams = path + ownerName + modelId + version + url;
 
     const endpoint = 'https://mxxq8l6m48.execute-api.us-east-1.amazonaws.com/prod/';
-    const paramArray = [endpoint, queryParams];
-    const queryString = paramArray.join('');
-    // console.log(queryString);
+    const queryString = endpoint + queryParams;
 
     fetch(queryString)
       .then((response) => response.json())
@@ -81,6 +90,7 @@ class Models extends Component {
       });
   }
 
+  // open and close sidebar
   openNav(modelId) {
     this.setState({ style: { width: 350 } });
     console.log(modelId);
@@ -93,10 +103,12 @@ class Models extends Component {
     this.setState({ style });
   }
 
+  // get only the models in progress
   renderModelsInProgress = () => {
     if (!this.state.models) { return 'You have no Models in progress. Go to Create Model to make one'; }
     if (!this.state.models.Items) { return null; }
 
+    // if the user has models, map each to a card
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '1') {
         console.log(model);
@@ -113,6 +125,7 @@ class Models extends Component {
       return null;
     });
 
+    // put em all together in one container
     const renderedModelTable = (
       <div>
         <h2 align="left">In Progress</h2>
@@ -124,6 +137,7 @@ class Models extends Component {
     return renderedModelTable;
   }
 
+  // get only the models completed
   renderModelsCompleted = () => {
     if (!this.state.models) { return 'You have no completeds models'; }
     if (this.state.userNotSet) { return null; }
@@ -137,7 +151,7 @@ class Models extends Component {
     const renderedModels = this.state.models.Items.map((model) => {
       if (model.active_status.N === '0') {
         return (
-          <ModelDetailsCard onClick={this.openNav}
+          <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
             key={Math.random()}
             model_id={model.model_id.S}
             dataset={model.dataset.S}
@@ -160,6 +174,7 @@ class Models extends Component {
     return renderedModelTable;
   }
 
+  // button to take to CreateModel component
   renderCreateModelButton = () => {
     return (
       <div>
@@ -173,12 +188,15 @@ class Models extends Component {
     );
   }
 
+  // -------------------------------------------------------- RENDER -------------------------------------------------------- //
+
   render() {
     let clickedModel = null;
     if (this.state.clickedModel) {
+      // if we've clicked on a model, iterate through queried model to find which one
       for (let i = 0; i < this.state.models.Items.length; i += 1) {
         if (this.state.models.Items[i].model_id.S === this.state.clickedModel) {
-          clickedModel = this.state.models.Items[i];
+          clickedModel = this.state.models.Items[i]; // this model will be whose details are displayed in sliding sidebar
         }
       }
     }

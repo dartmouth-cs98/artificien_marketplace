@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
 
+/*
+Right-side slide-out component that displays more in-depth information about dataset.
+Rendered when user clicks on dataLibraryCard component
+*/
+
 class DatasetSideNav extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +16,7 @@ class DatasetSideNav extends Component {
 
   renderDatasetCard = () => {
     if (this.props.content.predictable_attributes) {
+      // if we have predictable attributes for the card...
       return (
         <div className="overlay" style={this.props.style}>
           <button type="button" className="closebtn" onClick={this.props.onClick}>x</button>
@@ -26,6 +32,7 @@ class DatasetSideNav extends Component {
         </div>
       );
     } else {
+      // if we don't have predictable attributes for the card...
       return (
         <div className="overlay" style={this.props.style}>
           <button type="button" className="closebtn" onClick={this.props.onClick}>x</button>
@@ -43,18 +50,13 @@ class DatasetSideNav extends Component {
     }
   }
 
+  // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
     if (!this.props.content) {
+      // placeholder div for initial hidden sidebar
       return (
         <div className="overlay" style={this.props.style}>
-          <button type="button" className="closebtn" onClick={this.props.onClick}>-</button>
-          <div className="sidenav-container">
-            <div className="text-center">
-              <h2>Dataset X</h2>
-              <p>Dataset details go here</p>
-            </div>
-            <div className="list-group" />
-          </div>
+          <h3>Oops!</h3>
         </div>
       );
     } else {
