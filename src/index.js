@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
-
 import reducers from './reducers';
 
 import App from './components/app';
