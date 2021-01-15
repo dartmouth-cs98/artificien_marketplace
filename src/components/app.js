@@ -16,6 +16,7 @@ import Welcome from './Welcome';
 import Navbar from './Navbar';
 import Login from './Login';
 import CreateModel from './CreateModel';
+import Profile from './Profile';
 
 const FallBack = (props) => {
   return <div> URL Not Found </div>;
@@ -33,6 +34,7 @@ const App = (props) => {
         <Route exact path="/login" component={Login} />
         <Route path="/data_library" component={DataLibrary} />
         <Route exact path="/create_model" component={CreateModel} />
+        <Route exact path="/profile" component={Profile} />
         <Route component={FallBack} />
       </Switch>
     </Router>

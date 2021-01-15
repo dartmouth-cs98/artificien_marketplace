@@ -34,6 +34,9 @@ class Navbar extends Component {
             <li>
               <NavLink to="/select_data"> Data Upload </NavLink>
             </li>
+            <li>
+              <NavLink to="/profile"> Profile </NavLink>
+            </li>
           </ul>
         </nav>
       </>
