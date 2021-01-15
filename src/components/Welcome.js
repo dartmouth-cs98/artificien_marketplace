@@ -5,23 +5,23 @@ import { Auth } from 'aws-amplify';
 import { connect } from 'react-redux';
 import {
   getUser,
-} from '../databaseCalls';
+} from '../database/databaseCalls';
+import { addRole } from '../actions';
+
 // welcome variable on homepage
 
 class Welcome extends Component {
   render() {
-    // const { test } = this.props;
-    console.log(this.props);
     Auth.currentSession()
       .then((data) => {
         console.log(data);
         const name = data.accessToken.payload.username;
-        console.log(name);
         const callback = (successData, error) => {
           if (error) {
             console.log(error);
           } else {
             console.log(successData.Item.role.N); // display all datasets in db as catalog
+            this.props.addRole(successData.Item.role.N); // "add to redux store"
             // put in redux store
           }
         };
@@ -47,8 +47,8 @@ class Welcome extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    testProp: state.test,
+    role: state.role,
   };
 };
 
-export default connect(mapStateToProps)(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component
+export default connect(mapStateToProps, { addRole })(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component

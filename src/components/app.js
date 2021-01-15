@@ -16,6 +16,8 @@ import Welcome from './Welcome';
 import Navbar from './Navbar';
 import Login from './Login';
 import CreateModel from './CreateModel';
+import AuthorizedRoute from '../helpers/AuthorizedRoute';
+import Roles from '../helpers/Roles';
 
 const FallBack = (props) => {
   return <div> URL Not Found </div>;
@@ -27,12 +29,13 @@ const App = (props) => {
       <Navbar />
       <Switch>
         <Route exact path="/" component={Welcome} />
-        <Route path="/data_library" component={DataLibrary} />
-        <Route exact path="/models" component={Models} />
-        <Route exact path="/select_data" component={UploadData} />
-        <Route exact path="/login" component={Login} />
-        <Route path="/data_library" component={DataLibrary} />
-        <Route exact path="/create_model" component={CreateModel} />
+        <AuthorizedRoute exact path="/data_library" component={DataLibrary} validRoles={[Roles.DEVELOPER]} />
+        {/* <Route path="/data_library" component={DataLibrary} /> */}
+        <AuthorizedRoute exact path="/models" component={Models} validRoles={[Roles.DEVELOPER]} />
+        <AuthorizedRoute exact path="/select_data" component={UploadData} validRoles={[Roles.DEVELOPER]} />
+        <AuthorizedRoute exact path="/login" component={Login} validRoles={[Roles.DEVELOPER]} />
+        <AuthorizedRoute exact path="/data_library" component={DataLibrary} validRoles={[Roles.DEVELOPER]} />
+        <AuthorizedRoute exact path="/create_model" component={CreateModel} validRoles={[Roles.DEVELOPER]} />
         <Route component={FallBack} />
       </Switch>
     </Router>

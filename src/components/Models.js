@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import '../style.scss';
 import { Auth } from 'aws-amplify';
-import { queryModels } from '../databaseCalls';
+import { queryModels } from '../database/databaseCalls';
 import ModelDetailsCard from './ModelDetailsCard';
 import ModelSideNav from './ModelSideNav';
 

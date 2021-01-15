@@ -4,7 +4,7 @@ import {
   queryDatasetsMount,
   queryDatasetsCategory,
   scanDatasets,
-} from '../databaseCalls';
+} from '../database/databaseCalls';
 import DataLibraryCard from './DataLibraryCard';
 import DatasetSideNav from './DatasetSideNav';
 
