@@ -4,7 +4,7 @@ import { getUser } from '../databaseCalls';
 import '../style.scss';
 
 /*
-Simple component that links to user-specific jupyterhub instance
+Component that provides the user their information, will allow editing capabilities in the future.
 */
 
 class Profile extends Component {
@@ -21,6 +21,7 @@ class Profile extends Component {
 
   // mounting
   componentDidMount() {
+    // console.log('hi');
     const callbackMount = (successData, error) => {
       if (error) {
         console.log(error);
@@ -34,11 +35,9 @@ class Profile extends Component {
 
     // figure out which user is currently logged in and query their models
     getCurrentUser = () => {
-      console.log(this.state);
       if (this.state.userNotSet) {
         Auth.currentSession()
           .then((data) => {
-            console.log(this.state);
             console.log(data);
             console.log(data.accessToken.payload.username);
             this.setState({ currentUser: data.accessToken.payload.username });
@@ -48,7 +47,7 @@ class Profile extends Component {
       }
     }
 
-    // even if user revisiting page, must re-query their models
+  // even if user revisiting page, must re-query their information
   queryUser = () => {
     const callback = (data, error) => {
       if (error) {
@@ -67,7 +66,10 @@ class Profile extends Component {
     return (
       <div className="body">
         <div>
-          <h3>{this.state.userData.username}</h3>
+          <h3>Name: {this.state.userData.name}</h3>
+          <h3>Username: {this.state.userData.user_id}</h3>
+          <h3>Email: {this.state.userData.user_account_email}</h3>
+          <h3>Enterprise: {this.state.userData.enterprise}</h3>
         </div>
       </div>
     );
