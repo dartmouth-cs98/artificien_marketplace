@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import '../style.scss';
@@ -5,28 +6,29 @@ import { Auth } from 'aws-amplify';
 import { connect } from 'react-redux';
 import {
   getUser,
-} from '../databaseCalls';
+} from '../database/databaseCalls';
+import { addRole } from '../actions';
+
 // welcome variable on homepage
 
 class Welcome extends Component {
-  render() {
-    // const { test } = this.props;
-    console.log(this.props);
+  componentDidMount() {
     Auth.currentSession()
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         const name = data.accessToken.payload.username;
-        console.log(name);
         const callback = (successData, error) => {
           if (error) {
             console.log(error);
           } else {
-            console.log(successData.Item.role.N); // display all datasets in db as catalog
-            // put in redux store
+            if (this.props.role === undefined) this.props.addRole(successData.Item.role.N); // can't use ! here, 0 is falsey, add to initial state to redux store
           }
         };
         getUser(callback, name);
       });
+  }
+
+  render() {
     return (
       <>
         <div className="body">
@@ -38,6 +40,7 @@ class Welcome extends Component {
               Build, iterate, and access the exact datasets you need to generate insights.
             </i>
           </p>
+          {Math.random() > 0.5 && <p>This is where the login button should go</p>}
         </div>
         <div className="landing" />
       </>
@@ -47,8 +50,8 @@ class Welcome extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    testProp: state.test,
+    role: state.roleReducer.role,
   };
 };
 
-export default connect(mapStateToProps)(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component
+export default connect(mapStateToProps, { addRole })(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component

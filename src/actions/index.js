@@ -2,7 +2,15 @@
 export const ActionTypes = {
   INCREMENT: 'INCREMENT',
   DECREMENT: 'DECREMENT',
+  ADDROLE: 'ADDROLE',
 };
+
+export function addRole(pay) {
+  return {
+    type: ActionTypes.ADDROLE,
+    payload: pay,
+  };
+}
 
 export function increment() {
   return {

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
-import { putDataset } from '../databaseCalls';
+import { putDataset } from '../database/databaseCalls';
 
 /*
 Large component that allows users to describe the dataset their app has to offer
