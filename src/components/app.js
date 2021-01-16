@@ -18,6 +18,7 @@ import Login from './Login';
 import CreateModel from './CreateModel';
 import Roles from '../helpers/Roles';
 import withAuthorization from '../helpers/withAuthorization';
+import Profile from './Profile';
 
 const FallBack = (props) => {
   return <div> URL Not Found </div>;
@@ -34,6 +35,7 @@ const App = (props) => {
         <Route exact path="/select_data" component={withAuthorization(UploadData, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/login" component={withAuthorization(Login, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/create_model" component={withAuthorization(CreateModel, [Roles.DEVELOPER, Roles.CLIENT])} />
+        <Route exact path="/profile" component={withAuthorization(Profile, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route component={FallBack} />
       </Switch>
     </Router>
