@@ -7,7 +7,7 @@ import {
   Switch,
 } from 'react-router-dom';
 
-import { withAuthenticator } from '@aws-amplify/ui-react';
+// import { withAuthenticator } from '@aws-amplify/ui-react';
 
 import DataLibrary from './DataLibrary';
 import Models from './Models';
@@ -16,8 +16,8 @@ import Welcome from './Welcome';
 import Navbar from './Navbar';
 import Login from './Login';
 import CreateModel from './CreateModel';
-import AuthorizedRoute from '../helpers/AuthorizedRoute';
 import Roles from '../helpers/Roles';
+import withAuthorization from '../helpers/withAuthorization';
 
 const FallBack = (props) => {
   return <div> URL Not Found </div>;
@@ -29,19 +29,17 @@ const App = (props) => {
       <Navbar />
       <Switch>
         <Route exact path="/" component={Welcome} />
-        <AuthorizedRoute exact path="/data_library" component={DataLibrary} validRoles={[Roles.DEVELOPER]} />
-        {/* <Route path="/data_library" component={DataLibrary} /> */}
-        <AuthorizedRoute exact path="/models" component={Models} validRoles={[Roles.DEVELOPER]} />
-        <AuthorizedRoute exact path="/select_data" component={UploadData} validRoles={[Roles.DEVELOPER]} />
-        <AuthorizedRoute exact path="/login" component={Login} validRoles={[Roles.DEVELOPER]} />
-        <AuthorizedRoute exact path="/data_library" component={DataLibrary} validRoles={[Roles.DEVELOPER]} />
-        <AuthorizedRoute exact path="/create_model" component={CreateModel} validRoles={[Roles.DEVELOPER]} />
+        <Route exact path="/data_library" component={withAuthorization(DataLibrary, [Roles.DEVELOPER, Roles.CLIENT])} />
+        <Route exact path="/models" component={withAuthorization(Models, [Roles.DEVELOPER, Roles.CLIENT])} />
+        <Route exact path="/select_data" component={withAuthorization(UploadData, [Roles.DEVELOPER, Roles.CLIENT])} />
+        <Route exact path="/login" component={withAuthorization(Login, [Roles.DEVELOPER, Roles.CLIENT])} />
+        <Route exact path="/create_model" component={withAuthorization(CreateModel, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route component={FallBack} />
       </Switch>
     </Router>
   );
 };
 
-export default withAuthenticator(App);
+export default (App);
 
 // ReactDOM.render(<App />, document.getElementById('main'));

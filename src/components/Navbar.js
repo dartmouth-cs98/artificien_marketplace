@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import '../style.scss';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import RoleButton from './RoleButton';
 
 /*
 Simple top navigation bar
@@ -20,7 +22,7 @@ class Navbar extends Component {
     return (
       <>
         <div className="logo" active />
-        <nav>
+        <nav className="nav">
           <ul className="nav-ul">
             <li>
               <NavLink to="/" exact> Home </NavLink>
@@ -35,10 +37,18 @@ class Navbar extends Component {
               <NavLink to="/select_data"> Data Upload </NavLink>
             </li>
           </ul>
+          <ul className="nav-role-button-ul">
+            <li className="role-button">
+              <RoleButton />
+            </li>
+            {/* <li>
+              {Math.random() > 0.5 && <AmplifySignOut />}
+            </li> */}
+          </ul>
         </nav>
       </>
     );
   }
 }
 
-export default withRouter(Navbar);
+export default withRouter(withAuthenticator(Navbar));

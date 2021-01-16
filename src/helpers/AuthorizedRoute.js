@@ -1,14 +1,16 @@
+/* eslint-disable react/no-deprecated */
+/* eslint-disable prefer-destructuring */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { withRouter, Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-// Higher-order component to role-restrict access to routes
+// // Higher-order component to role-restrict access to routes
 const AuthorizedRoute = ({
-  component: Component, path, exact = true, validRoles, ...rest
+  component: Component, path, exact = true, validRoles, role, ...rest
 }) => {
-  const role = 1; // TODO: find user role from redux??
-  const isLoggedIn = true; // !!uid; // TODO: GET THIS FROM COGNITO - SHOULD BE ONLY CRITERION FOR WHETHER USER IS A GO TO SEE VARIABEL
+  // const state = store.getState();
+  const isLoggedIn = true; // !!uid; // TODO: GET THIS FROM COGNITO - SHOULD BE ONLY CRITERION FOR WHETHER USER IS A GO TO SEE VARIABLE
   const isValidRole = validRoles.includes(role);
 
   const message = isLoggedIn ? 'You do not have access to that page' : 'Please log in to view that page';
@@ -42,8 +44,9 @@ const AuthorizedRoute = ({
 };
 
 const mapStateToProps = (state) => {
+  console.log(state.roleReducer.role);
   return {
-    role: state.role, // TODO: test - not sure what's goin on here, can we get redux to functional components?
+    role: state.roleReducer.role,
   };
 };
 

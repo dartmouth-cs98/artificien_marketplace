@@ -7,6 +7,11 @@ body, html {
   overflow-x: hidden; // to prevent scrolling from side to side. thank you stack overflow for the advice here!
 }
 
+.nav{
+  display: flex;
+  justify-content: space-between; 
+}
+
 .logo {
   float: left;
   background-image: url('img/NavbarLogo.png'); // team logo
@@ -254,10 +259,11 @@ margin: 10px;
   margin-top: 30px;
 }
 
-// .overlay a {
-//   padding: 8px;
-//   text-decoration: none;
-//   font-size: 36px;
-//   color: #818181;
-//   display: block;
-// }
+.role-button {
+  display: flex;
+  justify-content: center;
+}
+
+.nav-role-button-ul{
+  margin-right: 10%;
+}

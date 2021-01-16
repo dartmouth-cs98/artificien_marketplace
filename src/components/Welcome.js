@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import '../style.scss';
@@ -11,22 +12,23 @@ import { addRole } from '../actions';
 // welcome variable on homepage
 
 class Welcome extends Component {
-  render() {
+  componentDidMount() {
     Auth.currentSession()
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         const name = data.accessToken.payload.username;
         const callback = (successData, error) => {
           if (error) {
             console.log(error);
           } else {
-            console.log(successData.Item.role.N); // display all datasets in db as catalog
-            this.props.addRole(successData.Item.role.N); // "add to redux store"
-            // put in redux store
+            if (this.props.role === undefined) this.props.addRole(successData.Item.role.N); // can't use ! here, 0 is falsey, add to initial state to redux store
           }
         };
         getUser(callback, name);
       });
+  }
+
+  render() {
     return (
       <>
         <div className="body">
@@ -38,6 +40,7 @@ class Welcome extends Component {
               Build, iterate, and access the exact datasets you need to generate insights.
             </i>
           </p>
+          {Math.random() > 0.5 && <p>This is where the login button should go</p>}
         </div>
         <div className="landing" />
       </>
@@ -47,7 +50,7 @@ class Welcome extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    role: state.role,
+    role: state.roleReducer.role,
   };
 };
 
