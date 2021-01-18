@@ -91,11 +91,18 @@ export function getEnterprise(callback, PK) {
 }
 
 export function getUser(callback, PK) {
+  // const getParams = {
+  //   Key: { user_id: { S: PK } },
+  //   TableName: 'user_table',
+  // };
   const getParams = {
-    Key: { user_id: { S: PK } },
+    IndexName: 'users_username_index',
+    ScanIndexForward: false,
+    ExpressionAttributeValues: { ':partitionKeyVal': { S: PK } },
+    KeyConditionExpression: 'username = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
     TableName: 'user_table',
   };
-  docClient.getItem(getParams, (err, data) => { // send and receieve
+  docClient.query(getParams, (err, data) => { // send and receieve
     if (err) {
       console.log(err, err.stack);
       callback(err);

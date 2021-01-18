@@ -1,6 +1,7 @@
 const Roles = {
-  DEVELOPER: 1,
   CLIENT: 0,
+  DEVELOPER: 1,
+  GUEST: 2,
 };
 
 export default Roles;

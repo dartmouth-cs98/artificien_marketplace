@@ -13,19 +13,21 @@ import { addRole } from '../actions';
 
 class Welcome extends Component {
   componentDidMount() {
+    // if logged in...
     Auth.currentSession()
       .then((data) => {
-        // console.log(data);
         const name = data.accessToken.payload.username;
-        const callback = (successData, error) => {
+        const callback = (successData, error) => { // requires current user to be in database
           if (error) {
             console.log(error);
           } else {
-            if (this.props.role === undefined) this.props.addRole(successData.Item.role.N); // can't use ! here, 0 is falsey, add to initial state to redux store
+            if (this.props.role === undefined) this.props.addRole(successData.Items[0].role.N); // can't use ! here, 0 is falsey, add to initial state to redux store
           }
         };
         getUser(callback, name);
       });
+    // else not logged in...
+    // add role to be 2 - "not logged in"
   }
 
   render() {
@@ -40,6 +42,7 @@ class Welcome extends Component {
               Build, iterate, and access the exact datasets you need to generate insights.
             </i>
           </p>
+          {/* if not logged in */}
           {Math.random() > 0.5 && <p>This is where the login button should go</p>}
         </div>
         <div className="landing" />

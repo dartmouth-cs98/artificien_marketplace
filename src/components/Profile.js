@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
-import { getUser } from '../databaseCalls';
+import { getUser } from '../database/databaseCalls';
 import '../style.scss';
 
 /*
@@ -13,66 +13,56 @@ class Profile extends Component {
     super(props);
 
     this.state = {
-      currentUser: null,
-      userNotSet: true,
       userData: null,
     };
   }
 
   // mounting
   componentDidMount() {
-    // console.log('hi');
-    const callbackMount = (successData, error) => {
-      if (error) {
-        console.log(error);
-      } else {
-        this.setState({ userData: successData }); // display all datasets in db as catalog
-        console.log(successData);
-      }
-    };
-    getUser(callbackMount);
+    this.getCurrentUser();
   }
 
     // figure out which user is currently logged in and query their models
     getCurrentUser = () => {
-      if (this.state.userNotSet) {
-        Auth.currentSession()
-          .then((data) => {
-            console.log(data);
-            console.log(data.accessToken.payload.username);
-            this.setState({ currentUser: data.accessToken.payload.username });
-            this.setState({ userNotSet: false });
-            this.queryUser();
-          });
-      }
+      Auth.currentSession()
+        .then((data) => {
+          console.log(data);
+          const name = data.accessToken.payload.username;
+          this.queryUser(name);
+        });
     }
 
   // even if user revisiting page, must re-query their information
-  queryUser = () => {
+  queryUser = (name) => {
     const callback = (data, error) => {
       if (error) {
         console.log(error);
       } else {
-        console.log(data);
-        this.setState({ userData: data });
+        console.log(data.Items[0]);
+        this.setState({ userData: data.Items[0] });
       }
     };
-    getUser(callback, this.state.currentUser.toLowerCase());
+    getUser(callback, name);
   }
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
-    console.log(this.state);
-    return (
-      <div className="body">
-        <div>
-          <h3>Name: {this.state.userData.name}</h3>
-          <h3>Username: {this.state.userData.user_id}</h3>
-          <h3>Email: {this.state.userData.user_account_email}</h3>
-          <h3>Enterprise: {this.state.userData.enterprise}</h3>
+    console.log(this.state.userData);
+    if (this.state.userData) {
+      return (
+        <div className="body">
+          <div>
+            <h3>Name: {this.state.userData.username.S}</h3>
+            <h3>Username: {this.state.userData.user_id.S}</h3>
+            <h3>Email: {this.state.userData.user_account_email.S}</h3>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div>Nothing yet</div>
+      );
+    }
   }
 }
 
