@@ -54,4 +54,4 @@ class Navbar extends Component {
   }
 }
 
-export default withRouter(withAuthenticator(Navbar));
+export default withRouter(withAuthenticator(Navbar)); // might be some sort of login flow thing here

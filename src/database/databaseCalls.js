@@ -92,10 +92,13 @@ export function getEnterprise(callback, PK) {
 
 export function getUser(callback, PK) {
   const getParams = {
-    Key: { user_id: { S: PK } },
+    IndexName: 'users_username_index',
+    ScanIndexForward: false,
+    ExpressionAttributeValues: { ':partitionKeyVal': { S: PK } },
+    KeyConditionExpression: 'username = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
     TableName: 'user_table',
   };
-  docClient.getItem(getParams, (err, data) => { // send and receieve
+  docClient.query(getParams, (err, data) => { // send and receieve
     if (err) {
       console.log(err, err.stack);
       callback(err);
@@ -261,18 +264,13 @@ export async function putEnterprise(callback, PK, email) {
   getEnterprise(callbacktwo, PK);
 }
 
-export async function putUser(callback, PK, isDev, email, name, enterprise) {
-  const banks = ['Bank of America', 'Citigroup', 'Bank of New York'];
-  // still need: find models user owns through query
-
+export async function putUser(callback, PK, isDev, email, username) {
   const putParams = { // works just fine
     Item: {
       user_id: { S: PK },
       is_developer: { S: isDev },
       user_account_email: { S: email },
-      name: { S: name },
-      enterprise: { S: enterprise },
-      bank_info: { bank_number: { N: Math.floor(Math.random() * 9999) }, bank: { S: banks[Math.floor(Math.random() * banks.length)] } },
+      username: { S: username },
     },
     TableName: 'user_table',
     ReturnConsumedCapacity: 'TOTAL',
