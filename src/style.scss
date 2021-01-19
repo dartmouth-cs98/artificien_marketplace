@@ -66,23 +66,33 @@ li a:hover {
   background-color: rgb(184, 179, 179);
 }
 
-button {
+.data-card-button {
   background-image: linear-gradient(to right, #580D93, #AF71EB); /* Artificien purple */
   border: none;
   border-radius: 15px;
   color: white;
   padding: 18px 32px;
   text-align: center;
-  margin: 10px;
+  margin: 20px;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
 }
 
 .block {
-display: block;
-width: 70%;
-margin: auto;
+  display: block;
+  width: 70%;
+  margin: auto;
+  background-image: linear-gradient(to right, #580D93, #AF71EB); /* Artificien purple */
+  border: none;
+  border-radius: 15px;
+  color: white;
+  padding: 18px 32px;
+  text-align: center;
+  margin: 20px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }
 
 iframe {
@@ -138,7 +148,7 @@ left: 0px;
 flex-wrap: wrap;
 } 
 
-.card {
+.data-card {
   width: 30%;
   height: 80%;
   border: 1px;
@@ -267,3 +277,27 @@ margin: 10px;
 .nav-role-button-ul{
   margin-right: 10%;
 }
+
+.profile-page-body {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-page-user-info {
+  display: flex;
+  width: 70%;
+  justify-content: space-evenly;
+}
+
+.username-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.username-input-form {
+  margin: 10px;
+}
+// #profile-page-user-info-item{
+//   : 10%;
+// }

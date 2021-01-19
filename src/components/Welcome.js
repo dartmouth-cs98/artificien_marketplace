@@ -17,6 +17,7 @@ class Welcome extends Component {
     Auth.currentSession()
       .then((data) => {
         const name = data.accessToken.payload.username;
+        console.log(name);
         const callback = (successData, error) => { // requires current user to be in database
           if (error) {
             console.log(error);
