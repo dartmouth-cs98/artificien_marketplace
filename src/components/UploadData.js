@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import { putDataset } from '../database/databaseCalls';
+import '../style.scss';
 
 /*
 Large component that allows users to describe the dataset their app has to offer
@@ -64,19 +65,30 @@ class UploadData extends Component {
     // window.location.reload(false); // optional force page reload, ugly
   }
 
-  // change app specified num users
+  // change app specified num users, make sure it is a positive integer
   addNumUsers = (event) => {
-    if (!Number.isNaN(parseInt(event.target.value, 10))) {
+    if (!Number.isNaN(parseInt(event.target.value, 10)) && parseInt(event.target.value, 10) > 0) {
       this.setState({ numUsers: event.target.value });
       this.setState({ numUsersSubmitted: true });
+    } else {
+      this.setState({ numUsersSubmitted: false });
     }
   }
 
-  // change app specified category
+  // change app specified category, make sure their category is not None
   addAppCategory = (event) => {
-    console.log('category submitted');
-    this.setState({ appCategory: event.target.value });
-    this.setState({ categorySubmitted: true });
+    if (!(event.target.value === '')) {
+      if (!(event.target.value === 'None')) {
+        console.log('category submitted');
+        this.setState({ appCategory: event.target.value });
+        this.setState({ categorySubmitted: true });
+      } else {
+        this.setState({ appCategory: event.target.value });
+        this.setState({ categorySubmitted: false });
+      }
+    } else {
+      this.setState({ categorySubmitted: false });
+    }
   }
 
   // change app specified name
@@ -106,23 +118,23 @@ class UploadData extends Component {
   // render number of users to input
 
   renderNumUsersInput = () => {
-    if (!this.state.numUsersSubmitted) { // if app name hasn't been submitted yet, give invalid message
+    if (!this.state.numUsersSubmitted) { // if number of users hasn't been submitted yet, give invalid message, make sure the number is positive!
       return (
         <div>
           <h2>How many users does this app have?</h2>
           <div>
             <input id="numUsersInput" type="number" onChange={(e) => this.addNumUsers(e)} />
-            <h4><i>invalid - must input number of users</i></h4>
+            <h4><i>invalid - must input a positive number of users</i></h4>
           </div>
         </div>
       );
-    } else { // app name submitted, valid
+    } else { // number of users submitted, valid
       return (
         <div>
           <h2>How many users does this app have?</h2>
           <div>
             <input id="numUsersInput" type="number" onChange={(e) => this.addNumUsers(e)} />
-            <h4><i>Success!</i></h4>
+            <h4><i><span>&#10003;</span></i></h4>
           </div>
         </div>
       );
@@ -160,7 +172,7 @@ class UploadData extends Component {
                 <option value="Consumer">Consumer</option>
               </select>
             </div>
-            <h4><i>Valid app category!</i></h4>
+            <h4><i><span>&#10003;</span></i></h4>
           </div>
         </div>
       );
@@ -184,7 +196,7 @@ class UploadData extends Component {
           <h2>What is your app named?</h2>
           <div>
             <input id="appNameInput" type="text" placeholder="name" onChange={(e) => this.addAppName(e)} />
-            <h4><i>Valid app name!</i></h4>
+            <h4><i><span>&#10003;</span></i></h4>
           </div>
         </div>
       );
@@ -208,18 +220,19 @@ class UploadData extends Component {
           <h2>What is your dataset named?</h2>
           <div>
             <input id="nameInput" type="text" placeholder="name" onChange={(e) => this.addDatasetName(e)} />
-            <h4><i>Valid dataset name!</i></h4>
+            <h4><i><span>&#10003;</span></i></h4>
           </div>
         </div>
       );
     }
   }
 
+  // make sure they have submitted all things we require
   renderSubmit = () => {
     if (this.state.categorySubmitted && this.state.appNameSubmitted && this.state.datasetNameSubmitted && this.state.numUsersSubmitted) { // we are ready to submit the data!
       return (
         <div>
-          <button type="submit" onClick={() => { this.submitDataset(); }}>Submit</button>
+          <button type="button" className="submit" onClick={() => { this.submitDataset(); }}>Submit</button>
         </div>
       );
     } else {

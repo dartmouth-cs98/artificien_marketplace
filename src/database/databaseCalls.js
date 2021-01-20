@@ -332,7 +332,8 @@ export async function putModel(callback, PK, owner) {
   });
 }
 
-export async function putDataset(callback, PK, app, name, category, numDevices, attributes, attributeTypes, attributeRangeMins, attributeRangeMaxes) {
+// take in less info than before
+export async function putDataset(callback, PK, app, name, category, numDevices) {
   const putParams = {
     Item: {
       dataset_id: { S: PK },
@@ -342,10 +343,6 @@ export async function putDataset(callback, PK, app, name, category, numDevices, 
       logo_image_url: { S: 'bingus' },
       category: { S: category },
       num_devices: { N: numDevices },
-      attributes: { L: attributes },
-      attributeTypes: { L: attributeTypes },
-      attributeRangeMins: { L: attributeRangeMins },
-      attributeRangeMaxes: { L: attributeRangeMaxes },
     },
     TableName: 'dataset_table',
     ReturnConsumedCapacity: 'TOTAL',
