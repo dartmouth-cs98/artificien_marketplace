@@ -48,7 +48,7 @@ class ChangeUsernameForm extends Component {
       <div className="username-input">
         <input type="text" className="username-input-form" onChange={(e) => this.usernameOnChange(e)} placeholder="New Username" />
         <input type="text" className="username-input-form" onChange={(e) => this.usernameRepeatOnChange(e)} placeholder="Repeat New Username" />
-        <button type="button" onClick={() => this.submitChange()}>Submit Change</button>
+        <button type="button" className="change-user-data-button" onClick={() => this.submitChange()}>Submit Change</button>
         <div>{this.displaySubmitFeedback()}</div>
       </div>
     );

@@ -32,7 +32,7 @@ const App = (props) => {
         <Route exact path="/" component={Welcome} />
         <Route exact path="/data_library" component={withAuthorization(DataLibrary, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/models" component={withAuthorization(Models, [Roles.DEVELOPER, Roles.CLIENT])} />
-        <Route exact path="/select_data" component={withAuthorization(UploadData, [Roles.DEVELOPER, Roles.CLIENT])} />
+        <Route exact path="/select_data" component={withAuthorization(UploadData, [Roles.DEVELOPER])} />
         <Route exact path="/login" component={withAuthorization(Login, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/create_model" component={withAuthorization(CreateModel, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/profile" component={withAuthorization(Profile, [Roles.DEVELOPER, Roles.CLIENT])} />
