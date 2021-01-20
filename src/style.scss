@@ -291,10 +291,11 @@ margin: 10px;
   margin-right: 10%;
 }
 
-.profile-page-user-info-body {
+.profile-page-user-info-body-row {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 }
+
 .profile-page-user-metrics-body {
   display: flex;
   justify-content: center;
@@ -315,6 +316,16 @@ margin: 10px;
 
 .username-input-form {
   margin: 10px;
+}
+
+.user-metric-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+#user-metric {
+  margin: 10%;
 }
 
 h3 {

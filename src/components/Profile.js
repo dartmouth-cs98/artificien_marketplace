@@ -1,3 +1,4 @@
+/* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
 // import 'bootstrap/dist/css/bootstrap.css';
@@ -39,17 +40,13 @@ class Profile extends Component {
             console.log(error);
           } else {
             console.log(success);
-            this.setState({ userModels: success });
+            const newMetricsDict = { ...this.state.metricsDict, userModels: success };
+            this.setState({ metricsDict: newMetricsDict });
           }
         };
         queryModels(modelsQueryCallback, name);
       });
     // get metrics here
-
-    // metric 1: Models created
-    // get current user username,
-    // query models table on 'owner', return a list of all models they've made
-    // length of list is first metric.
 
     // metric 2: Devices reached
     // metric 3: Average training time
@@ -78,63 +75,67 @@ class Profile extends Component {
     getUser(callback, name);
   }
 
+  renderSecondRow = () => {
+    const infoItemList = [];
+    if (this.state.userData.enterprise) {
+      infoItemList.push(<div id="profile-page-user-info"> <h3 id="profile-page-user-info-item">Enterprise: {this.state.userData.enterprise.S}</h3></div>);
+    }
+    if (this.state.userData.date_joined) {
+      infoItemList.push(<div id="profile-page-user-info"> <h3 id="profile-page-user-info-item">Date Joined: {this.state.userData.date_joined.S}</h3></div>);
+    }
+    if (this.state.userData.bank_info && this.state.userData.bank_info.bank) {
+      infoItemList.push(<div id="profile-page-user-info"> <h3 id="profile-page-user-info-item">Bank Name: {this.state.userData.bank_info.bank}</h3></div>);
+    }
+    if (this.state.userData.bank_info && this.state.userData.bank_info.bank_number) {
+      infoItemList.push(<div id="profile-page-user-info"> <h3 id="profile-page-user-info-item">Bank Number: {this.state.userData.bank_info.bank_number}</h3></div>);
+    }
+    return (
+      <div className="profile-page-user-info-body-row">
+        {infoItemList}
+      </div>
+    );
+  }
+
   renderMetricsCards = () => {
     const metricCards = [];
     console.log(this.state.metricsDict);
-    for (const metric in Object.keys(this.state.metricsDict)) {
-      if (String(metric) === '0') {
-        console.log(metric);
-        metricCards.push(<UserMetricsCard title={metric} body={this.state.userModels.Items.length} username={this.state.userData.username.S} />);
-      } else if (String(metric) === '1') {
-        console.log(metric);
-        metricCards.push(<UserMetricsCard title={metric} body={this.state.numDevicesReached} username={this.state.userData.username.S} />);
-      } else if (String(metric) === '2') {
-        console.log(metric);
-        metricCards.push(<UserMetricsCard title={metric} body={this.state.averageTrainingTime} username={this.state.userData.username.S} />);
+    if (!this.state.metricsDict.userModels) return null;
+
+    for (let i = 0; i < Object.keys(this.state.metricsDict).length; i += 1) {
+      if (String(Object.keys(this.state.metricsDict)[i]) === 'userModels') {
+        console.log('models');
+        metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models Created" body={this.state.metricsDict.userModels.Items.length} username={this.state.userData.username.S} />);
+      } else if (String(Object.keys(this.state.metricsDict)[i]) === 'numDevicesReached') {
+        console.log('numDevices');
+        metricCards.push(<UserMetricsCard id="user-metric" title="Number of Devices Reached" body={this.state.metricsDict.numDevicesReached} username={this.state.userData.username.S} />);
+      } else if (String(Object.keys(this.state.metricsDict)[i]) === 'averageTrainingTime') {
+        console.log('training');
+        metricCards.push(<UserMetricsCard id="user-metric" title="Average Training Time" body={this.state.metricsDict.averageTrainingTime} username={this.state.userData.username.S} />);
       } else {
-        console.log(metric);
+        console.log(Object.keys(this.state.metricsDict)[i]);
       }
     }
     return metricCards;
-    // if (this.state.userModels && this.state.numDevicesReached && this.state.averageTrainingTime) {
-    //   return (
-    //     <>
-    //       <UserMetricsCard body={this.state.userModels.Items.length} username={this.state.userData.username.S} />
-    //       <UserMetricsCard body={this.state.numDevicesReached} username={this.state.userData.username.S} />
-    //       <UserMetricsCard body={this.state.averageTrainingTime} username={this.state.userData.username.S} />
-    //     </>
-    //   );
-    // } else {
-    //   return null;
-    // }
   }
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   // 2 errors rn: cannot print on new lines, struggling to print out the arrays for bank name and number
   render() {
-    console.log(this.state.userData);
-    if (this.state.userData && this.state.userModels) {
+    if (this.state.userData && this.state.metricsDict.userModels) {
       return (
         <>
-          <div className="profile-page-user-info-body">
+          <div className="profile-page-user-info-body-row">
             <div id="profile-page-user-info">
               <div id="change-profile-info">
-                <h3 id="profile-page-user-info-item">Name: {this.state.userData.username.S}</h3>
+                <h3 id="profile-page-user-info-item">Username: {this.state.userData.username.S}</h3>
                 <button type="button" className="change-user-data-button" onClick={() => this.setState({ usernameChange: true })}>Change</button>
                 {this.renderChangeButton()}
               </div>
             </div>
-            <div id="profile-page-user-info">
-              {this.state.userData.user_id && <h3 id="profile-page-user-info-item">Username: {this.state.userData.user_id.S}</h3>}
-              {this.state.userData.user_account_email && <h3 id="profile-page-user-info-item">Email: {this.state.userData.user_account_email.S}</h3>}
-              {this.state.userData.enterprise && <h3 id="profile-page-user-info-item">Enterprise: {this.state.userData.enterprise.S}</h3>}
-            </div>
-            <div id="profile-page-user-info">
-              {this.state.userData.date_joined && <h3 id="profile-page-user-info-item">Date Joined: {this.state.userData.date_joined.S}</h3>}
-              {this.state.userData.bank_info && this.state.userData.bank_info.bank && <h3 id="profile-page-user-info-item">Bank Name: {this.state.userData.bank_info.bank}</h3>}
-              {this.state.userData.bank_info && this.state.userData.bank_info.bank_number && <h3 id="profile-page-user-info-item">Bank Number: {this.state.userData.bank_info.bank_number}</h3>}
-            </div>
+            <div id="profile-page-user-info"> {this.state.userData.user_id && <h3 id="profile-page-user-info-item">User ID: {this.state.userData.user_id.S}</h3>} </div>
+            <div id="profile-page-user-info"> {this.state.userData.user_account_email && <h3 id="profile-page-user-info-item">Email: {this.state.userData.user_account_email.S}</h3>} </div>
           </div>
+          {this.renderSecondRow()}
           <div className="profile-page-user-metrics-body">
             <div className="user-metric-container">{this.renderMetricsCards()}</div>
           </div>

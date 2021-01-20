@@ -19,9 +19,8 @@ class UserMetricsCard extends Component {
     return (
       makeStyles({
         root: {
-          minWidth: 275,
-          border: '2px',
-          borderColor: '#580D93',
+          width: '275px',
+          margin: '10px',
         },
         bullet: {
           display: 'inline-block',
@@ -49,13 +48,13 @@ class UserMetricsCard extends Component {
             {this.props.title}
           </Typography>
           <br />
-          {String(this.props.title) !== 'averageTrainingTime'
+          {String(this.props.title) !== 'Average Training Time'
           && (
           <Typography className={this.state.classes.pos} color="textSecondary">
             {this.props.body}
           </Typography>
           )}
-          {String(this.props.title) === 'averageTrainingTime'
+          {String(this.props.title) === 'Average Training Time'
           && (
             <Typography className={this.state.classes.pos} color="textSecondary">
               {this.props.body[0]} hours and {this.props.body[1]} minutes
@@ -63,7 +62,7 @@ class UserMetricsCard extends Component {
           )}
         </CardContent>
         <CardActions>
-          {this.props.title === 'numModelsCreated' && <Button size="small">See My Models</Button>}
+          {this.props.title === 'Number of Models Created' && <Button size="small">See My Models</Button>}
         </CardActions>
       </Card>
     );
