@@ -19,7 +19,11 @@ class Profile extends Component {
     this.state = {
       userData: null,
       usernameChange: false,
-      userModels: null,
+      metricsDict: {
+        userModels: null,
+        numDevicesReached: 1000,
+        averageTrainingTime: [7, 16],
+      },
     };
   }
 
@@ -74,15 +78,35 @@ class Profile extends Component {
     getUser(callback, name);
   }
 
-  renderNumModels = () => {
-    if (this.state.userModels) {
-      return (
-        // <div>Number of models created: {this.state.userModels.Items.length}</div>
-        <UserMetricsCard numModels={this.state.userModels.Items.length} username={this.state.userData.username.S} />
-      );
-    } else {
-      return null;
+  renderMetricsCards = () => {
+    const metricCards = [];
+    console.log(this.state.metricsDict);
+    for (const metric in Object.keys(this.state.metricsDict)) {
+      if (String(metric) === '0') {
+        console.log(metric);
+        metricCards.push(<UserMetricsCard title={metric} body={this.state.userModels.Items.length} username={this.state.userData.username.S} />);
+      } else if (String(metric) === '1') {
+        console.log(metric);
+        metricCards.push(<UserMetricsCard title={metric} body={this.state.numDevicesReached} username={this.state.userData.username.S} />);
+      } else if (String(metric) === '2') {
+        console.log(metric);
+        metricCards.push(<UserMetricsCard title={metric} body={this.state.averageTrainingTime} username={this.state.userData.username.S} />);
+      } else {
+        console.log(metric);
+      }
     }
+    return metricCards;
+    // if (this.state.userModels && this.state.numDevicesReached && this.state.averageTrainingTime) {
+    //   return (
+    //     <>
+    //       <UserMetricsCard body={this.state.userModels.Items.length} username={this.state.userData.username.S} />
+    //       <UserMetricsCard body={this.state.numDevicesReached} username={this.state.userData.username.S} />
+    //       <UserMetricsCard body={this.state.averageTrainingTime} username={this.state.userData.username.S} />
+    //     </>
+    //   );
+    // } else {
+    //   return null;
+    // }
   }
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
@@ -93,22 +117,26 @@ class Profile extends Component {
       return (
         <>
           <div className="profile-page-user-info-body">
-            <div className="profile-page-user-info">
+            <div id="profile-page-user-info">
               <div id="change-profile-info">
                 <h3 id="profile-page-user-info-item">Name: {this.state.userData.username.S}</h3>
                 <button type="button" className="change-user-data-button" onClick={() => this.setState({ usernameChange: true })}>Change</button>
                 {this.renderChangeButton()}
               </div>
-              <h3 id="profile-page-user-info-item">Username: {this.state.userData.user_id.S}</h3>
-              <h3 id="profile-page-user-info-item">Email: {this.state.userData.user_account_email.S}</h3>
-              <h2 id="profile-page-user-info-item">Enterprise: {this.state.userData.enterprise.S}</h2>
-              <h2 id="profile-page-user-info-item">Date Joined: {this.state.userData.date_joined.S}</h2>
-              <h2 id="profile-page-user-info-item">Bank Name: {this.state.userData.bank_info.bank}</h2>
-              <h2 id="profile-page-user-info-item">Bank Number: {this.state.userData.bank_info.bank_number}</h2>
+            </div>
+            <div id="profile-page-user-info">
+              {this.state.userData.user_id && <h3 id="profile-page-user-info-item">Username: {this.state.userData.user_id.S}</h3>}
+              {this.state.userData.user_account_email && <h3 id="profile-page-user-info-item">Email: {this.state.userData.user_account_email.S}</h3>}
+              {this.state.userData.enterprise && <h3 id="profile-page-user-info-item">Enterprise: {this.state.userData.enterprise.S}</h3>}
+            </div>
+            <div id="profile-page-user-info">
+              {this.state.userData.date_joined && <h3 id="profile-page-user-info-item">Date Joined: {this.state.userData.date_joined.S}</h3>}
+              {this.state.userData.bank_info && this.state.userData.bank_info.bank && <h3 id="profile-page-user-info-item">Bank Name: {this.state.userData.bank_info.bank}</h3>}
+              {this.state.userData.bank_info && this.state.userData.bank_info.bank_number && <h3 id="profile-page-user-info-item">Bank Number: {this.state.userData.bank_info.bank_number}</h3>}
             </div>
           </div>
           <div className="profile-page-user-metrics-body">
-            <div className="user-metric-container">{this.renderNumModels()}</div>
+            <div className="user-metric-container">{this.renderMetricsCards()}</div>
           </div>
         </>
       );

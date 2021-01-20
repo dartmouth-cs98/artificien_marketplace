@@ -46,15 +46,24 @@ class UserMetricsCard extends Component {
             {this.props.username}
           </Typography>
           <Typography variant="h5" component="h2">
-            Number of Models Created
+            {this.props.title}
           </Typography>
           <br />
+          {String(this.props.title) !== 'averageTrainingTime'
+          && (
           <Typography className={this.state.classes.pos} color="textSecondary">
-            {this.props.numModels}
+            {this.props.body}
           </Typography>
+          )}
+          {String(this.props.title) === 'averageTrainingTime'
+          && (
+            <Typography className={this.state.classes.pos} color="textSecondary">
+              {this.props.body[0]} hours and {this.props.body[1]} minutes
+            </Typography>
+          )}
         </CardContent>
         <CardActions>
-          <Button size="small">See My Models</Button>
+          {this.props.title === 'numModelsCreated' && <Button size="small">See My Models</Button>}
         </CardActions>
       </Card>
     );
