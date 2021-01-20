@@ -16,30 +16,28 @@ class UploadData extends Component {
       appName: null,
       appCategory: null,
       datasetName: null,
-      numAttributes: null,
       numUsers: null,
 
       // Progress booleans - how far along is the user?
       // determine what is displayed
       appNameSubmitted: false,
       categorySubmitted: false,
+      numUsersSubmitted: false,
       datasetNameSubmitted: false,
-      readyForSubmit: false,
 
     };
   }
 
-  // number of attributes dropdown menu is changed
-  numAttributesOnChange = (event) => {
-    this.setState({ numAttributes: event.target.value });
-  }
+  // Finally put all attributes in database
+  submitDataset = () => {
+    const callback = (data, error) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(data);
+      }
+    };
 
-  // consolidate variant dictionary inputs of names and types into strict lists
-  buildAttributeNameAndTypeLists = () => {
-    for (let i = 0; i < Object.keys(this.state.attributeNameDict).length; i += 1) {
-      this.state.attributeNameList.push(this.state.attributeNameDict[i]);
-      this.state.attributeTypeList.push(this.state.attributeTypeDict[i]);
-    }
     // put entry into database
     putDataset(callback, this.state.datasetName, this.state.appName,
       'bingus', this.state.appCategory, this.state.numUsers);
@@ -58,9 +56,9 @@ class UploadData extends Component {
     this.setState({ numUsers: null });
 
     // progress booleans
-    this.setState({ readyForSubmit: false });
     this.setState({ appNameSubmitted: false });
     this.setState({ categorySubmitted: false });
+    this.setState({ numUsersSubmitted: false });
     this.setState({ datasetNameSubmitted: false });
 
     // window.location.reload(false); // optional force page reload, ugly
@@ -70,6 +68,7 @@ class UploadData extends Component {
   addNumUsers = (event) => {
     if (!Number.isNaN(parseInt(event.target.value, 10))) {
       this.setState({ numUsers: event.target.value });
+      this.setState({ numUsersSubmitted: true });
     }
   }
 
@@ -102,23 +101,32 @@ class UploadData extends Component {
     }
   }
 
-  // fully ready to submit dataset
-  readyForSubmit = () => {
-    this.setState({ readyForSubmit: true });
-  }
-
   // --------------------------------- RENDER METHODS --------------------------------- //
 
   // render number of users to input
+
   renderNumUsersInput = () => {
-    return (
-      <div>
-        <h2>How many users does this app have?</h2>
+    if (!this.state.numUsersSubmitted) { // if app name hasn't been submitted yet, give invalid message
+      return (
         <div>
-          <input id="numUsersInput" type="number" onChange={(e) => this.addNumUsers(e)} />
+          <h2>How many users does this app have?</h2>
+          <div>
+            <input id="numUsersInput" type="number" onChange={(e) => this.addNumUsers(e)} />
+            <h4><i>invalid - must input number of users</i></h4>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else { // app name submitted, valid
+      return (
+        <div>
+          <h2>How many users does this app have?</h2>
+          <div>
+            <input id="numUsersInput" type="number" onChange={(e) => this.addNumUsers(e)} />
+            <h4><i>Success!</i></h4>
+          </div>
+        </div>
+      );
+    }
   }
 
   renderAppCategory = () => {
@@ -207,10 +215,16 @@ class UploadData extends Component {
     }
   }
 
-  // annoying wrapper on ready to submit
-  checkForSubmit = () => {
-    if (this.state.finalRangesEntered) {
-      this.readyForSubmit();
+  renderSubmit = () => {
+    if (this.state.categorySubmitted && this.state.appNameSubmitted && this.state.datasetNameSubmitted && this.state.numUsersSubmitted) { // we are ready to submit the data!
+      return (
+        <div>
+          <button type="submit" onClick={() => { this.submitDataset(); }}>Submit</button>
+        </div>
+      );
+    } else {
+      return (null
+      );
     }
   }
 
@@ -225,6 +239,7 @@ class UploadData extends Component {
           {this.renderAppNameInput()}
           {this.renderNumUsersInput()}
           {this.renderAppCategory()}
+          {this.renderSubmit()}
         </div>
       </div>
     );
