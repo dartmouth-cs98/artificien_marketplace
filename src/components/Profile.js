@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
 // import 'bootstrap/dist/css/bootstrap.css';
 // import { Card, Nav, Button } from 'react-bootstrap';
-import { getUser } from '../database/databaseCalls';
+import { getUser, queryModels } from '../database/databaseCalls';
 import '../style.scss';
 import ChangeUsernameForm from './ChangeUsernameForm';
+import UserMetricsCard from './UserMetricsCard';
 
 /*
 Component that provides the user their information, will allow editing capabilities in the future.
@@ -18,23 +19,39 @@ class Profile extends Component {
     this.state = {
       userData: null,
       usernameChange: false,
+      userModels: null,
     };
   }
 
   // mounting
   componentDidMount() {
-    this.getCurrentUser();
-  }
-
-  // figure out which user is currently logged in and query their models
-  getCurrentUser = () => {
     Auth.currentSession()
       .then((data) => {
         console.log(data);
         const name = data.accessToken.payload.username;
         this.queryUser(name);
+        const modelsQueryCallback = (success, error) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log(success);
+            this.setState({ userModels: success });
+          }
+        };
+        queryModels(modelsQueryCallback, name);
       });
+    // get metrics here
+
+    // metric 1: Models created
+    // get current user username,
+    // query models table on 'owner', return a list of all models they've made
+    // length of list is first metric.
+
+    // metric 2: Devices reached
+    // metric 3: Average training time
   }
+
+  // figure out which user is currently logged in and query their models
 
   renderChangeButton = () => {
     if (this.state.usernameChange) {
@@ -56,22 +73,38 @@ class Profile extends Component {
     getUser(callback, name);
   }
 
+  renderNumModels = () => {
+    if (this.state.userModels) {
+      return (
+        // <div>Number of models created: {this.state.userModels.Items.length}</div>
+        <UserMetricsCard numModels={this.state.userModels.Items.length} username={this.state.userData.username.S} />
+      );
+    } else {
+      return null;
+    }
+  }
+
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
     console.log(this.state.userData);
-    if (this.state.userData) {
+    if (this.state.userData && this.state.userModels) {
       return (
-        <div className="profile-page-body">
-          <div className="profile-page-user-info">
-            <div id="change-profile-info">
-              <h3 id="profile-page-user-info-item">Name: {this.state.userData.username.S}</h3>
-              <button type="button" onClick={() => this.setState({ usernameChange: true })}>Change!</button>
-              {this.renderChangeButton()}
+        <>
+          <div className="profile-page-user-info-body">
+            <div className="profile-page-user-info">
+              <div id="change-profile-info">
+                <h3 id="profile-page-user-info-item">Name: {this.state.userData.username.S}</h3>
+                <button type="button" className="change-user-data-button" onClick={() => this.setState({ usernameChange: true })}>Change</button>
+                {this.renderChangeButton()}
+              </div>
+              <h3 id="profile-page-user-info-item">Username: {this.state.userData.user_id.S}</h3>
+              <h3 id="profile-page-user-info-item">Email: {this.state.userData.user_account_email.S}</h3>
             </div>
-            <h3 id="profile-page-user-info-item">Username: {this.state.userData.user_id.S}</h3>
-            <h3 id="profile-page-user-info-item">Email: {this.state.userData.user_account_email.S}</h3>
           </div>
-        </div>
+          <div className="profile-page-user-metrics-body">
+            <div className="user-metric-container">{this.renderNumModels()}</div>
+          </div>
+        </>
       );
     } else {
       return (
