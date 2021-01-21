@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
 // import 'bootstrap/dist/css/bootstrap.css';
 // import { Card, Nav, Button } from 'react-bootstrap';
+import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import { getUser, queryModels } from '../database/databaseCalls';
 import '../style.scss';
 import ChangeUsernameForm from './ChangeUsernameForm';
@@ -119,7 +120,6 @@ class Profile extends Component {
   }
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
-  // 2 errors rn: cannot print on new lines, struggling to print out the arrays for bank name and number
   render() {
     if (this.state.userData && this.state.metricsDict.userModels) {
       return (
@@ -139,11 +139,12 @@ class Profile extends Component {
           <div className="profile-page-user-metrics-body">
             <div className="user-metric-container">{this.renderMetricsCards()}</div>
           </div>
+          {/* <LoadingScreen /> */}
         </>
       );
     } else {
       return (
-        <div>Nothing to see here!</div>
+        <LoadingScreen />
       );
     }
   }
