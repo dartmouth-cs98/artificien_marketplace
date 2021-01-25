@@ -106,7 +106,7 @@ class Models extends Component {
   // get only the models in progress
   renderModelsInProgress = () => {
     if (!this.state.models) { return 'You have no Models in progress. Go to Create Model to make one'; }
-    if (!this.state.models.Items) { return null; }
+    // if (!this.state.models.Items) { return null; }
 
     // if the user has models, map each to a card
     const renderedModels = this.state.models.Items.map((model) => {
@@ -140,7 +140,10 @@ class Models extends Component {
   // get only the models completed
   renderModelsCompleted = () => {
     if (!this.state.models) { return 'You have no completeds models'; }
-    if (this.state.userNotSet) { return null; }
+    if (this.state.userNotSet) {
+      console.log('user not set');
+      return null;
+    }
 
     if (!this.state.models.Items) {
       return (

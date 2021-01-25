@@ -8,6 +8,7 @@ import {
   getUser,
 } from '../database/databaseCalls';
 import { addRole } from '../actions';
+import LoadingScreen from '../UtilityComponents/LoadingScreen';
 
 // welcome variable on homepage
 
@@ -46,7 +47,9 @@ class Welcome extends Component {
           {/* if not logged in */}
           {Math.random() > 0.5 && <p>This is where the login button should go</p>}
         </div>
-        <div className="landing" />
+        <div className="landing">
+          <LoadingScreen />
+        </div>
       </>
     );
   }
