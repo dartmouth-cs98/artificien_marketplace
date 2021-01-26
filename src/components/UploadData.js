@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import { putDataset } from '../database/databaseCalls';
 import '../style.scss';
 
@@ -227,12 +228,14 @@ class UploadData extends Component {
     }
   }
 
-  // make sure they have submitted all things we require
+  // make sure they have submitted all things we require, button both guides them to tutorials
   renderSubmit = () => {
     if (this.state.categorySubmitted && this.state.appNameSubmitted && this.state.datasetNameSubmitted && this.state.numUsersSubmitted) { // we are ready to submit the data!
       return (
         <div>
-          <button type="button" className="submit" onClick={() => { this.submitDataset(); }}>Submit</button>
+          <NavLink to="/tutorials">
+            <button type="button" className="submit" onClick={() => { this.submitDataset(); }}>Submit</button>
+          </NavLink>
         </div>
       );
     } else {
