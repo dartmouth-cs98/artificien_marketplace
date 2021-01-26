@@ -7,9 +7,20 @@ body, html {
   overflow-x: hidden; // to prevent scrolling from side to side. thank you stack overflow for the advice here!
 }
 
+.drawer-font-body {
+  font-family: "Avenir";
+}
+
+#main {
+  background-color: white;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
 .nav{
   display: flex;
   justify-content: space-between; 
+  background-color: white;
 }
 
 .logo {
@@ -360,6 +371,12 @@ h3 {
 .profile-page-user-info-item {
   display: block;
 }
+
+.documentation-toolbar-header {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 // #profile-page-user-info-item{
 //   : 10%;
 // }

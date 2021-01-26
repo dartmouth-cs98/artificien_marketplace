@@ -7,6 +7,7 @@ import {
 } from '../database/databaseCalls';
 import DataLibraryCard from './DataLibraryCard';
 import DatasetSideNav from './DatasetSideNav';
+import LoadingScreen from '../UtilityComponents/LoadingScreen';
 
 /*
 Component that renders library of all available datasets to shoppers
@@ -122,7 +123,7 @@ class DataLibrary extends Component {
 
   renderDatasetsInCategory = () => {
     if (!this.state.inCategory) {
-      return 'No datasets found in category';
+      return <LoadingScreen />;
     }
     // make cards for datasets in category by sort
     const renderedDatasets = this.state.inCategory.Items.map((dataset) => {
@@ -188,7 +189,7 @@ class DataLibrary extends Component {
 
   renderAllDatasets = () => {
     if (!this.state.sortedCategory) {
-      return null;
+      return <LoadingScreen />;
     }
 
     if (this.state.categoriesNotSet) {
@@ -196,7 +197,6 @@ class DataLibrary extends Component {
         if (error) {
           console.log(error);
         } else {
-          // console.log(data);
           this.setState({ inCategory: data });
         }
       };
@@ -205,7 +205,6 @@ class DataLibrary extends Component {
         if (error) {
           console.log(error);
         } else {
-          // console.log(data);
           this.setState({ outCategory: data });
         }
       };
