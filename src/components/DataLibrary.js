@@ -1,6 +1,9 @@
+/* eslint-disable guard-for-in */
 import React, { Component } from 'react';
 import '../style.scss';
+import { Auth } from 'aws-amplify';
 import {
+  getUser,
   queryDatasetsMount,
   queryDatasetsCategory,
   scanDatasets,
@@ -32,6 +35,8 @@ class DataLibrary extends Component {
       },
       clickedDataset: null,
       toDisplayDataset: null,
+      currentUser: null,
+      currentUserDatasetsPurchased: [],
     };
     this.openNav = this.openNav.bind(this);
     this.closeNav = this.closeNav.bind(this);
@@ -47,6 +52,26 @@ class DataLibrary extends Component {
     };
     queryDatasetsMount(callbackMount);
     document.addEventListener('click', this.closeNav);
+
+    Auth.currentSession()
+      .then((data) => {
+        const name = data.accessToken.payload.username;
+        this.setState({ currentUser: name });
+
+        const getUserCallback = (success, error) => {
+          if (error) {
+            console.log(error);
+          } else if (success.Items[0].datasets_purchased) {
+            const newList = [];
+            for (const datasetName of success.Items[0].datasets_purchased.L) {
+              console.log(datasetName.S);
+              newList.push(datasetName.S);
+            }
+            this.setState({ currentUserDatasetsPurchased: newList });
+          }
+        };
+        getUser(getUserCallback, name);
+      });
   }
 
   componentWillUnmount() {
@@ -107,10 +132,25 @@ class DataLibrary extends Component {
     }
   };
 
+  checkIfAlreadyPurchased = (dataset) => {
+    console.log(dataset);
+    console.log(this.state.currentUserDatasetsPurchased);
+    if (dataset && this.state.currentUserDatasetsPurchased) {
+      for (const purchased of this.state.currentUserDatasetsPurchased) {
+        if (String(purchased) === String(dataset.dataset_id.S)) {
+          console.log(dataset.dataset_id.S);
+          return true;
+        }
+      }
+      console.log(dataset.dataset_id.S);
+      return false;
+    }
+    return false;
+  }
+
   // side nav
   openNav(datasetId) {
     this.setState({ style: { width: 350 } });
-    console.log(datasetId);
     this.setState({ clickedDataset: datasetId });
   }
 
@@ -251,6 +291,7 @@ class DataLibrary extends Component {
 
   render() {
     this.getDisplayDataset();
+    const alreadyPurchased = this.checkIfAlreadyPurchased(this.state.toDisplayDataset);
     if (!this.state.categoryIsChosen) {
       // if we have a category, render in-category and out-of-category datasets separately.
       return (
@@ -267,6 +308,8 @@ class DataLibrary extends Component {
               content={this.state.toDisplayDataset}
               onClick={this.closeNav}
               style={this.state.style}
+              alreadyPurchased={alreadyPurchased}
+              currentUser={this.state.currentUser}
             />
           </div>
         </div>
@@ -287,6 +330,8 @@ class DataLibrary extends Component {
               content={this.state.toDisplayDataset}
               onClick={this.closeNav}
               style={this.state.style}
+              alreadyPurchased={alreadyPurchased}
+              currentUser={this.state.currentUser}
             />
           </div>
         </div>

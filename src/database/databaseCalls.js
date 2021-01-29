@@ -90,12 +90,12 @@ export function getEnterprise(callback, PK) {
   });
 }
 
-export function getUser(callback, PK) {
+export async function getUser(callback, PK) {
   const getParams = {
     IndexName: 'users_username_index',
     ScanIndexForward: false,
     ExpressionAttributeValues: { ':partitionKeyVal': { S: PK } },
-    KeyConditionExpression: 'username = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
+    KeyConditionExpression: 'username = :partitionKeyVal',
     TableName: 'user_table',
   };
   docClient.query(getParams, (err, data) => { // send and receieve
@@ -427,9 +427,15 @@ export function queryDatasetsMount(callback) {
   });
 }
 
-// Testing todo
-// update app DB table with one entry that has a "logo_image_url" field
-// test putDataset
-// test putUser for general functionality
-// write update functionality. Specific method only for user table. Only need to update:
-// - bank info, name, email, enterprise.
+// ----------------------- Update ----------------------
+
+export function updateItem(upParams) {
+  docClient.updateItem(upParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+    } else {
+      console.log('--------UPDATE-------');
+      console.log(JSON.stringify(data, null, 2));
+    }
+  });
+}
