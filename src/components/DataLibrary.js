@@ -1,12 +1,16 @@
+/* eslint-disable guard-for-in */
 import React, { Component } from 'react';
 import '../style.scss';
+import { Auth } from 'aws-amplify';
 import {
+  getUser,
   queryDatasetsMount,
   queryDatasetsCategory,
   scanDatasets,
 } from '../database/databaseCalls';
 import DataLibraryCard from './DataLibraryCard';
 import DatasetSideNav from './DatasetSideNav';
+import LoadingScreen from '../UtilityComponents/LoadingScreen';
 
 /*
 Component that renders library of all available datasets to shoppers
@@ -31,6 +35,8 @@ class DataLibrary extends Component {
       },
       clickedDataset: null,
       toDisplayDataset: null,
+      currentUser: null,
+      currentUserDatasetsPurchased: [],
     };
     this.openNav = this.openNav.bind(this);
     this.closeNav = this.closeNav.bind(this);
@@ -46,6 +52,26 @@ class DataLibrary extends Component {
     };
     queryDatasetsMount(callbackMount);
     document.addEventListener('click', this.closeNav);
+
+    Auth.currentSession()
+      .then((data) => {
+        const name = data.accessToken.payload.username;
+        this.setState({ currentUser: name });
+
+        const getUserCallback = (success, error) => {
+          if (error) {
+            console.log(error);
+          } else if (success.Items[0].datasets_purchased) {
+            const newList = [];
+            for (const datasetName of success.Items[0].datasets_purchased.L) {
+              console.log(datasetName.S);
+              newList.push(datasetName.S);
+            }
+            this.setState({ currentUserDatasetsPurchased: newList });
+          }
+        };
+        getUser(getUserCallback, name);
+      });
   }
 
   componentWillUnmount() {
@@ -106,10 +132,25 @@ class DataLibrary extends Component {
     }
   };
 
+  checkIfAlreadyPurchased = (dataset) => {
+    console.log(dataset);
+    console.log(this.state.currentUserDatasetsPurchased);
+    if (dataset && this.state.currentUserDatasetsPurchased) {
+      for (const purchased of this.state.currentUserDatasetsPurchased) {
+        if (String(purchased) === String(dataset.dataset_id.S)) {
+          console.log(dataset.dataset_id.S);
+          return true;
+        }
+      }
+      console.log(dataset.dataset_id.S);
+      return false;
+    }
+    return false;
+  }
+
   // side nav
   openNav(datasetId) {
     this.setState({ style: { width: 350 } });
-    console.log(datasetId);
     this.setState({ clickedDataset: datasetId });
   }
 
@@ -122,7 +163,7 @@ class DataLibrary extends Component {
 
   renderDatasetsInCategory = () => {
     if (!this.state.inCategory) {
-      return 'No datasets found in category';
+      return <LoadingScreen />;
     }
     // make cards for datasets in category by sort
     const renderedDatasets = this.state.inCategory.Items.map((dataset) => {
@@ -188,7 +229,7 @@ class DataLibrary extends Component {
 
   renderAllDatasets = () => {
     if (!this.state.sortedCategory) {
-      return null;
+      return <LoadingScreen />;
     }
 
     if (this.state.categoriesNotSet) {
@@ -196,7 +237,6 @@ class DataLibrary extends Component {
         if (error) {
           console.log(error);
         } else {
-          // console.log(data);
           this.setState({ inCategory: data });
         }
       };
@@ -205,7 +245,6 @@ class DataLibrary extends Component {
         if (error) {
           console.log(error);
         } else {
-          // console.log(data);
           this.setState({ outCategory: data });
         }
       };
@@ -252,47 +291,28 @@ class DataLibrary extends Component {
 
   render() {
     this.getDisplayDataset();
-    if (!this.state.categoryIsChosen) {
-      // if we have a category, render in-category and out-of-category datasets separately.
-      return (
-        <div className="body">
-          <h1>Data Library</h1>
-          <h3>
-            <i>Categories</i>
-          </h3>
-          <div>{this.renderUniqueCategories()}</div>
-          <br />
-          <div>{this.mountDisplayDatasets()}</div>
-          <div>
-            <DatasetSideNav
-              content={this.state.toDisplayDataset}
-              onClick={this.closeNav}
-              style={this.state.style}
-            />
-          </div>
+    const alreadyPurchased = this.checkIfAlreadyPurchased(this.state.toDisplayDataset);
+    // if we have a category, render in-category and out-of-category datasets separately.
+    return (
+      <div className="body">
+        <h1>Data Library</h1>
+        <h3>
+          <i>Categories</i>
+        </h3>
+        <div>{this.renderUniqueCategories()}</div>
+        <br />
+        <div>{this.state.categoryIsChosen ? this.renderAllDatasets() : this.mountDisplayDatasets()}</div>
+        <div>
+          <DatasetSideNav
+            content={this.state.toDisplayDataset}
+            onClick={this.closeNav}
+            style={this.state.style}
+            alreadyPurchased={alreadyPurchased}
+            currentUser={this.state.currentUser}
+          />
         </div>
-      );
-    } else {
-      // if we don't have a category yet, just render all datasets
-      return (
-        <div className="body">
-          <h1>Data Library</h1>
-          <h3>
-            <i>Categories</i>
-          </h3>
-          <div>{this.renderUniqueCategories()}</div>
-          <br />
-          <div>{this.renderAllDatasets()}</div>
-          <div>
-            <DatasetSideNav
-              content={this.state.toDisplayDataset}
-              onClick={this.closeNav}
-              style={this.state.style}
-            />
-          </div>
-        </div>
-      );
-    }
+      </div>
+    );
   }
 }
 

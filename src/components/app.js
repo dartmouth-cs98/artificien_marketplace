@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 import '../style.scss';
 import React from 'react';
 // import ReactDOM from 'react-dom';
@@ -19,6 +20,7 @@ import CreateModel from './CreateModel';
 import Roles from '../helpers/Roles';
 import withAuthorization from '../helpers/withAuthorization';
 import Profile from './Profile';
+import Documentation from './Documentation';
 import Tutorials from './Tutorials';
 
 const FallBack = (props) => {
@@ -28,7 +30,7 @@ const FallBack = (props) => {
 const App = (props) => {
   return (
     <Router>
-      <Navbar />
+      <Navbar style={{ 'font-family': 'Avenir' }} />
       <Switch>
         <Route exact path="/" component={Welcome} />
         <Route exact path="/data_library" component={withAuthorization(DataLibrary, [Roles.DEVELOPER, Roles.CLIENT])} />
@@ -37,6 +39,7 @@ const App = (props) => {
         <Route exact path="/login" component={withAuthorization(Login, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/create_model" component={withAuthorization(CreateModel, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/profile" component={withAuthorization(Profile, [Roles.DEVELOPER, Roles.CLIENT])} />
+        <Route exact path="/documentation" component={withAuthorization(Documentation, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/tutorials" component={withAuthorization(Tutorials, [Roles.DEVELOPER])} />
         <Route component={FallBack} />
       </Switch>

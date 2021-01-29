@@ -39,6 +39,9 @@ class Navbar extends Component {
             <li>
               <NavLink to="/profile"> Profile </NavLink>
             </li>
+            <li>
+              <NavLink to="/documentation"> Documentation </NavLink>
+            </li>
           </ul>
           <ul className="nav-role-button-ul">
             <li className="role-button">
