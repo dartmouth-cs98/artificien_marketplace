@@ -85,18 +85,9 @@ class DatasetSideNav extends Component {
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
-    if (!this.props.content) {
-      // placeholder div for initial hidden sidebar
-      return (
-        <div className="overlay" style={this.props.style}>
-          <h3>Oops!</h3>
-        </div>
-      );
-    } else {
-      return (
-        <div>{this.renderDatasetCard()}</div>
-      );
-    }
+    return (
+      <div>{this.props.content ? <div>{this.renderDatasetCard()}</div> : <h3>Oops!</h3>}</div>
+    );
   }
 }
 

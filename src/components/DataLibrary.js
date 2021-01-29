@@ -292,51 +292,27 @@ class DataLibrary extends Component {
   render() {
     this.getDisplayDataset();
     const alreadyPurchased = this.checkIfAlreadyPurchased(this.state.toDisplayDataset);
-    if (!this.state.categoryIsChosen) {
-      // if we have a category, render in-category and out-of-category datasets separately.
-      return (
-        <div className="body">
-          <h1>Data Library</h1>
-          <h3>
-            <i>Categories</i>
-          </h3>
-          <div>{this.renderUniqueCategories()}</div>
-          <br />
-          <div>{this.mountDisplayDatasets()}</div>
-          <div>
-            <DatasetSideNav
-              content={this.state.toDisplayDataset}
-              onClick={this.closeNav}
-              style={this.state.style}
-              alreadyPurchased={alreadyPurchased}
-              currentUser={this.state.currentUser}
-            />
-          </div>
+    // if we have a category, render in-category and out-of-category datasets separately.
+    return (
+      <div className="body">
+        <h1>Data Library</h1>
+        <h3>
+          <i>Categories</i>
+        </h3>
+        <div>{this.renderUniqueCategories()}</div>
+        <br />
+        <div>{this.state.categoryIsChosen ? this.renderAllDatasets() : this.mountDisplayDatasets()}</div>
+        <div>
+          <DatasetSideNav
+            content={this.state.toDisplayDataset}
+            onClick={this.closeNav}
+            style={this.state.style}
+            alreadyPurchased={alreadyPurchased}
+            currentUser={this.state.currentUser}
+          />
         </div>
-      );
-    } else {
-      // if we don't have a category yet, just render all datasets
-      return (
-        <div className="body">
-          <h1>Data Library</h1>
-          <h3>
-            <i>Categories</i>
-          </h3>
-          <div>{this.renderUniqueCategories()}</div>
-          <br />
-          <div>{this.renderAllDatasets()}</div>
-          <div>
-            <DatasetSideNav
-              content={this.state.toDisplayDataset}
-              onClick={this.closeNav}
-              style={this.state.style}
-              alreadyPurchased={alreadyPurchased}
-              currentUser={this.state.currentUser}
-            />
-          </div>
-        </div>
-      );
-    }
+      </div>
+    );
   }
 }
 
