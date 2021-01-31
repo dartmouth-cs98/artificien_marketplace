@@ -67,7 +67,10 @@ class Models extends Component {
         this.setState({ models: data });
       }
     };
-    queryModels(callback, this.state.currentUser.toLowerCase());
+    console.log(this.state.currentUser);
+    if (this.state.currentUser) {
+      queryModels(callback, this.state.currentUser.toLowerCase());
+    }
   }
 
   // actually get model with simple API call to aws endpoint. All necessary parameters included
@@ -110,7 +113,7 @@ class Models extends Component {
 
     // if the user has models, map each to a card
     const renderedModels = this.state.models.Items.map((model) => {
-      if (model.active_status.N === '1') {
+      if (parseInt(model.percent_complete.N, 10) !== 100) {
         console.log(model);
         return (
           <ModelDetailsCard onClick={this.openNav}
@@ -152,7 +155,7 @@ class Models extends Component {
     }
 
     const renderedModels = this.state.models.Items.map((model) => {
-      if (model.active_status.N === '0') {
+      if (parseInt(model.percent_complete.N, 10) === 100) {
         return (
           <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
             key={Math.random()}
@@ -183,7 +186,7 @@ class Models extends Component {
       <div>
         <h1 align="center">My Models</h1>
         <Link to="/create_model" style={{ textDecoration: 'none' }}>
-          <button type="button" className="block">
+          <button type="button" className="data-card-button">
             Upload New Model <span>&#43;</span>
           </button>
         </Link>

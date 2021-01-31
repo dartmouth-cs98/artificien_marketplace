@@ -21,7 +21,7 @@ class ModelDetailsCard extends Component {
           <div className="card-body">
             <h3>Submitted on {this.props.date_submitted}</h3>
             <p>Model {this.props.percent_complete}% complete</p>
-            <button type="button" className="openbtn2" tabIndex={0} onClick={() => this.props.onClick(this.props.model_id)}>View Model &rarr;</button>
+            <button type="button" className="data-card-button" tabIndex={0} onClick={() => this.props.onClick(this.props.model_id)}>View Model &rarr;</button>
           </div>
         </div>
       </div>

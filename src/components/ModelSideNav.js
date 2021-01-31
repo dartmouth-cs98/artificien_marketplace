@@ -34,9 +34,14 @@ class ModelSideNav extends Component {
             <p>Training on: {this.props.content.dataset.S}</p>
             <p>Percent Complete: {this.props.content.percent_complete.N}%</p>
           </div>
-          <div>{this.props.retrievedURL
-            ? <a href={this.props.retrievedURL} className="rtrvbtn" rel="noreferrer" target="_blank">Download Model</a>
-            : <button type="button" className="dwnldbtn" onClick={this.props.retrieveFunction}>Retrieve Model &darr;</button>}
+          <div>{parseInt(this.props.content.percent_complete.N, 10) === 100
+            ? (
+              <div>{this.props.retrievedURL
+                ? <a href={this.props.retrievedURL} className="rtrvbtn" rel="noreferrer" target="_blank">Download Model</a>
+                : <button type="button" className="dwnldbtn" onClick={this.props.retrieveFunction}>Retrieve Model &darr;</button>}
+              </div>
+            )
+            : <p>Not ready to download yet</p>}
           </div>
           <div className="list-group" />
         </div>
