@@ -157,6 +157,16 @@ left: 0px;
 }
 
 .dwnldbtn {
+  background-image: linear-gradient(to right, #580D93, #AF71EB); /* Artificien purple */
+  border: none;
+  border-radius: 15px;
+  color: white;
+  padding: 18px 32px;
+  text-align: center;
+  margin: 10px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
   position: relative;
   bottom: 4px;
   left: 0px;
