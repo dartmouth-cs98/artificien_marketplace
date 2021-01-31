@@ -57,8 +57,6 @@ class DatasetSideNav extends Component {
   }
 
   renderDatasetCard = () => {
-    console.log(this.props.content.dataset_id.S);
-    console.log(this.props.alreadyPurchased);
     // if we have predictable attributes for the card...
     return (
       <div className="overlay" style={this.props.style}>
@@ -86,7 +84,7 @@ class DatasetSideNav extends Component {
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
     return (
-      <div>{this.props.content ? <div>{this.renderDatasetCard()}</div> : <h3>Oops!</h3>}</div>
+      <div>{this.props.content && <div>{this.renderDatasetCard()}</div>}</div>
     );
   }
 }
