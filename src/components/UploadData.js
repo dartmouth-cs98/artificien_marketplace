@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
+// import update from 'react-addons-update'; // ES6
 import { putDataset } from '../database/databaseCalls';
 
 // import { Button } from 'reactstrap';
@@ -24,9 +25,11 @@ class UploadData extends Component {
       addAttributeForms: true,
       readyForSubmit: false,
       finalRangesEntered: false,
+      readyOnce: false,
 
       attributeNameList: [],
       attributeTypeList: [],
+      attributeTypeSubmitted: 0, // counter of number of attributes with a type
       attributeTypeDict: {},
       attributeNameDict: {},
 
@@ -39,10 +42,12 @@ class UploadData extends Component {
     };
   }
 
+  // sets the number of attributes
   numAttributesOnChange = (event) => {
     this.setState({ numAttributes: event.target.value });
   }
 
+  // add the attribute name, make sure it only enters once (with the repeat stuff)
   addAttributeName = (event, i) => {
     let repeat = false;
     for (const attribute in this.state.attributeNameDict) {
@@ -55,6 +60,7 @@ class UploadData extends Component {
     }
   }
 
+  // set the range minimum to the value (stringify)
   addAttributeRangeMin = (event, i) => {
     console.log(event.target.value);
     console.log(i);
@@ -62,6 +68,7 @@ class UploadData extends Component {
     this.state.attributeRangeMinDict[i] = { S: event.target.value };
   }
 
+  // set the range maximum to the value (stringify)
   addAttributeRangeMax = (event, i) => {
     console.log(event.target.value);
     // this.state.attributeRangeMaxes.push({ S: event.target.value });
@@ -69,12 +76,56 @@ class UploadData extends Component {
     this.setState({ addAttributeForms: false });
   }
 
+  // make sure that the attribute type is NOT none!
+  // if you are changing to a type AND it is either from none OR it is none of the existing types (i.e. it hasn't been made yet!)
   addAttributeType = (event, i) => {
-    console.log(event.target.value);
-    this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
-    this.setState({ addAttributeForms: false });
+    if (!(event.target.value === '')) {
+      console.log(event.target.value);
+      console.log(this.state.attributeTypeSubmitted);
+      // if you are changing the value back to none!
+      // if this exists even
+      if (this.state.attributeTypeDict[i]) {
+        console.log('exists');
+        console.log(event.target.value);
+        console.log(this.state.attributeTypeDict[i].S);
+        console.log(this.state.readyForRangesButton);
+        if (event.target.value === 'O' && !(event.target.value === this.state.attributeTypeDict[i].S)) {
+          // this.setState({
+          // attributeTypeDict: update(this.state.ttributeTypeDict, { i: event.target.value }),
+          // });
+          this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
+          this.setState((state) => {
+            return { attributeTypeSubmitted: state.attributeTypeSubmitted - 1 };
+          });
+          // this.setState({ attributeTypeSubmitted: this.state.attributeTypeSubmitted - 1 });
+          console.log(this.state.attributeTypeSubmitted);
+          console.log('decrementing counter');
+        } else if (!(event.target.value === 'O') && (this.state.attributeTypeDict[i].S === 'O')) {
+          this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
+          this.setState((state) => {
+            return { attributeTypeSubmitted: state.attributeTypeSubmitted + 1 };
+          });
+          console.log(this.state.attributeTypeSubmitted);
+          console.log('incrementing counter');
+        }
+      } else {
+        console.log('not exists');
+        if (!(event.target.value === 'O')) {
+          this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
+          this.setState((state) => {
+            return { attributeTypeSubmitted: state.attributeTypeSubmitted + 1 };
+          });
+          console.log('incrementing counter on new input');
+          console.log(this.state.attributeTypeSubmitted);
+        } else {
+          this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
+        }
+        this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
+      }
+    }
   }
 
+  // count number of attributes
   getNumNumberAttributes = () => {
     let numNumAttributes = 0;
     for (const key in this.state.attributeTypeDict) {
@@ -83,6 +134,7 @@ class UploadData extends Component {
     return numNumAttributes;
   }
 
+  // make sure max > min!
   checkValidRanges = () => {
     const numNumberAttributes = this.getNumNumberAttributes();
     if (numNumberAttributes > 0) {
@@ -102,6 +154,7 @@ class UploadData extends Component {
     }
   }
 
+  // get attribute name + type!
   buildAttributeNameAndTypeLists = () => {
     for (let i = 0; i < Object.keys(this.state.attributeNameDict).length; i += 1) {
       this.state.attributeNameList.push(this.state.attributeNameDict[i]);
@@ -109,6 +162,7 @@ class UploadData extends Component {
     }
   }
 
+  // get range list
   buildAttributeRangeLists = () => {
     for (let i = 0; i < Object.keys(this.state.attributeRangeMinDict).length; i += 1) {
       console.log('building: //');
@@ -163,10 +217,12 @@ class UploadData extends Component {
     this.setState({ categorySubmitted: false });
     this.setState({ datasetNameSubmitted: false });
     this.setState({ numUsersSubmitted: false });
+    this.setState({ readyOnce: false });
 
     this.setState({ numUsers: null });
     this.setState({ inputDatatypeFormList: [] });
     this.setState({ attributeRangeInputs: [] });
+    this.setState({ attributeTypeSubmitted: 0 });
     this.setState({ readyForSubmit: false });
     this.setState({ readyForRanges: false });
     this.setState({ readyForRangesButton: false });
@@ -179,9 +235,11 @@ class UploadData extends Component {
   // change app specified num users, make sure it is a positive integer
   addNumUsers = (event) => {
     if (!Number.isNaN(parseInt(event.target.value, 10)) && parseInt(event.target.value, 10) > 0) {
+      console.log('num users submitted');
       this.setState({ numUsers: event.target.value });
       this.setState({ numUsersSubmitted: true });
     } else {
+      console.log('num users unsubmitted');
       this.setState({ numUsersSubmitted: false });
     }
   }
@@ -194,6 +252,7 @@ class UploadData extends Component {
         this.setState({ appCategory: event.target.value });
         this.setState({ categorySubmitted: true });
       } else {
+        console.log('category unsubmitted');
         this.setState({ appCategory: event.target.value });
         this.setState({ categorySubmitted: false });
       }
@@ -246,6 +305,7 @@ class UploadData extends Component {
       this.setState({ appName: event.target.value });
       this.setState({ appNameSubmitted: true });
     } else {
+      console.log('app name unsubmitted');
       this.setState({ appNameSubmitted: false });
     }
   }
@@ -280,6 +340,7 @@ class UploadData extends Component {
       this.setState({ datasetName: event.target.value });
       this.setState({ datasetNameSubmitted: true });
     } else {
+      console.log('dataset name unsubmitted');
       this.setState({ datasetNameSubmitted: false });
     }
   }
@@ -309,7 +370,14 @@ class UploadData extends Component {
   }
 
   readyForSubmit = () => {
-    this.setState({ readyForSubmit: true });
+    if (this.state.finalRangesEntered && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.datasetNameSubmitted && this.state.categorySubmitted) {
+      this.setState({ readyForSubmit: true });
+      this.setState({ readyOnce: true });
+      console.log('ready!');
+    } else {
+      this.setState({ readyForSubmit: false });
+      console.log('not ready!');
+    }
   }
 
   checkIfRangesReady = () => {
@@ -372,8 +440,11 @@ class UploadData extends Component {
         }
         this.setState({ addAttributeForms: false });
       }
+      console.log(this.state.attributeTypeSubmitted);
+      console.log(this.state.numAttributes);
       if (this.state.readyForRangesButton) {
-        if (Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes) {
+        if (Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes
+        || this.state.attributeTypeSubmitted < this.state.numAttributes) {
           return (
             <div className="dataLists">
               <div className="typesList">
@@ -389,7 +460,7 @@ class UploadData extends Component {
               <div className="typesList">
                 <h2>Add Your Attributes</h2>
                 {this.state.inputDatatypeFormList}
-                <button type="submit" onClick={() => { this.readyForRanges(); }}>Ranges</button>
+                <button type="submit" className="submit" onClick={() => { this.readyForRanges(); }}>Ranges</button>
               </div>
             </div>
           );
@@ -409,7 +480,7 @@ class UploadData extends Component {
   }
 
   checkForSubmit = () => {
-    if (this.state.finalRangesEntered) {
+    if (this.state.finalRangesEntered && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.datasetNameSubmitted && this.state.categorySubmitted) {
       console.log('run readyForSubmit()');
       this.readyForSubmit();
     }
@@ -417,42 +488,48 @@ class UploadData extends Component {
 
   renderAttributeRanges = () => {
     if (this.state.readyForRanges) { // we are ready to render the ranges
-      if (this.state.readyForSubmit) { // all ranges have been put in
+      if (this.state.readyForSubmit && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.datasetNameSubmitted && this.state.categorySubmitted) { // all ranges have been put in
         console.log('readyForSubmit');
         if (this.getNumNumberAttributes() < 1) {
           return (
             <div>
               <h4><i>No number type fields, please submit</i></h4>
-              <button type="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
+              <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
             </div>
           );
         }
         return (
           <div>
-            <h4><i>Ranges entered, please submit dataset</i></h4>
-            <button type="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
+            <h4><i>Ranges and all other fields entered correctly, please submit dataset</i></h4>
+            <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
           </div>
         );
       } else {
         this.checkForSubmit();
-        return (
-          <div>
-            {this.state.attributeRangeInputs}
-            <button type="button" onClick={() => this.checkIfRangesReady()}>Submit Ranges</button>
-          </div>
-        );
+        console.log('not ready');
+        if (this.state.readyOnce) {
+          return (
+            <div>
+              <h4><i>Please submit one of the top four fields to submit</i></h4>
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              {this.state.attributeRangeInputs}
+              <button type="button" className="submit" onClick={() => this.checkIfRangesReady()}>Submit Ranges</button>
+            </div>
+          );
+        }
       }
     } else {
       return (
-        <div>
-          {this.stateattributeRangeInputs}
-        </div>
+        null
       );
     }
   }
 
   // render number of users to input
-
   renderNumUsersInput = () => {
     if (!this.state.numUsersSubmitted) { // if number of users hasn't been submitted yet, give invalid message, make sure the number is positive!
       return (
@@ -476,6 +553,8 @@ class UploadData extends Component {
       );
     }
   }
+
+  // -------------------------------------------------------- RENDER -------------------------------------------------------- //
 
   render() {
     if (!this.state.readyForRangesButton) {
