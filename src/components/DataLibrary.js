@@ -26,7 +26,7 @@ class DataLibrary extends Component {
     this.state = {
       inCategory: null,
       outCategory: null,
-      sortedCategory: null,
+      sortedCategory: 'No Category',
       allDatasets: null,
       categoryIsChosen: false,
       categoriesNotSet: true,
@@ -37,6 +37,8 @@ class DataLibrary extends Component {
       toDisplayDataset: null,
       currentUser: null,
       currentUserDatasetsPurchased: [],
+      currentSearchTerm: null,
+      searchTermInput: false,
     };
     this.openNav = this.openNav.bind(this);
     this.closeNav = this.closeNav.bind(this);
@@ -81,12 +83,13 @@ class DataLibrary extends Component {
   categoryOnClickFunction = (category) => {
     if (category === 'No Category') { // get rid of display when user wants no organization
       this.setState({ categoryIsChosen: false });
-      this.setState({ sortedCategory: null });
+      this.setState({ sortedCategory: 'No Category' });
     } else { // we have chosen a category by which to sort
       this.setState({ categoriesNotSet: true });
       this.setState({ categoryIsChosen: true });
       this.setState({ sortedCategory: category });
     }
+    if (this.state.searchTermInput) this.setState({ searchTermInput: false });
   };
 
   mountDisplayDatasets = () => {
@@ -133,19 +136,30 @@ class DataLibrary extends Component {
   };
 
   checkIfAlreadyPurchased = (dataset) => {
-    console.log(dataset);
-    console.log(this.state.currentUserDatasetsPurchased);
     if (dataset && this.state.currentUserDatasetsPurchased) {
       for (const purchased of this.state.currentUserDatasetsPurchased) {
         if (String(purchased) === String(dataset.dataset_id.S)) {
-          console.log(dataset.dataset_id.S);
           return true;
         }
       }
-      console.log(dataset.dataset_id.S);
       return false;
     }
     return false;
+  }
+
+  searchBarOnChange = (e) => {
+    this.setState({ currentSearchTerm: e.target.value });
+  }
+
+  handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      if (this.state.categoryIsChosen) this.setState({ categoryIsChosen: false });
+      if (this.state.currentSearchTerm && this.state.currentSearchTerm !== '') {
+        // console.log(`searching ${this.state.currentSearchTerm}`);
+        document.getElementById('searchbar').value = '';
+        this.setState({ searchTermInput: true });
+      }
+    }
   }
 
   // side nav
@@ -156,7 +170,6 @@ class DataLibrary extends Component {
 
   closeNav() {
     document.removeEventListener('click', this.closeNav);
-    console.log('bongo');
     const style = { width: 0 };
     this.setState({ style });
   }
@@ -255,10 +268,44 @@ class DataLibrary extends Component {
     return (
       <div>
         <div>{this.renderDatasetsInCategory()}</div>
-        <div>{this.renderDatasetsOutOfCategory()}</div>
+        {/* <div>{this.renderDatasetsOutOfCategory()}</div> */}
       </div>
     );
   };
+
+  renderSearchBar = () => {
+    return (
+      <input type="text" id="searchbar" placeholder="dataset name" onKeyPress={this.handleKeyPress} onChange={(e) => this.searchBarOnChange(e)} />
+    );
+  }
+
+  renderSearchTermDatasets = () => {
+    const searchTerm = this.state.currentSearchTerm;
+    const allMatchingDatasets = this.state.allDatasets.Items.reduce((finalDatasets, dataset) => {
+      console.log(dataset);
+      console.log(searchTerm);
+      if (dataset.app.S.includes(searchTerm)) {
+        finalDatasets.push(
+          <DataLibraryCard
+            onClick={this.openNav}
+            app={dataset.app.S}
+            num_devices={dataset.num_devices.N}
+            category={dataset.category.S}
+            dataset_id={dataset.dataset_id.S}
+          />,
+        );
+      }
+      return finalDatasets;
+    }, []);
+    if (this.state.categoryIsChosen) this.setState({ categoryIsChosen: false });
+    if (allMatchingDatasets.length > 0) {
+      return (
+        <div>{allMatchingDatasets}</div>
+      );
+    } else {
+      return <div>No Datasets matching that pattern</div>;
+    }
+  }
 
   // get all unique categories for all datasets available
   renderUniqueCategories = () => {
@@ -273,18 +320,21 @@ class DataLibrary extends Component {
     allUniqueCategories.push('No Category');
 
     const allCategoryButtons = allUniqueCategories.map((category) => {
-      // each category goes to a button
+      const styleObj = {
+        fontWeight: 900,
+        display: 'block',
+      };
       return (
-        <button
-          type="button"
+        <div
+          aria-hidden="true"
           className="categoryButton"
           onClick={() => this.categoryOnClickFunction(category)} // onclick will revamp catalog as sorted
         >
-          {category}
-        </button>
+          {category === this.state.sortedCategory ? <> <div>&#9660;</div><div style={styleObj}>{category}</div></> : category}
+        </div>
       );
     });
-    return <div>{allCategoryButtons}</div>;
+    return <><hr /><div className="categories-and-searchbar"><div>{allCategoryButtons}</div>{this.renderSearchBar()}</div><hr /></>;
   };
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
@@ -296,12 +346,16 @@ class DataLibrary extends Component {
     return (
       <div className="body">
         <h1>Data Library</h1>
-        <h3>
-          <i>Categories</i>
-        </h3>
-        <div>{this.renderUniqueCategories()}</div>
+        {this.renderUniqueCategories()}
         <br />
-        <div>{this.state.categoryIsChosen ? this.renderAllDatasets() : this.mountDisplayDatasets()}</div>
+        {this.state.categoryIsChosen
+          ? <div>{this.renderAllDatasets()}</div>
+          : (
+            <div>{this.state.searchTermInput
+              ? this.renderSearchTermDatasets()
+              : this.mountDisplayDatasets()}
+            </div>
+          )}
         <div>
           <DatasetSideNav
             content={this.state.toDisplayDataset}

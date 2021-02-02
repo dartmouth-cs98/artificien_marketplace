@@ -117,17 +117,18 @@ li a:hover {
 }
 
 .categoryButton {
-  background-image: linear-gradient(to right, #580D93, #AF71EB); /* Artificien purple */
   border: none;
-  border-radius: 15px;
-  color: white;
+  color: black;
   padding: 12px 21px;
   text-align: center;
-  margin: 15px;
   text-decoration: none;
   display: inline-block;
-  font-size: 12px;
+  font-size: 18px;
 }
+.categoryButton:hover {
+  font-weight: 900;
+}
+
 .block {
   display: block;
   width: 70%;
@@ -226,18 +227,6 @@ flex-wrap: wrap;
   margin: 2px;
   width : 70%;
   height: 20%;
-}
-
-.categoryButton {
-  background-color: #3C096C; // Purple
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  margin: 5px;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
 }
 
 .model-holder {
@@ -387,6 +376,24 @@ h3 {
   justify-content: space-evenly;
 }
 
-// #profile-page-user-info-item{
-//   : 10%;
-// }
+hr {
+  border: none;
+  height: 1px;
+  /* Set the hr color */
+  color:rgb(182, 181, 181); /* old IE */
+  background-color: rgb(182, 181, 181); /* Modern Browsers */
+}
+
+.categories-and-searchbar {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  align-items: center;
+}
+
+#searchbar {
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

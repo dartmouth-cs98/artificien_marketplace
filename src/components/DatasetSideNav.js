@@ -57,12 +57,10 @@ class DatasetSideNav extends Component {
   }
 
   renderDatasetCard = () => {
-    console.log(this.props.content.dataset_id.S);
-    console.log(this.props.alreadyPurchased);
     // if we have predictable attributes for the card...
     return (
       <div className="overlay" style={this.props.style}>
-        <button type="button" className="closebtn" onClick={this.props.onClick}>x</button>
+        <button type="button" className="data-card-button" onClick={this.props.onClick}>x</button>
         <div className="sidenav-container">
           <div className="text-center">
             <h2>{this.props.content.dataset_id.S}</h2>
@@ -86,7 +84,7 @@ class DatasetSideNav extends Component {
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
     return (
-      <div>{this.props.content ? <div>{this.renderDatasetCard()}</div> : <h3>Oops!</h3>}</div>
+      <div>{this.props.content && <div>{this.renderDatasetCard()}</div>}</div>
     );
   }
 }
