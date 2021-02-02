@@ -60,7 +60,7 @@ class DatasetSideNav extends Component {
     // if we have predictable attributes for the card...
     return (
       <div className="overlay" style={this.props.style}>
-        <button type="button" className="closebtn" onClick={this.props.onClick}>x</button>
+        <button type="button" className="data-card-button" onClick={this.props.onClick}>x</button>
         <div className="sidenav-container">
           <div className="text-center">
             <h2>{this.props.content.dataset_id.S}</h2>

@@ -68,7 +68,7 @@ class Profile extends Component {
       if (error) {
         console.log(error);
       } else {
-        console.log(data);
+        console.log('user data:');
         console.log(data.Items[0]);
         this.setState({ userData: data.Items[0] });
       }
