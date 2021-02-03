@@ -26,7 +26,7 @@ class DataLibrary extends Component {
     this.state = {
       inCategory: null,
       outCategory: null,
-      sortedCategory: 'No Category',
+      sortedCategory: 'All',
       allDatasets: null,
       categoryIsChosen: false,
       categoriesNotSet: true,
@@ -81,9 +81,9 @@ class DataLibrary extends Component {
   }
 
   categoryOnClickFunction = (category) => {
-    if (category === 'No Category') { // get rid of display when user wants no organization
+    if (category === 'All') { // get rid of display when user wants no organization
       this.setState({ categoryIsChosen: false });
-      this.setState({ sortedCategory: 'No Category' });
+      this.setState({ sortedCategory: 'All' });
     } else { // we have chosen a category by which to sort
       this.setState({ categoriesNotSet: true });
       this.setState({ categoryIsChosen: true });
@@ -316,8 +316,12 @@ class DataLibrary extends Component {
     const allCategories = this.state.allDatasets.Items.map((dataset) => {
       return dataset.category.S;
     });
-    const allUniqueCategories = [...new Set(allCategories)];
-    allUniqueCategories.push('No Category');
+    const allUniqueCategories = ['All'];
+    for (const x of allCategories) {
+      if (!allUniqueCategories.includes(x)) {
+        allUniqueCategories.push(x);
+      }
+    }
 
     const allCategoryButtons = allUniqueCategories.map((category) => {
       const styleObj = {

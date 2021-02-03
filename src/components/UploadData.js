@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 // import update from 'react-addons-update'; // ES6
 import { putDataset } from '../database/databaseCalls';
 
@@ -494,14 +495,18 @@ class UploadData extends Component {
           return (
             <div>
               <h4><i>No number type fields, please submit</i></h4>
-              <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
+              <NavLink to="/documentation">
+                <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
+              </NavLink>
             </div>
           );
         }
         return (
           <div>
             <h4><i>Ranges and all other fields entered correctly, please submit dataset</i></h4>
-            <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
+            <NavLink to="/documentation">
+              <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
+            </NavLink>
           </div>
         );
       } else {
