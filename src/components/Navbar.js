@@ -20,10 +20,10 @@ class Navbar extends Component {
 
   render() {
     return (
-      <>
+      <div className="navbar-complete">
         <div className="logo" active />
         <nav className="nav">
-          <ul className="nav-ul">
+          <ul className="nav-ul" style={{ 'font-family': 'Avenir', 'font-size': '1rem' }}>
             <li>
               <NavLink to="/" exact> Home </NavLink>
             </li>
@@ -52,7 +52,7 @@ class Navbar extends Component {
             </li> */}
           </ul>
         </nav>
-      </>
+      </div>
     );
   }
 }
