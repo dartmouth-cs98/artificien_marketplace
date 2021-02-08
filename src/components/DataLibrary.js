@@ -1,3 +1,4 @@
+/* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable guard-for-in */
 import React, { Component } from 'react';
 import '../style.scss';
@@ -26,7 +27,7 @@ class DataLibrary extends Component {
     this.state = {
       inCategory: null,
       outCategory: null,
-      sortedCategory: 'No Category',
+      sortedCategory: 'All',
       allDatasets: null,
       categoryIsChosen: false,
       categoriesNotSet: true,
@@ -81,9 +82,9 @@ class DataLibrary extends Component {
   }
 
   categoryOnClickFunction = (category) => {
-    if (category === 'No Category') { // get rid of display when user wants no organization
+    if (category === 'All') { // get rid of display when user wants no organization
       this.setState({ categoryIsChosen: false });
-      this.setState({ sortedCategory: 'No Category' });
+      this.setState({ sortedCategory: 'All' });
     } else { // we have chosen a category by which to sort
       this.setState({ categoriesNotSet: true });
       this.setState({ categoryIsChosen: true });
@@ -155,9 +156,10 @@ class DataLibrary extends Component {
     if (event.key === 'Enter') {
       if (this.state.categoryIsChosen) this.setState({ categoryIsChosen: false });
       if (this.state.currentSearchTerm && this.state.currentSearchTerm !== '') {
-        // console.log(`searching ${this.state.currentSearchTerm}`);
         document.getElementById('searchbar').value = '';
         this.setState({ searchTermInput: true });
+        const workingSearchTerm = this.state.currentSearchTerm;
+        this.setState({ finalizedSearchTerm: workingSearchTerm });
       }
     }
   }
@@ -280,10 +282,8 @@ class DataLibrary extends Component {
   }
 
   renderSearchTermDatasets = () => {
-    const searchTerm = this.state.currentSearchTerm;
+    const searchTerm = this.state.finalizedSearchTerm;
     const allMatchingDatasets = this.state.allDatasets.Items.reduce((finalDatasets, dataset) => {
-      console.log(dataset);
-      console.log(searchTerm);
       if (dataset.app.S.includes(searchTerm)) {
         finalDatasets.push(
           <DataLibraryCard
@@ -317,7 +317,7 @@ class DataLibrary extends Component {
       return dataset.category.S;
     });
     const allUniqueCategories = [...new Set(allCategories)];
-    allUniqueCategories.push('No Category');
+    allUniqueCategories.unshift('All');
 
     const allCategoryButtons = allUniqueCategories.map((category) => {
       const styleObj = {

@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
@@ -8,6 +9,7 @@ import { getUser, queryModels } from '../database/databaseCalls';
 import '../style.scss';
 import ChangeUsernameForm from './ChangeUsernameForm';
 import UserMetricsCard from './UserMetricsCard';
+import ProfileAccordion from './ProfileAccordion';
 
 /*
 Component that provides the user their information, will allow editing capabilities in the future.
@@ -48,9 +50,6 @@ class Profile extends Component {
         queryModels(modelsQueryCallback, name);
       });
     // get metrics here
-
-    // metric 2: Devices reached
-    // metric 3: Average training time
   }
 
   // figure out which user is currently logged in and query their models
@@ -74,6 +73,22 @@ class Profile extends Component {
       }
     };
     getUser(callback, name);
+  }
+
+  renderFirstRow = () => {
+    return (
+      <div className="profile-page-user-info-body-row">
+        <div id="profile-page-user-info">
+          <div id="change-profile-info">
+            <h3 id="profile-page-user-info-item">Username: {this.state.userData.username.S}</h3>
+            {/* <button type="button" className="change-user-data-button" onClick={() => this.setState({ usernameChange: true })}>Change</button>
+            {this.renderChangeButton()} */}
+          </div>
+        </div>
+        <div id="profile-page-user-info"> {this.state.userData.user_id && <h3 id="profile-page-user-info-item">User ID: {this.state.userData.user_id.S}</h3>} </div>
+        <div id="profile-page-user-info"> {this.state.userData.user_account_email && <h3 id="profile-page-user-info-item">Email: {this.state.userData.user_account_email.S}</h3>} </div>
+      </div>
+    );
   }
 
   renderSecondRow = () => {
@@ -124,22 +139,11 @@ class Profile extends Component {
     if (this.state.userData && this.state.metricsDict.userModels) {
       return (
         <>
-          <div className="profile-page-user-info-body-row">
-            <div id="profile-page-user-info">
-              <div id="change-profile-info">
-                <h3 id="profile-page-user-info-item">Username: {this.state.userData.username.S}</h3>
-                <button type="button" className="change-user-data-button" onClick={() => this.setState({ usernameChange: true })}>Change</button>
-                {this.renderChangeButton()}
-              </div>
-            </div>
-            <div id="profile-page-user-info"> {this.state.userData.user_id && <h3 id="profile-page-user-info-item">User ID: {this.state.userData.user_id.S}</h3>} </div>
-            <div id="profile-page-user-info"> {this.state.userData.user_account_email && <h3 id="profile-page-user-info-item">Email: {this.state.userData.user_account_email.S}</h3>} </div>
-          </div>
-          {this.renderSecondRow()}
+          <h1 align="center">My Profile</h1>
           <div className="profile-page-user-metrics-body">
             <div className="user-metric-container">{this.renderMetricsCards()}</div>
           </div>
-          {/* <LoadingScreen /> */}
+          <ProfileAccordion content={this.state.userData} />
         </>
       );
     } else {

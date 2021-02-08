@@ -29,7 +29,7 @@ const useStyles = (theme) => ({
     margin: '10px',
   },
   appBar: {
-    marginTop: '100px',
+    marginTop: '87px',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -38,7 +38,7 @@ const useStyles = (theme) => ({
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    marginTop: '100px',
+    marginTop: '87px',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -57,7 +57,7 @@ const useStyles = (theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    marginTop: '100px',
+    marginTop: '87px',
   },
   drawerHeader: {
     display: 'flex',

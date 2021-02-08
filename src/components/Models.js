@@ -125,17 +125,45 @@ class Models extends Component {
           />
         );
       }
-      return null;
+      return (
+        <>
+          <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
+            key={Math.random()}
+            model_id={model.model_id.S}
+            dataset={model.dataset.S}
+            date_submitted={model.date_submitted.S}
+            percent_complete={60}
+          />
+          <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
+            key={Math.random()}
+            model_id={model.model_id.S}
+            dataset={model.dataset.S}
+            date_submitted={model.date_submitted.S}
+            percent_complete={60}
+          />
+          <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
+            key={Math.random()}
+            model_id={model.model_id.S}
+            dataset={model.dataset.S}
+            date_submitted={model.date_submitted.S}
+            percent_complete={60}
+          />
+        </>
+      );
     });
 
     // put em all together in one container
     const renderedModelTable = (
-      <div>
-        <h2 align="left">In Progress</h2>
-        <div className="card-holder">
-          {renderedModels}
+      <>
+        <h2 style={{ 'margin-bottom': '2px' }} align="left">In Progress</h2>
+        <div className="models-in-progress-headers">
+          <p id="model-header-p">NAME</p>
+          <p id="model-header-p">DATE SUBMITTED</p>
+          <p id="model-header-p">DATASET</p>
+          <p id="model-header-p">PROGRESS</p>
         </div>
-      </div>
+        {renderedModels}
+      </>
     );
     return renderedModelTable;
   }
@@ -143,10 +171,6 @@ class Models extends Component {
   // get only the models completed
   renderModelsCompleted = () => {
     if (!this.state.models) { return 'You have no completeds models'; }
-    if (this.state.userNotSet) {
-      console.log('user not set');
-      return null;
-    }
 
     if (!this.state.models.Items) {
       return (
@@ -157,25 +181,38 @@ class Models extends Component {
     const renderedModels = this.state.models.Items.map((model) => {
       if (parseInt(model.percent_complete.N, 10) === 100) {
         return (
-          <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
-            key={Math.random()}
-            model_id={model.model_id.S}
-            dataset={model.dataset.S}
-            date_submitted={model.date_submitted.S}
-            percent_complete={model.percent_complete.N}
-          />
+          <>
+            <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
+              key={Math.random()}
+              model_id={model.model_id.S}
+              dataset={model.dataset.S}
+              date_submitted={model.date_submitted.S}
+              percent_complete={model.percent_complete.N}
+            />
+            <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
+              key={Math.random()}
+              model_id={model.model_id.S}
+              dataset={model.dataset.S}
+              date_submitted={model.date_submitted.S}
+              percent_complete={60}
+            />
+          </>
         );
       }
       return null;
     });
 
     const renderedModelTable = (
-      <div>
-        <h2 align="left">Completed</h2>
-        <div className="card-holder">
-          {renderedModels}
+      <>
+        <h2 style={{ 'margin-bottom': '2px' }} align="left">Completed</h2>
+        <div className="models-completed-headers">
+          <p id="model-header-p">NAME</p>
+          <p id="model-header-p">DATE SUBMITTED</p>
+          <p id="model-header-p">DATASET</p>
+          <p id="model-header-p">STATUS</p>
         </div>
-      </div>
+        {renderedModels}
+      </>
     );
     return renderedModelTable;
   }
@@ -186,7 +223,7 @@ class Models extends Component {
       <div>
         <h1 align="center">My Models</h1>
         <Link to="/create_model" style={{ textDecoration: 'none' }}>
-          <button type="button" className="data-card-button">
+          <button type="button" className="create-model-button">
             Upload New Model <span>&#43;</span>
           </button>
         </Link>
@@ -210,9 +247,9 @@ class Models extends Component {
     return (
       <div className="body">
         <div>
-          <div>{this.renderCreateModelButton()}</div>
-          <div>{this.renderModelsInProgress()}</div>
-          <div>{this.renderModelsCompleted()}</div>
+          <div id="model-row">{this.renderCreateModelButton()}</div>
+          <div id="model-row">{this.renderModelsInProgress()}</div>
+          <div id="model-row">{this.renderModelsCompleted()}</div>
         </div>
         <div>
           <ModelSideNav content={clickedModel}
