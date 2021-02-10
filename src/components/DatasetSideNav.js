@@ -56,6 +56,23 @@ class DatasetSideNav extends Component {
     updateItem(upParams);
   }
 
+  // make a seperate render for the purchase button!
+  renderPurchased = () => {
+    if (this.props.content.app.S in this.props.content.alreadyPurchased) {
+      return (
+        <div className="dataset_existing">You already own access to this dataset!</div>
+      );
+    } else {
+      return (
+        <button type="button"
+          className="data-card-button"
+          onClick={() => this.purchaseDataset(this.props.content.dataset_id.S, this.props.currentUser)}
+        >Purchase This Dataset
+        </button>
+      );
+    }
+  }
+
   renderDatasetCard = () => {
     // if we have predictable attributes for the card...
     return (
@@ -63,17 +80,10 @@ class DatasetSideNav extends Component {
         <button type="button" className="data-card-button" onClick={this.props.onClick}>x</button>
         <div className="sidenav-container">
           <div className="text-center">
-            <h2>{this.props.content.dataset_id.S}</h2>
-            <p>Pulled From: {this.props.content.app.S}</p>
+            <h2>{this.props.content.app.S}</h2>
             <p>Category: {this.props.content.category.S}</p>
             {this.props.content.predictable_attributes && <p>Predictable Attributes: {this.props.content.predictable_attributes.S}</p>}
-            {!this.props.alreadyPurchased ? (
-              <button type="button"
-                className="data-card-button"
-                onClick={() => this.purchaseDataset(this.props.content.dataset_id.S, this.props.currentUser)}
-              >Purchase This Dataset
-              </button>
-            ) : <div> You already own access to this dataset! </div>}
+            {this.renderPurchased()};
           </div>
           <div className="list-group" />
         </div>
