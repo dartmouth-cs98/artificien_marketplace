@@ -312,6 +312,7 @@ class DataLibrary extends Component {
     const allCategories = this.state.allDatasets.Items.map((dataset) => {
       return dataset.category.S;
     });
+
     const allUniqueCategories = [...new Set(allCategories)];
     allUniqueCategories.unshift('All');
 

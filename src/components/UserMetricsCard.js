@@ -5,7 +5,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+
 
 class UserMetricsCard extends Component {
   constructor(props) {
@@ -63,9 +64,9 @@ class UserMetricsCard extends Component {
           )}
         </CardContent>
         <CardActions>
-          <Link to="/models" style={{ textDecoration: 'none' }}>
+          <NavLink to="/models">
             {this.props.title === 'Number of Models Created' && <Button size="small">See My Models</Button>}
-          </Link>
+          </NavLink>
         </CardActions>
       </Card>
     );
