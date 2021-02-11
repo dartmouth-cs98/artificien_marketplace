@@ -53,6 +53,9 @@ display: flex;
 .active {
   color: purple;
 }
+.dataset_existing {
+  color: white;
+}
 
 ul {
   list-style-type: none;
@@ -187,12 +190,9 @@ li a:hover {
   font-size: 16px;
 }
 
-iframe {
-position: left;
-width: 75vw;
-height: 40vw;
+sidetext {
+  color: white;
 }
-
 .openbtn {
 position: relative;
 bottom: 4px;
