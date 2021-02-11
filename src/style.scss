@@ -1,8 +1,10 @@
 body, html {
   font-family: "Avenir";
-  position: center;
-  height: 100%;
-  width: 100%;
+  // position: center;
+  position: absolute;
+  min-height: 100%;
+  min-width: 100%;
+  margin-left: 8px;
   text-align: center;
   overflow-x: hidden; // to prevent scrolling from side to side. thank you stack overflow for the advice here!
 }
@@ -11,16 +13,25 @@ body, html {
   font-family: "Avenir";
 }
 
-#main {
-  background-color: white;
-  margin-top: 5px;
-  margin-left: 5px;
+.welcome-body {
+  margin: 0;
 }
 
-.nav{
+#main {
+  background-color: white;
+  width: 100%;
+  margin-left: 8px;
+}
+
+.nav {
   display: flex;
   justify-content: space-between; 
   background-color: white;
+  // border-style: solid;
+  // border-color: purple;
+}
+.navbar-complete {
+  border-bottom: 5px solid purple;
 }
 
 .logo {
@@ -28,18 +39,9 @@ body, html {
   background-image: url('img/NavbarLogo.png'); // team logo
   width: 5vw;
   height: 2.5vw;
-  margin-right: 50px;
+  margin: 8px 50px 0px 8px;
   background-repeat: no-repeat;
   background-size: contain;
-}
-
-.landing {
-  background: url('img/LoginPage.png') no-repeat center fixed; // team logo
-  position: fixed;
-  width: 100vw;
-  height: 50vw;
-  top: 100%;
-  // background-color: purple; need to figure out how to add purple coloring!
 }
 
 .flex-container {
@@ -50,6 +52,9 @@ display: flex;
 
 .active {
   color: purple;
+}
+.dataset_existing {
+  color: white;
 }
 
 ul {
@@ -77,6 +82,34 @@ li a:hover {
   background-color: rgb(184, 179, 179);
 }
 
+.model-card-success-button {
+  background-image: linear-gradient(to right, #580D93, #AF71EB);
+  border: none;
+  color: white;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 18px 32px;
+  text-align: center;
+  margin: 0;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.model-card-failure-button {
+  background-image: linear-gradient(to right, rgb(253, 185, 185), rgb(248, 103, 103));
+  border: none;
+  color: white;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 18px 36px;
+  text-align: center;
+  margin: 0;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
 .data-card-button {
   background-image: linear-gradient(to right, #580D93, #AF71EB); /* Artificien purple */
   border: none;
@@ -88,6 +121,18 @@ li a:hover {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+}
+
+.create-model-button {
+  background-image: linear-gradient(to right, #580D93, #AF71EB); /* Artificien purple */
+  border-radius: 10px;
+  color: white;
+  padding: 18px 32px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  width: 100%;
+  margin-bottom: 50px;
 }
 
 .change-user-data-button {
@@ -145,12 +190,9 @@ li a:hover {
   font-size: 16px;
 }
 
-iframe {
-position: left;
-width: 75vw;
-height: 40vw;
+sidetext {
+  color: white;
 }
-
 .openbtn {
 position: relative;
 bottom: 4px;
@@ -192,17 +234,6 @@ left: 0px;
   left: 0px;
 }
 
-.card-holder {
-  width: 100%;
-  display: flex;
-  padding: 0;
-  margin: 0;
-  // background-color: #011627; // using color from Figma
-  color: #FDFFFC;
-  border-radius: 25px;
-  // justify-content: space-around;
-}
-
 .wrap { 
 -webkit-flex-wrap: wrap;
 flex-wrap: wrap;
@@ -219,7 +250,60 @@ flex-wrap: wrap;
   color: #FDFFFC; 
   border-radius: 25px;
 }
-.card-body {
+
+#model-row {
+  margin-left: 5%;
+  margin-right: 10%;
+}
+
+.model-card {
+  width: 100%;
+  display: flex;
+  background-color: #011627;
+  color: #FDFFFC;
+  border-radius: 10px;
+  justify-content: space-between;
+  margin-top: 8px;
+  margin-bottom: 10px;
+}
+
+#model-p {
+  margin: 15px;
+  width: 20%;
+  text-align: left;
+}
+
+#model-header-p {
+  margin: 15px;
+  width: 20%;
+  text-align: left;
+}
+
+.models-in-progress-headers {
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+  padding-left: 15px;
+}
+.models-completed-headers {
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+  padding-left: 15px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.models-content-inner {
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+  padding-left: 15px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+.data-card-body {
   margin: 10px;
 }
 
@@ -334,7 +418,7 @@ margin: 10px;
 .profile-page-user-metrics-body {
   display: flex;
   justify-content: center;
-  margin: 10%
+  margin: 5%
 }
 
 #profile-page-user-info {

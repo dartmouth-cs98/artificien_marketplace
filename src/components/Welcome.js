@@ -9,6 +9,7 @@ import {
 } from '../database/databaseCalls';
 import { addRole } from '../actions';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
+import welcomePageStyles from '../styles/stylesDict';
 
 // welcome variable on homepage
 
@@ -35,7 +36,7 @@ class Welcome extends Component {
   render() {
     return (
       <>
-        <div className="body">
+        <div className="welcome-body" style={welcomePageStyles[this.props.role]}>
           <h1>Distributed data, democratized.</h1>
           <p>
             <i>
@@ -44,8 +45,6 @@ class Welcome extends Component {
               Build, iterate, and access the exact datasets you need to generate insights.
             </i>
           </p>
-          {/* if not logged in */}
-          {Math.random() > 0.5 && <p>This is where the login button should go</p>}
         </div>
         <div className="landing">
           <LoadingScreen />

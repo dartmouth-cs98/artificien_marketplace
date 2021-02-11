@@ -1,3 +1,4 @@
+/* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable guard-for-in */
 import React, { Component } from 'react';
 import '../style.scss';
@@ -113,7 +114,6 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <h2 align="left">All Datasets</h2>
         <span className="card-holder wrap">{renderedDatasets}</span>
       </div>
     );
@@ -155,9 +155,10 @@ class DataLibrary extends Component {
     if (event.key === 'Enter') {
       if (this.state.categoryIsChosen) this.setState({ categoryIsChosen: false });
       if (this.state.currentSearchTerm && this.state.currentSearchTerm !== '') {
-        // console.log(`searching ${this.state.currentSearchTerm}`);
         document.getElementById('searchbar').value = '';
         this.setState({ searchTermInput: true });
+        const workingSearchTerm = this.state.currentSearchTerm;
+        this.setState({ finalizedSearchTerm: workingSearchTerm });
       }
     }
   }
@@ -197,9 +198,6 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <h2 align="left">
-          From Category: <i>{this.state.sortedCategory}</i>
-        </h2>
         <div className="card-holder wrap">{renderedDatasets}</div>
       </div>
     );
@@ -280,10 +278,8 @@ class DataLibrary extends Component {
   }
 
   renderSearchTermDatasets = () => {
-    const searchTerm = this.state.currentSearchTerm;
+    const searchTerm = this.state.finalizedSearchTerm;
     const allMatchingDatasets = this.state.allDatasets.Items.reduce((finalDatasets, dataset) => {
-      console.log(dataset);
-      console.log(searchTerm);
       if (dataset.app.S.includes(searchTerm)) {
         finalDatasets.push(
           <DataLibraryCard
@@ -316,12 +312,9 @@ class DataLibrary extends Component {
     const allCategories = this.state.allDatasets.Items.map((dataset) => {
       return dataset.category.S;
     });
-    const allUniqueCategories = ['All'];
-    for (const x of allCategories) {
-      if (!allUniqueCategories.includes(x)) {
-        allUniqueCategories.push(x);
-      }
-    }
+
+    const allUniqueCategories = [...new Set(allCategories)];
+    allUniqueCategories.unshift('All');
 
     const allCategoryButtons = allUniqueCategories.map((category) => {
       const styleObj = {

@@ -15,7 +15,7 @@ class DataLibraryCard extends Component {
   render() {
     return (
       <div className="data-card" key={Math.random()} style={{ width: '22rem' }}>
-        <div className="card-body">
+        <div className="data-card-body">
           <h1>{this.props.app}</h1>
           <p>{this.props.num_devices} Users</p>
           <p>Category: {this.props.category}</p>

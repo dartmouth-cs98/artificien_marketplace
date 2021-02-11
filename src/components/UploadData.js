@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 // import update from 'react-addons-update'; // ES6
+import { Link } from 'react-router-dom';
 import { putDataset } from '../database/databaseCalls';
 
 // import { Button } from 'reactstrap';
