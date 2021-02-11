@@ -390,6 +390,26 @@ export function queryModels(callback, PK) {
   });
 }
 
+export function queryDatasetsOwner(callback, PK) {
+  console.log(PK);
+  const queryParams = { // works just fine
+    IndexName: 'owner_username-num_devices-index',
+    ScanIndexForward: false,
+    ExpressionAttributeValues: { ':partitionKeyVal': { S: PK } },
+    KeyConditionExpression: 'owner_username = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
+    TableName: 'dataset_table',
+  };
+
+  docClient.query(queryParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
+
 export function queryDatasetsCategory(callback, category) {
   const queryParams = { // works just fine
     // AttributesToGet: ['model_id', 'owner'],

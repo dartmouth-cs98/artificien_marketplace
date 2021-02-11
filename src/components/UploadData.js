@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
+import { Auth } from 'aws-amplify';
 import { NavLink } from 'react-router-dom';
 // import update from 'react-addons-update'; // ES6
 import { Link } from 'react-router-dom';
@@ -12,6 +13,9 @@ class UploadData extends Component {
     super(props);
 
     this.state = {
+      currentUser: null,
+
+      // Content variables - what is the user inputting?
       appName: null,
       appCategory: null,
       datasetName: null,
@@ -44,137 +48,18 @@ class UploadData extends Component {
     };
   }
 
-  // sets the number of attributes
-  numAttributesOnChange = (event) => {
-    this.setState({ numAttributes: event.target.value });
-  }
-
-  // add the attribute name, make sure it only enters once (with the repeat stuff)
-  addAttributeName = (event, i) => {
-    let repeat = false;
-    for (const attribute in this.state.attributeNameDict) {
-      if (attribute.S === event.target.value) { repeat = true; }
-    }
-    if (!repeat) {
-      console.log(event.target.value);
-      this.state.attributeNameDict[i] = { S: event.target.value };
-      this.setState({ addAttributeForms: false });
+  componentDidMount = () => {
+    if (!this.state.currentUser) {
+      Auth.currentSession()
+        .then((data) => {
+          console.log(data.accessToken.payload.username);
+          this.setState({ currentUser: data.accessToken.payload.username });
+        });
     }
   }
 
-  // set the range minimum to the value (stringify)
-  addAttributeRangeMin = (event, i) => {
-    console.log(event.target.value);
-    console.log(i);
-    // this.state.attributeRangeMins.push({ S: event.target.value });
-    this.state.attributeRangeMinDict[i] = { S: event.target.value };
-  }
-
-  // set the range maximum to the value (stringify)
-  addAttributeRangeMax = (event, i) => {
-    console.log(event.target.value);
-    // this.state.attributeRangeMaxes.push({ S: event.target.value });
-    this.state.attributeRangeMaxDict[i] = { S: event.target.value };
-    this.setState({ addAttributeForms: false });
-  }
-
-  // make sure that the attribute type is NOT none!
-  // if you are changing to a type AND it is either from none OR it is none of the existing types (i.e. it hasn't been made yet!)
-  addAttributeType = (event, i) => {
-    if (!(event.target.value === '')) {
-      console.log(event.target.value);
-      console.log(this.state.attributeTypeSubmitted);
-      // if you are changing the value back to none!
-      // if this exists even
-      if (this.state.attributeTypeDict[i]) {
-        console.log('exists');
-        console.log(event.target.value);
-        console.log(this.state.attributeTypeDict[i].S);
-        console.log(this.state.readyForRangesButton);
-        if (event.target.value === 'O' && !(event.target.value === this.state.attributeTypeDict[i].S)) {
-          // this.setState({
-          // attributeTypeDict: update(this.state.ttributeTypeDict, { i: event.target.value }),
-          // });
-          this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
-          this.setState((state) => {
-            return { attributeTypeSubmitted: state.attributeTypeSubmitted - 1 };
-          });
-          // this.setState({ attributeTypeSubmitted: this.state.attributeTypeSubmitted - 1 });
-          console.log(this.state.attributeTypeSubmitted);
-          console.log('decrementing counter');
-        } else if (!(event.target.value === 'O') && (this.state.attributeTypeDict[i].S === 'O')) {
-          this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
-          this.setState((state) => {
-            return { attributeTypeSubmitted: state.attributeTypeSubmitted + 1 };
-          });
-          console.log(this.state.attributeTypeSubmitted);
-          console.log('incrementing counter');
-        }
-      } else {
-        console.log('not exists');
-        if (!(event.target.value === 'O')) {
-          this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
-          this.setState((state) => {
-            return { attributeTypeSubmitted: state.attributeTypeSubmitted + 1 };
-          });
-          console.log('incrementing counter on new input');
-          console.log(this.state.attributeTypeSubmitted);
-        } else {
-          this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
-        }
-        this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
-      }
-    }
-  }
-
-  // count number of attributes
-  getNumNumberAttributes = () => {
-    let numNumAttributes = 0;
-    for (const key in this.state.attributeTypeDict) {
-      if (this.state.attributeTypeDict[key].S === 'N') numNumAttributes += 1;
-    }
-    return numNumAttributes;
-  }
-
-  // make sure max > min!
-  checkValidRanges = () => {
-    const numNumberAttributes = this.getNumNumberAttributes();
-    if (numNumberAttributes > 0) {
-      console.log(this.state.attributeRangeMins);
-      for (let i = 0; i < numNumberAttributes; i += 1) {
-        const supposedMin = this.state.attributeRangeMins[i];
-        const supposedMax = this.state.attributeRangeMaxes[i];
-        console.log('Min');
-        console.log(supposedMin);
-        if (Number.parseInt(supposedMin.S, 10) > Number.parseInt(supposedMax.S, 10)) {
-          console.log('swap min and max');
-          this.state.attributeRangeMins[i] = supposedMax;
-          this.state.attributeRangeMaxes[i] = supposedMin;
-        }
-        if (supposedMin === supposedMax) this.state.attributeRangeMins[i] = String(Number.parseInt(supposedMin, 10) - 0.1);
-      }
-    }
-  }
-
-  // get attribute name + type!
-  buildAttributeNameAndTypeLists = () => {
-    for (let i = 0; i < Object.keys(this.state.attributeNameDict).length; i += 1) {
-      this.state.attributeNameList.push(this.state.attributeNameDict[i]);
-      this.state.attributeTypeList.push(this.state.attributeTypeDict[i]);
-    }
-  }
-
-  // get range list
-  buildAttributeRangeLists = () => {
-    for (let i = 0; i < Object.keys(this.state.attributeRangeMinDict).length; i += 1) {
-      console.log('building: //');
-      console.log(this.state.attributeRangeMinDict[i]);
-      this.state.attributeRangeMins.push(this.state.attributeRangeMinDict[i]);
-      this.state.attributeRangeMaxes.push(this.state.attributeRangeMaxDict[i]);
-    }
-  }
-
-  submitAttributes = () => {
+  // Finally put all attributes in database
+  submitDataset = () => {
     const callback = (data, error) => {
       if (error) {
         console.log(error);
@@ -191,9 +76,8 @@ class UploadData extends Component {
     console.log(this.state.attributeNameList);
 
     putDataset(callback, this.state.datasetName, this.state.appName,
-      'bingus', this.state.appCategory, this.state.numUsers,
-      this.state.attributeNameList, this.state.attributeTypeList,
-      this.state.attributeRangeMins, this.state.attributeRangeMaxes);
+      'bingus', this.state.appCategory, this.state.numUsers, this.state.currentUser);
+
 
     document.getElementById('appNameInput').value = '';
     document.getElementById('nameInput').value = '';
