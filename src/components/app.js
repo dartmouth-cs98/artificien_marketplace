@@ -38,7 +38,7 @@ const App = (props) => {
         <Route exact path="/login" component={withAuthorization(Login, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/create_model" component={withAuthorization(CreateModel, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/profile" component={withAuthorization(Profile, [Roles.DEVELOPER, Roles.CLIENT])} />
-        <Route exact path="/documentation" component={withAuthorization(Documentation, [Roles.DEVELOPER, Roles.CLIENT])} />
+        <Route exact path="/documentation" component={withAuthorization(Documentation, [Roles.DEVELOPER])} />
         <Route component={FallBack} />
       </Switch>
     </Router>

@@ -333,10 +333,11 @@ export async function putModel(callback, PK, owner) {
 }
 
 // take in less info than before
-export async function putDataset(callback, PK, app, name, category, numDevices) {
+export async function putDataset(callback, PK, app, name, category, numDevices, owner) {
   const putParams = {
     Item: {
       dataset_id: { S: PK },
+      owner: { S: owner },
       app: { S: app },
       name: { S: name },
       placeholder: { S: 'placeholder' },
@@ -375,6 +376,26 @@ export function queryModels(callback, PK) {
     ExpressionAttributeValues: { ':partitionKeyVal': { S: PK } },
     KeyConditionExpression: 'owner_name = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
     TableName: 'model_table',
+  };
+
+  docClient.query(queryParams, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(data);
+    }
+  });
+}
+
+export function queryDatasetsOwner(callback, PK) {
+  console.log(PK);
+  const queryParams = { // works just fine
+    IndexName: 'owner_username-num_devices-index',
+    ScanIndexForward: false,
+    ExpressionAttributeValues: { ':partitionKeyVal': { S: PK } },
+    KeyConditionExpression: 'owner_username = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
+    TableName: 'dataset_table',
   };
 
   docClient.query(queryParams, (err, data) => {

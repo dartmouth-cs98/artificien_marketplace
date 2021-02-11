@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
+import { Auth } from 'aws-amplify';
 import { putDataset } from '../database/databaseCalls';
 import '../style.scss';
 
@@ -13,6 +14,9 @@ class UploadData extends Component {
     super(props);
 
     this.state = {
+
+      currentUser: null,
+
       // Content variables - what is the user inputting?
       appName: null,
       appCategory: null,
@@ -29,6 +33,16 @@ class UploadData extends Component {
     };
   }
 
+  componentDidMount = () => {
+    if (!this.state.currentUser) {
+      Auth.currentSession()
+        .then((data) => {
+          console.log(data.accessToken.payload.username);
+          this.setState({ currentUser: data.accessToken.payload.username });
+        });
+    }
+  }
+
   // Finally put all attributes in database
   submitDataset = () => {
     const callback = (data, error) => {
@@ -41,7 +55,7 @@ class UploadData extends Component {
 
     // put entry into database
     putDataset(callback, this.state.datasetName, this.state.appName,
-      'bingus', this.state.appCategory, this.state.numUsers);
+      'bingus', this.state.appCategory, this.state.numUsers, this.state.currentUser);
 
     // reset form values to null for next dataset upload
     document.getElementById('appNameInput').value = '';
