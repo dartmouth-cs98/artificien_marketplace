@@ -38,7 +38,7 @@ class ModelSideNav extends Component {
     return (
       <div className="overlay" style={this.props.style}>
         <div className="sidenav-container">
-          <button type="button" className="closebtn" onClick={this.props.onClick}>x</button>
+          <button type="button" className="data-card-button" onClick={this.props.onClick}>x</button>
           <div className="text-center">
             <h2>{this.props.content.model_id.S}</h2>
             <p>Model started: {this.props.content.date_submitted.S}</p>

@@ -114,7 +114,6 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <h2 align="left">All Datasets</h2>
         <span className="card-holder wrap">{renderedDatasets}</span>
       </div>
     );
@@ -199,9 +198,6 @@ class DataLibrary extends Component {
 
     const renderedDatasetTable = (
       <div>
-        <h2 align="left">
-          From Category: <i>{this.state.sortedCategory}</i>
-        </h2>
         <div className="card-holder wrap">{renderedDatasets}</div>
       </div>
     );
@@ -316,6 +312,7 @@ class DataLibrary extends Component {
     const allCategories = this.state.allDatasets.Items.map((dataset) => {
       return dataset.category.S;
     });
+
     const allUniqueCategories = [...new Set(allCategories)];
     allUniqueCategories.unshift('All');
 
