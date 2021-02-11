@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
@@ -12,6 +13,7 @@ class DatasetSideNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      changed: false,
     };
   }
 
@@ -21,6 +23,8 @@ class DatasetSideNav extends Component {
         console.log(error);
       } else {
         console.log(data);
+        console.log(this.state.changed);
+        this.setState({ changed: true });
         if (data.Items[0].datasets_purchased) { // if list exists, append to list
           const datasetsPurchased = data.Items[0].datasets_purchased.L;
           const datasetsPurchasedNew = [...datasetsPurchased];
@@ -58,17 +62,22 @@ class DatasetSideNav extends Component {
 
   // make a seperate render for the purchase button!
   renderPurchased = () => {
-    if (this.props.content.app.S in this.props.content.alreadyPurchased) {
-      return (
-        <div className="dataset_existing">You already own access to this dataset!</div>
-      );
-    } else {
+    console.log(!this.state.changed);
+    console.log(!this.props.alreadyPurchased);
+    if (!this.props.alreadyPurchased || !this.state.changed) {
+      console.log('hello');
       return (
         <button type="button"
           className="data-card-button"
           onClick={() => this.purchaseDataset(this.props.content.dataset_id.S, this.props.currentUser)}
-        >Purchase This Dataset
+        >
+          Purchase This Dataset
         </button>
+      );
+    } else {
+      console.log('nothankyou');
+      return (
+        <div className="dataset_existing">You already own access to this dataset!</div>
       );
     }
   }
@@ -77,7 +86,7 @@ class DatasetSideNav extends Component {
     // if we have predictable attributes for the card...
     return (
       <div className="overlay" style={this.props.style}>
-        <button type="button" className="data-card-button" onClick={this.props.onClick}>x</button>
+        <button type="button" className="data-card-button" onClick={() => { this.props.onClick; this.setState({ changed: false }); }}>x</button>
         <div className="sidenav-container">
           <div className="text-center">
             <h2>{this.props.content.app.S}</h2>
