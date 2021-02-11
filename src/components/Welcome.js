@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-lonely-if */
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
@@ -33,7 +34,38 @@ class Welcome extends Component {
     // add role to be 2 - "not logged in"
   }
 
+  renderLoading = () => {
+    console.log('LOADING');
+    // Auth.currentSession().then(() => {
+    //   console.log('wungus');
+    //   return (
+    //     <div className="landing">
+    //       <LoadingScreen />
+    //     </div>
+    //   );
+    // }).catch(() => {
+    //   console.log('No way jose');
+    //   return (
+    //     <div>No sir</div>
+    //   );
+    // });
+    if (Auth.currentUserCredentials()) {
+      console.log('credentialed');
+      return (
+        <div className="landing">
+          <LoadingScreen />
+        </div>
+      );
+    } else {
+      return (
+        <div className="landing"> Nope
+        </div>
+      );
+    }
+  }
+
   render() {
+    console.log('RUN RENDER');
     return (
       <>
         <div className="welcome-body" style={welcomePageStyles[this.props.role]}>
@@ -45,9 +77,7 @@ class Welcome extends Component {
               Build, iterate, and access the exact datasets you need to generate insights.
             </i>
           </p>
-        </div>
-        <div className="landing">
-          <LoadingScreen />
+          {this.renderLoading()}
         </div>
       </>
     );

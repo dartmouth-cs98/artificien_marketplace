@@ -47,9 +47,6 @@ class Navbar extends Component {
             <li className="role-button">
               <RoleButton />
             </li>
-            {/* <li>
-              {Math.random() > 0.5 && <AmplifySignOut />}
-            </li> */}
           </ul>
         </nav>
       </div>
