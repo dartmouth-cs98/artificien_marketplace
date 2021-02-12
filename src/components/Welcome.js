@@ -36,21 +36,7 @@ class Welcome extends Component {
 
   renderLoading = () => {
     console.log('LOADING');
-    // Auth.currentSession().then(() => {
-    //   console.log('wungus');
-    //   return (
-    //     <div className="landing">
-    //       <LoadingScreen />
-    //     </div>
-    //   );
-    // }).catch(() => {
-    //   console.log('No way jose');
-    //   return (
-    //     <div>No sir</div>
-    //   );
-    // });
     if (Auth.currentUserCredentials()) {
-      console.log('credentialed');
       return (
         <div className="landing">
           <LoadingScreen />
