@@ -482,3 +482,24 @@ hr {
   flex-direction: column;
   justify-content: center;
 }
+
+amplify-authenticator{
+  background-color: blue !important;
+}
+
+#signup-signin-button {
+  border: none;
+  background-color: white;
+  color: black;
+  padding: 12px 21px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+}
+
+#signup-signin-button:hover {
+  background-color: rgb(224, 221, 221);
+}
+
+// --background-color{blue}

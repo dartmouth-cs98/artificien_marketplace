@@ -9,7 +9,6 @@ const LoadingScreen = (props) => {
     <>
       <div style={{ width: '100%', height: '100vh', background: 'white' }}>
         <div style={{
-          'z-index': -1,
           position: 'relative',
           top: '20%',
           left: '50%',

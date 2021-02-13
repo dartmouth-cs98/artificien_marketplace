@@ -1,9 +1,8 @@
-/* eslint-disable consistent-return */
 /* eslint-disable no-lonely-if */
-/* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import '../style.scss';
 import { Auth } from 'aws-amplify';
+// import { withAuthenticator } from '@aws-amplify/ui-react';
 import { connect } from 'react-redux';
 import {
   getUser,
@@ -11,10 +10,21 @@ import {
 import { addRole } from '../actions';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import welcomePageStyles from '../styles/stylesDict';
+import AuthStateApp from './AuthStateApp';
 
 // welcome variable on homepage
 
 class Welcome extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      askedForSignIn: false,
+      askedForSignUp: false,
+      faded: 0,
+    };
+  }
+
   componentDidMount() {
     // if logged in...
     Auth.currentSession()
@@ -34,27 +44,25 @@ class Welcome extends Component {
     // add role to be 2 - "not logged in"
   }
 
-  renderLoading = () => {
-    console.log('LOADING');
-    if (Auth.currentUserCredentials()) {
+  renderAuth = () => {
+    if (this.state.askedForSignIn) { return (<AuthStateApp signin />); } else if (this.state.askedForSignUp) { return (<AuthStateApp signin={false} />); } else {
       return (
-        <div className="landing">
-          <LoadingScreen />
-        </div>
-      );
-    } else {
-      return (
-        <div className="landing"> Nope
-        </div>
+        <><button type="button" onClick={() => this.setState({ askedForSignIn: true, faded: 1 })} id="signup-signin-button">Sign In</button>
+          <button type="button" onClick={() => this.setState({ askedForSignUp: true, faded: 1 })} id="signup-signin-button">Create Account</button>
+        </>
       );
     }
   }
 
   render() {
-    console.log('RUN RENDER');
+    // if current user signed in, change faded to 1
+    // check if signed in
+    // if so, get has_onboarded.
+    //  if has_onboarded == 0:
+    //    return slideshow component
     return (
       <>
-        <div className="welcome-body" style={welcomePageStyles[this.props.role]}>
+        <div className="welcome-body" style={welcomePageStyles[this.state.faded]}>
           <h1>Distributed data, democratized.</h1>
           <p>
             <i>
@@ -63,8 +71,9 @@ class Welcome extends Component {
               Build, iterate, and access the exact datasets you need to generate insights.
             </i>
           </p>
-          {this.renderLoading()}
         </div>
+        {this.renderAuth()}
+        {<LoadingScreen />}
       </>
     );
   }
@@ -77,3 +86,4 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, { addRole })(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component
+// export default connect(mapStateToProps, { addRole })(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import '../style.scss';
-import { withAuthenticator } from '@aws-amplify/ui-react';
+// import { withAuthenticator } from '@aws-amplify/ui-react';
 import RoleButton from './RoleButton';
 
 /*
@@ -54,4 +54,5 @@ class Navbar extends Component {
   }
 }
 
-export default withRouter(withAuthenticator(Navbar)); // might be some sort of login flow thing here
+// export default withRouter(withAuthenticator(Navbar)); // might be some sort of login flow thing here
+export default withRouter(Navbar); // might be some sort of login flow thing here
