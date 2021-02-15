@@ -26,10 +26,9 @@ body, html {
 
 .nav {
   display: flex;
-  justify-content: space-between; 
+  justify-content: center; 
+  width: 90%;
   background-color: white;
-  // border-style: solid;
-  // border-color: purple;
 }
 .navbar-complete {
   border-bottom: 5px solid purple;
@@ -502,4 +501,39 @@ amplify-authenticator{
   background-color: rgb(224, 221, 221);
 }
 
-// --background-color{blue}
+.caution {
+  background-image: url('img/Caution.png');
+  background-repeat: no-repeat;
+  height: 100px;
+  width: 100%;
+  background-position: center;
+}
+
+.bottom-nav-container {
+  width: 100%;
+  // background-color:rgb(243, 242, 242);
+  background-color:white;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 18%;
+  bottom: 0px;
+  border-top: 1px solid rgb(224, 221, 221);
+}
+
+#bottom-nav-column{
+  color: rgb(121, 120, 120);
+  margin-left: 100px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-right: 100px;
+  font-size: 14px;
+  font-weight: bolder;
+}
+
+#bottom-nav-column p{
+  color: rgb(175, 171, 171);
+  font-size: 13px;
+  margin-top: 10px;
+  text-align: left;
+}

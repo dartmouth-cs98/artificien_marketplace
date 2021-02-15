@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import '../style.scss';
+import { connect } from 'react-redux';
+import { addRole } from '../actions';
 // import { withAuthenticator } from '@aws-amplify/ui-react';
 import RoleButton from './RoleButton';
 
@@ -34,7 +36,7 @@ class Navbar extends Component {
               <NavLink to="/models"> Models </NavLink>
             </li>
             <li>
-              <NavLink to="/select_data"> Data Upload </NavLink>
+              <NavLink to="/upload_data"> Data Upload </NavLink>
             </li>
             <li>
               <NavLink to="/profile"> Profile </NavLink>
@@ -45,7 +47,7 @@ class Navbar extends Component {
           </ul>
           <ul className="nav-role-button-ul">
             <li className="role-button">
-              <RoleButton />
+              {this.props.role !== 2 && <RoleButton />}
             </li>
           </ul>
         </nav>
@@ -54,5 +56,11 @@ class Navbar extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    role: state.roleReducer.role,
+  };
+};
+
 // export default withRouter(withAuthenticator(Navbar)); // might be some sort of login flow thing here
-export default withRouter(Navbar); // might be some sort of login flow thing here
+export default withRouter(connect(mapStateToProps, { addRole })(Navbar)); // might be some sort of login flow thing here

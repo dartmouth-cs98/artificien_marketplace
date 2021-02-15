@@ -1,17 +1,17 @@
 import { ActionTypes } from '../actions';
 
-const roleReducer = (state, action) => {
+const modalReducer = (state, action) => {
   switch (action.type) {
-    case ActionTypes.ADDROLE:
+    case ActionTypes.OPENMODAL:
       return {
         ...state,
-        role: action.payload,
+        open: action.payload,
       };
     default:
       return {
-        role: 2,
+        open: false,
       };
   }
 };
 
-export default roleReducer;
+export default modalReducer;

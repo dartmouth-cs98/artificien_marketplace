@@ -7,10 +7,13 @@ import { connect } from 'react-redux';
 import {
   getUser,
 } from '../database/databaseCalls';
-import { addRole } from '../actions';
-import LoadingScreen from '../UtilityComponents/LoadingScreen';
+import { addRole, openModal } from '../actions';
+// import LoadingScreen from '../UtilityComponents/LoadingScreen';
+import HomepageAnimation from '../UtilityComponents/HomepageAnimation';
+import ErrorModal from '../UtilityComponents/Modal';
 import welcomePageStyles from '../styles/stylesDict';
 import AuthStateApp from './AuthStateApp';
+import BottomNav from './BottomNav';
 
 // welcome variable on homepage
 
@@ -35,31 +38,29 @@ class Welcome extends Component {
           if (error) {
             console.log(error);
           } else {
+            console.log(successData);
             if (this.props.role === undefined) this.props.addRole(successData.Items[0].role.N); // can't use ! here, 0 is falsey, add to initial state to redux store
           }
         };
         getUser(callback, name);
+      }).catch(() => {
+        console.log('caught');
       });
-    // else not logged in...
-    // add role to be 2 - "not logged in"
   }
 
   renderAuth = () => {
     if (this.state.askedForSignIn) { return (<AuthStateApp signin />); } else if (this.state.askedForSignUp) { return (<AuthStateApp signin={false} />); } else {
       return (
-        <><button type="button" onClick={() => this.setState({ askedForSignIn: true, faded: 1 })} id="signup-signin-button">Sign In</button>
-          <button type="button" onClick={() => this.setState({ askedForSignUp: true, faded: 1 })} id="signup-signin-button">Create Account</button>
-        </>
+        <div style={{ display: 'flex', 'justify-content': 'center' }}>
+          <button type="button" onClick={() => this.setState({ askedForSignIn: true })} id="signup-signin-button">Sign In</button>
+          <button type="button" onClick={() => this.setState({ askedForSignUp: true })} id="signup-signin-button">Create Account</button>
+        </div>
       );
     }
   }
 
   render() {
-    // if current user signed in, change faded to 1
-    // check if signed in
-    // if so, get has_onboarded.
-    //  if has_onboarded == 0:
-    //    return slideshow component
+    console.log('render');
     return (
       <>
         <div className="welcome-body" style={welcomePageStyles[this.state.faded]}>
@@ -73,7 +74,10 @@ class Welcome extends Component {
           </p>
         </div>
         {this.renderAuth()}
-        {<LoadingScreen />}
+        {/* {<LoadingScreen />} */}
+        {<div style={{ 'margin-bottom': '10px' }}><HomepageAnimation /></div>}
+        {<BottomNav />}
+        {<ErrorModal open={this.props.open} />}
       </>
     );
   }
@@ -82,8 +86,9 @@ class Welcome extends Component {
 const mapStateToProps = (state) => {
   return {
     role: state.roleReducer.role,
+    open: state.modalReducer.open,
   };
 };
 
-export default connect(mapStateToProps, { addRole })(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component
+export default connect(mapStateToProps, { addRole, openModal })(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component
 // export default connect(mapStateToProps, { addRole })(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component
