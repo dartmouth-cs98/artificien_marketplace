@@ -42,7 +42,7 @@
     "webpack-dev-server": "^3.3.1"
   },
   "dependencies": {
-    "@aws-amplify/cli": "^4.43.0",
+    "@aws-amplify/cli": "^4.44.0",
     "@aws-amplify/ui-components": "^0.10.4",
     "@aws-amplify/ui-react": "^0.2.38",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
