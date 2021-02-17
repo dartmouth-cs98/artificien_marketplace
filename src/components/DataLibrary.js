@@ -11,6 +11,7 @@ import {
 } from '../database/databaseCalls';
 import DataLibraryCard from './DataLibraryCard';
 import DatasetSideNav from './DatasetSideNav';
+import BottomNav from './BottomNav';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
 
 /*
@@ -341,28 +342,31 @@ class DataLibrary extends Component {
     const alreadyPurchased = this.checkIfAlreadyPurchased(this.state.toDisplayDataset);
     // if we have a category, render in-category and out-of-category datasets separately.
     return (
-      <div className="body">
-        <h1>Data Library</h1>
-        {this.renderUniqueCategories()}
-        <br />
-        {this.state.categoryIsChosen
-          ? <div>{this.renderAllDatasets()}</div>
-          : (
-            <div>{this.state.searchTermInput
-              ? this.renderSearchTermDatasets()
-              : this.mountDisplayDatasets()}
-            </div>
-          )}
-        <div>
-          <DatasetSideNav
-            content={this.state.toDisplayDataset}
-            onClick={this.closeNav}
-            style={this.state.style}
-            alreadyPurchased={alreadyPurchased}
-            currentUser={this.state.currentUser}
-          />
+      <>
+        <div className="body">
+          <h1>Data Library</h1>
+          {this.renderUniqueCategories()}
+          <br />
+          {this.state.categoryIsChosen
+            ? <div>{this.renderAllDatasets()}</div>
+            : (
+              <div>{this.state.searchTermInput
+                ? this.renderSearchTermDatasets()
+                : this.mountDisplayDatasets()}
+              </div>
+            )}
+          <div>
+            <DatasetSideNav
+              content={this.state.toDisplayDataset}
+              onClick={this.closeNav}
+              style={this.state.style}
+              alreadyPurchased={alreadyPurchased}
+              currentUser={this.state.currentUser}
+            />
+          </div>
         </div>
-      </div>
+        <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
+      </>
     );
   }
 }
