@@ -18,7 +18,7 @@
       "serviceType": "imported",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
-      "customAuth": true,
+      "customAuth": false,
       "output": {
         "UserPoolId": "us-east-1_gxjsNZ82v",
         "UserPoolName": "artificienUserPool",

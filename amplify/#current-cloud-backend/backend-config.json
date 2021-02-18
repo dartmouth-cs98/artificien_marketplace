@@ -5,7 +5,7 @@
       "serviceType": "imported",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
-      "customAuth": true
+      "customAuth": false
     }
   }
 }
