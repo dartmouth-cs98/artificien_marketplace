@@ -64,8 +64,7 @@ class Welcome extends Component {
     } else {
       return (
         <div style={{ display: 'flex', 'justify-content': 'center' }}>
-          <button type="button" onClick={() => this.setState({ askedForSignIn: true })} id="signup-signin-button">Sign In</button>
-          <button type="button" onClick={() => this.setState({ askedForSignUp: true })} id="signup-signin-button">Create Account</button>
+          <button type="button" onClick={() => this.setState({ askedForSignUp: true })} id="signup-signin-button">Sign In or Create Account</button>
         </div>
       );
     }
