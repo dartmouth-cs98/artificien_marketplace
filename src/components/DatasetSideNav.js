@@ -58,7 +58,7 @@ class DatasetSideNav extends Component {
 
   // make a seperate render for the purchase button!
   renderPurchased = () => {
-    if (this.props.content.app.S in this.props.content.alreadyPurchased) {
+    if (this.props.content.alreadyPurchased && (this.props.content.alreadyPurchased.contains(this.props.content.app.S))) {
       return (
         <div className="dataset_existing">You already own access to this dataset!</div>
       );

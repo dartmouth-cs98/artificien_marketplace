@@ -1,0 +1,11 @@
+{
+  "auth": {
+    "react13be3f8f": {
+      "service": "Cognito",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

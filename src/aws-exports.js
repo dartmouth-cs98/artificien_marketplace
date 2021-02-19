@@ -7,7 +7,9 @@ const awsmobile = {
     "aws_cognito_region": "us-east-1",
     "aws_user_pools_id": "us-east-1_gxjsNZ82v",
     "aws_user_pools_web_client_id": "5nrhkbejfsq8mgi5jc08586maa",
-    "oauth": {}
+    "oauth": {
+        "domain": "artificien.auth.us-east-1.amazoncognito.com"
+    }
 };
 
 

@@ -1,10 +1,11 @@
+@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@4/distr/fira_code.css);
+
 body, html {
   font-family: "Avenir";
-  // position: center;
   position: absolute;
   min-height: 100%;
   min-width: 100%;
-  margin-left: 8px;
+  margin-left: 0px;
   text-align: center;
   overflow-x: hidden; // to prevent scrolling from side to side. thank you stack overflow for the advice here!
 }
@@ -20,15 +21,14 @@ body, html {
 #main {
   background-color: white;
   width: 100%;
-  margin-left: 8px;
+  margin-left: 0px;
 }
 
 .nav {
   display: flex;
   justify-content: space-between; 
+  width: 90%;
   background-color: white;
-  // border-style: solid;
-  // border-color: purple;
 }
 .navbar-complete {
   border-bottom: 5px solid purple;
@@ -39,7 +39,7 @@ body, html {
   background-image: url('img/NavbarLogo.png'); // team logo
   width: 5vw;
   height: 2.5vw;
-  margin: 8px 50px 0px 8px;
+  margin: 16px 50px 0px 8px;
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -480,4 +480,60 @@ hr {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+amplify-authenticator{
+  background-color: blue !important;
+}
+
+#signup-signin-button {
+  border: none;
+  background-color: white;
+  color: black;
+  padding: 12px 21px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+}
+
+#signup-signin-button:hover {
+  background-color: rgb(224, 221, 221);
+}
+
+.caution {
+  background-image: url('img/Caution.png');
+  background-repeat: no-repeat;
+  height: 100px;
+  width: 100%;
+  background-position: center;
+}
+
+.bottom-nav-container {
+  width: 100%;
+  // background-color:rgb(243, 242, 242);
+  background-color:white;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 18%;
+  bottom: 0px;
+  border-top: 1px solid rgb(224, 221, 221);
+}
+
+#bottom-nav-column{
+  color: rgb(121, 120, 120);
+  margin-left: 100px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-right: 100px;
+  font-size: 14px;
+  font-weight: bolder;
+}
+
+#bottom-nav-column p{
+  color: rgb(175, 171, 171);
+  font-size: 13px;
+  margin-top: 10px;
+  text-align: left;
 }

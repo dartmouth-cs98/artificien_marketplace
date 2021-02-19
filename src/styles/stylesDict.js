@@ -3,7 +3,8 @@ const welcomePageStyles = {
   },
   // alternate is dev
   1: {
-    color: 'purple',
+    display: 'none',
+    margin: '10px',
   },
 };
 

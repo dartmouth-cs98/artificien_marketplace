@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import '../style.scss';
@@ -12,7 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import codeSnippet from './CodeSnippet';
+import CodeSnippet from './CodeSnippet';
 
 const drawerWidth = 240;
 
@@ -30,6 +31,7 @@ const useStyles = (theme) => ({
     margin: '10px',
   },
   appBar: {
+    position: 'absolute',
     marginTop: '87px',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -59,6 +61,7 @@ const useStyles = (theme) => ({
   drawerPaper: {
     width: drawerWidth,
     marginTop: '87px',
+    position: 'absolute',
   },
   drawerHeader: {
     display: 'flex',
@@ -75,6 +78,9 @@ const useStyles = (theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: -drawerWidth,
+    marginRight: '10%',
+    textAlign: 'left',
+    fontFamily: 'Fira Code',
   },
   contentShift: {
     transition: theme.transitions.create('margin', {
@@ -151,11 +157,11 @@ class DocumentationDrawer extends Component {
             </div>
             <Divider />
             <Typography>
-              testSection
+              Library Functions
             </Typography>
             <Divider />
             <Typography>
-              testSectionTwo
+              Connecting To Your App&lsquo;s Node
             </Typography>
             <Divider />
           </Drawer>
@@ -165,9 +171,12 @@ class DocumentationDrawer extends Component {
             })}
           >
             <div className={classes.drawerHeader} />
-            <Typography paragraph>
+            {/* <Typography paragraph>
               {this.props.userDataset && <Typography>{this.props.userDataset.app.S}</Typography>}
-            </Typography>
+            </Typography> */}
+            <Typography variant="h2">The Docs</Typography>
+            <br />
+            <Typography variant="h5">Library Functions</Typography>
             <Typography paragraph>
               Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
               facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
@@ -178,7 +187,22 @@ class DocumentationDrawer extends Component {
               tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
               nibh sit.
             </Typography>
-            {codeSnippet}
+            {this.props.userDataset ? <CodeSnippet content={this.props.userDataset.app.S} /> : <CodeSnippet content="bingus" />}
+            <br />
+            <br />
+            <br />
+            <Typography variant="h5">Connecting To Your App&lsquo;s Node</Typography>
+            <Typography paragraph>
+              Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
+              facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
+              tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
+              consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
+              vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
+              hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
+              tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
+              nibh sit.
+            </Typography>
+            {this.props.userDataset ? <CodeSnippet content={this.props.userDataset.app.S} /> : <CodeSnippet content="bingus" />}
           </main>
         </div>
       </div>

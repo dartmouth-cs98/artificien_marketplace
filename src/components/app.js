@@ -23,26 +23,25 @@ import Profile from './Profile';
 import Documentation from './Documentation';
 import Tutorials from './Tutorials';
 
-const FallBack = (props) => {
-  return <div> URL Not Found </div>;
-};
+// const FallBack = (props) => {
+//   return <div> No Authorized Access to this page! </div>;
+// };
 
 const App = (props) => {
   return (
     <Router>
       <Navbar style={{ 'font-family': 'Avenir' }} />
       <Switch>
-        <Route exact path="/" component={Welcome} />
-        <Route exact path="/data_library" component={withAuthorization(DataLibrary, [Roles.DEVELOPER, Roles.CLIENT])} />
+        <Route exact path="/" component={withAuthorization(Welcome, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+        <Route exact path="/data_library" component={withAuthorization(DataLibrary, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
         <Route exact path="/models" component={withAuthorization(Models, [Roles.DEVELOPER, Roles.CLIENT])} />
-        <Route exact path="/select_data" component={withAuthorization(UploadData, [Roles.DEVELOPER])} />
+        <Route exact path="/upload_data" component={withAuthorization(UploadData, [Roles.DEVELOPER])} />
         <Route exact path="/login" component={withAuthorization(Login, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/create_model" component={withAuthorization(CreateModel, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/profile" component={withAuthorization(Profile, [Roles.DEVELOPER, Roles.CLIENT])} />
-        <Route exact path="/documentation" component={withAuthorization(Documentation, [Roles.DEVELOPER])} />
-        <Route exact path="/documentation" component={withAuthorization(Documentation, [Roles.DEVELOPER, Roles.CLIENT])} />
+        <Route exact path="/documentation" component={withAuthorization(Documentation, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
         <Route exact path="/tutorials" component={withAuthorization(Tutorials, [Roles.DEVELOPER])} />
-        <Route component={FallBack} />
+        {/* <Route component={withAuthorization(FallBack, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} /> */}
       </Switch>
     </Router>
   );

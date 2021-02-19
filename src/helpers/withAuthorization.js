@@ -3,6 +3,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';// Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { openModal } from '../store/reducers/modal-reducer';
 
 export default function withAuthorization(ComponentToBeRendered, validRoles) { // VR is integer
   class Authorize extends React.Component {
@@ -10,6 +11,7 @@ export default function withAuthorization(ComponentToBeRendered, validRoles) { /
       try {
         if (!(validRoles.includes(Number.parseInt(this.props.role, 10)))) {
           this.props.history.push('/');
+          this.props.openModal(true);
         } else {
           console.log('allowed');
         }
@@ -21,6 +23,7 @@ export default function withAuthorization(ComponentToBeRendered, validRoles) { /
     componentWillUpdate(nextProps) {
       if (!(validRoles.includes(Number.parseInt(nextProps.role, 10)))) {
         this.props.history.push('/');
+        this.props.openModal(true);
       } else {
         console.log('still allowed');
       }
@@ -37,5 +40,5 @@ export default function withAuthorization(ComponentToBeRendered, validRoles) { /
     };
   }
 
-  return withRouter(connect(mapStateToProps)(Authorize));
+  return withRouter(connect(mapStateToProps, { openModal })(Authorize));
 }
