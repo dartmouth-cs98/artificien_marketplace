@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import '../style.scss';
 import { connect } from 'react-redux';
-import { addRole } from '../actions';
-// import { withAuthenticator } from '@aws-amplify/ui-react';
+// import { addRole } from '../store/reducers/role-reducer';
 import RoleButton from './RoleButton';
 
 /*
@@ -21,6 +20,7 @@ class Navbar extends Component {
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
 
   render() {
+    console.log(this.props.role);
     return (
       <div className="navbar-complete">
         <div className="logo" active />
@@ -63,4 +63,4 @@ const mapStateToProps = (state) => {
 };
 
 // export default withRouter(withAuthenticator(Navbar)); // might be some sort of login flow thing here
-export default withRouter(connect(mapStateToProps, { addRole })(Navbar)); // might be some sort of login flow thing here
+export default withRouter(connect(mapStateToProps)(Navbar)); // might be some sort of login flow thing here

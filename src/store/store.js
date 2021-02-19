@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import rootReducer from '../reducers/index';
+import rootReducer from './reducers/index';
 
 const store = createStore(rootReducer, {}, compose(
   applyMiddleware(),

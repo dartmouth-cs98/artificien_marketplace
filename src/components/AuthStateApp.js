@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {
-  AmplifySignOut, AmplifySignIn, AmplifySignUp,
+  AmplifySignIn, AmplifySignUp, AmplifyConfirmSignUp, AmplifyAuthenticator,
 } from '@aws-amplify/ui-react';
-import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
+import { onAuthUIStateChange, AuthState } from '@aws-amplify/ui-components';
+import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import '../style.scss';
 
 class AuthStateApp extends Component {
@@ -31,48 +32,52 @@ class AuthStateApp extends Component {
 
   render() {
     if (this.state.authState === AuthState.SignedIn && this.state.user) {
+      window.location.reload(false);
       return (
-        <div className="App">
-          <div>Hello, {this.state.user}</div>
-          <AmplifySignOut />
+        <div>
+          Signing You In...
+          <LoadingScreen />
         </div>
       );
-    } else if (this.props.signin) {
+    }
+    if (this.props.signin) {
       return (
         <AmplifySignIn slot="sign-in" usernameAlias="email" />
       );
     } else {
       return (
-        <AmplifySignUp
-          slot="sign-up"
-          usernameAlias="email"
-          formFields={[
-            {
-              type: 'email',
-              label: 'email',
-              placeholder: 'xxxxxxxxx@yyyy.com',
-              required: true,
-            },
-            {
-              type: 'password',
-              label: 'Password',
-              placeholder: '*************',
-              required: true,
-            },
-            {
-              type: 'phone_number',
-              label: 'phone number',
-              placeholder: 'XXX-XXX-XXXX',
-              required: true,
-            },
-            {
-              type: 'role',
-              label: 'role',
-              placeholder: ' \'Developer\' or \'Client\'',
-              required: true,
-            },
-          ]}
-        />
+        <AmplifyAuthenticator>
+          <AmplifySignUp />
+          <AmplifyConfirmSignUp />
+        </AmplifyAuthenticator>
+      // slot="sign-up"
+      // usernameAlias="email"
+      // formFields={[
+      //   {
+      //     type: 'email',
+      //     label: 'email',
+      //     placeholder: 'xxxxxxxxx@yyyy.com',
+      //     required: true,
+      //   },
+      //   {
+      //     type: 'password',
+      //     label: 'Password',
+      //     placeholder: '*************',
+      //     required: true,
+      //   },
+      //   {
+      //     type: 'phone_number',
+      //     label: 'phone number',
+      //     placeholder: 'XXX-XXX-XXXX',
+      //     required: true,
+      //   },
+      //   {
+      //     type: 'role',
+      //     label: 'role',
+      //     placeholder: ' \'0\' for client or \'1\' for developer',
+      //     required: true,
+      //   },
+      // ]}
       );
     }
   }

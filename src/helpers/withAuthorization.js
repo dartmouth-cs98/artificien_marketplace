@@ -3,7 +3,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';// Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { openModal } from '../actions';
+import { openModal } from '../store/reducers/modal-reducer';
 
 export default function withAuthorization(ComponentToBeRendered, validRoles) { // VR is integer
   class Authorize extends React.Component {

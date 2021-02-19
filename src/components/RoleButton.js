@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import AntSwitch from './AntSwitch';
-import { addRole } from '../actions';
+import { addRole } from '../store/reducers/role-reducer';
 import {
   getUser,
 } from '../database/databaseCalls';

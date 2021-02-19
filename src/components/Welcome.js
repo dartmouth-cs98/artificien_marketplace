@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import {
   getUser,
 } from '../database/databaseCalls';
-import { addRole, openModal } from '../actions';
+import { addRole } from '../store/reducers/role-reducer';
 // import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import HomepageAnimation from '../UtilityComponents/HomepageAnimation';
 import ErrorModal from '../UtilityComponents/Modal';
@@ -25,31 +25,43 @@ class Welcome extends Component {
       askedForSignIn: false,
       askedForSignUp: false,
       faded: 0,
+      // isSignedIn: false,
     };
   }
 
   componentDidMount() {
     // if logged in...
-    Auth.currentSession()
-      .then((data) => {
-        const name = data.accessToken.payload.username;
-        console.log(name);
-        const callback = (successData, error) => { // requires current user to be in database
-          if (error) {
-            console.log(error);
-          } else {
-            console.log(successData);
-            if (this.props.role === undefined) this.props.addRole(successData.Items[0].role.N); // can't use ! here, 0 is falsey, add to initial state to redux store
-          }
-        };
-        getUser(callback, name);
-      }).catch(() => {
-        console.log('caught');
-      });
+    this.checkAuth();
+  }
+
+  checkAuth() {
+    if (!this.state.isSignedIn) {
+      Auth.currentSession()
+        .then((data) => {
+          this.setState({ isSignedIn: true });
+          const name = data.accessToken.payload.username;
+          // console.log(name);
+          const callback = (successData, error) => { // requires current user to be in database
+            if (error) {
+              console.log(error);
+            } else {
+              console.log(successData);
+              if (this.props.role === 2 && successData.Items[0].role) this.props.addRole(successData.Items[0].role.N); // can't use ! here, 0 is falsey, add to initial state to redux store
+            }
+          };
+          getUser(callback, name);
+        }).catch(() => {
+          console.log('caught');
+        });
+    }
   }
 
   renderAuth = () => {
-    if (this.state.askedForSignIn) { return (<AuthStateApp signin />); } else if (this.state.askedForSignUp) { return (<AuthStateApp signin={false} />); } else {
+    if (this.state.askedForSignIn) {
+      return <AuthStateApp signin />;
+    } else if (this.state.askedForSignUp) {
+      return <AuthStateApp signin={false} />;
+    } else {
       return (
         <div style={{ display: 'flex', 'justify-content': 'center' }}>
           <button type="button" onClick={() => this.setState({ askedForSignIn: true })} id="signup-signin-button">Sign In</button>
@@ -60,6 +72,7 @@ class Welcome extends Component {
   }
 
   render() {
+    this.checkAuth();
     console.log('render');
     return (
       <>
@@ -73,11 +86,10 @@ class Welcome extends Component {
             </i>
           </p>
         </div>
-        {this.renderAuth()}
-        {/* {<LoadingScreen />} */}
-        {<div style={{ 'margin-bottom': '10px' }}><HomepageAnimation /></div>}
-        {<BottomNav />}
-        {<ErrorModal open={this.props.open} />}
+        {this.props.role === 2 && this.renderAuth()}
+        <div style={{ 'margin-bottom': '10px' }}><HomepageAnimation /></div>
+        <BottomNav />
+        <ErrorModal open={this.props.open} />
       </>
     );
   }
@@ -90,5 +102,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { addRole, openModal })(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component
-// export default connect(mapStateToProps, { addRole })(Welcome); // alright we're gonna run our "map state to props" guy to manipulate the state of the following component
+export default connect(mapStateToProps, { addRole })(Welcome);

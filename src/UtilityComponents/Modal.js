@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { connect } from 'react-redux';
-import { openModal } from '../actions';
+import { openModal } from '../store/reducers/modal-reducer';
 
 class ErrorModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    //   open: false,
     };
   }
 
   render() {
-    console.log(this.props.open);
+    let op;
+    if (this.props.open === undefined) op = false;
+    else op = this.props.open;
 
     const handleClose = () => {
-      console.log('closeblar');
       this.props.openModal(false);
-    //   this.setState({ open: false });
     };
 
     const bodyStyles = {
@@ -41,7 +40,7 @@ class ErrorModal extends Component {
     return (
       <div>
         <Modal
-          open={this.props.open} // this.props.open maybe make this props-based. When we redirect, swap a global "isModal" redux var to 1. pass that into here, as this.props.open
+          open={op} // this.props.open maybe make this props-based. When we redirect, swap a global "isModal" redux var to 1. pass that into here, as this.props.open
           onClose={handleClose}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
