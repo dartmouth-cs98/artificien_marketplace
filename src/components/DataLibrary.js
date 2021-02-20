@@ -344,7 +344,7 @@ class DataLibrary extends Component {
     return (
       <>
         <div className="body">
-          <h1>Data Library</h1>
+          <h1>Marketplace</h1>
           {this.renderUniqueCategories()}
           <br />
           {this.state.categoryIsChosen

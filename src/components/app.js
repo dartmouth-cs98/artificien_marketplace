@@ -33,7 +33,7 @@ const App = (props) => {
       <Navbar style={{ 'font-family': 'Avenir' }} />
       <Switch>
         <Route exact path="/" component={withAuthorization(Welcome, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-        <Route exact path="/data_library" component={withAuthorization(DataLibrary, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+        <Route exact path="/marketplace" component={withAuthorization(DataLibrary, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
         <Route exact path="/models" component={withAuthorization(Models, [Roles.DEVELOPER, Roles.CLIENT])} />
         <Route exact path="/upload_data" component={withAuthorization(UploadData, [Roles.DEVELOPER])} />
         <Route exact path="/login" component={withAuthorization(Login, [Roles.DEVELOPER, Roles.CLIENT])} />
