@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // import update from 'react-addons-update'; // ES6
 import { Link } from 'react-router-dom';
 import { putDataset } from '../database/databaseCalls';
+import BottomNav from './BottomNav';
 
 // import { Button } from 'reactstrap';
 
@@ -568,17 +569,20 @@ class UploadData extends Component {
       }
     }
     return (
-      <div>
-        <h1>Upload Your Data</h1>
+      <>
         <div>
-          {this.renderDatasetNameInput()}
-          {this.renderAppNameInput()}
-          {this.renderNumUsersInput()}
-          {this.renderAppCategory()}
-          {this.renderAttributeFields()}
-          {this.renderAttributeRanges()}
+          <h1>Upload Your Data</h1>
+          <div>
+            {this.renderDatasetNameInput()}
+            {this.renderAppNameInput()}
+            {this.renderNumUsersInput()}
+            {this.renderAppCategory()}
+            {this.renderAttributeFields()}
+            {this.renderAttributeRanges()}
+          </div>
         </div>
-      </div>
+        <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
+      </>
     );
   }
 }

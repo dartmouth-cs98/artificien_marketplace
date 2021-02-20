@@ -5,6 +5,7 @@ import { Auth } from 'aws-amplify';
 import { queryModels } from '../database/databaseCalls';
 import ModelDetailsCard from './ModelDetailsCard';
 import ModelSideNav from './ModelSideNav';
+import BottomNav from './BottomNav';
 
 /*
 Component that displays all user models, both active and inactive (in different sections)
@@ -170,7 +171,7 @@ class Models extends Component {
 
   // get only the models completed
   renderModelsCompleted = () => {
-    if (!this.state.models) { return 'You have no completeds models'; }
+    if (!this.state.models) { return 'You have no completed models'; }
 
     if (!this.state.models.Items) {
       return (
@@ -245,21 +246,24 @@ class Models extends Component {
     }
     this.getCurrentUser();
     return (
-      <div className="body">
-        <div>
-          <div id="model-row">{this.renderCreateModelButton()}</div>
-          <div id="model-row">{this.renderModelsInProgress()}</div>
-          <div id="model-row">{this.renderModelsCompleted()}</div>
+      <>
+        <div className="body">
+          <div>
+            <div id="model-row">{this.renderCreateModelButton()}</div>
+            <div id="model-row">{this.renderModelsInProgress()}</div>
+            <div id="model-row">{this.renderModelsCompleted()}</div>
+          </div>
+          <div>
+            <ModelSideNav content={clickedModel}
+              retrievedURL={this.state.retrievedModelURL}
+              retrieveFunction={() => this.retrieveModel(clickedModel)}
+              onClick={() => this.closeNav()}
+              style={this.state.style}
+            />
+          </div>
         </div>
-        <div>
-          <ModelSideNav content={clickedModel}
-            retrievedURL={this.state.retrievedModelURL}
-            retrieveFunction={() => this.retrieveModel(clickedModel)}
-            onClick={() => this.closeNav()}
-            style={this.state.style}
-          />
-        </div>
-      </div>
+        <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
+      </>
     );
   }
 }

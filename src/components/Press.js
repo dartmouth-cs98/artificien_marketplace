@@ -6,7 +6,7 @@ import BottomNav from './BottomNav';
 Simple component that links to user-specific jupyterhub instance
 */
 
-class CreateModel extends Component {
+class AboutUs extends Component {
   constructor(props) {
     super(props);
 
@@ -19,8 +19,8 @@ class CreateModel extends Component {
     return (
       <>
         <div className="body">
-          <h1>Model Upload</h1>
-          <a href="https://jupyter.artificien.com/hub/login" title="embedded jupyter" target="_blank" rel="noreferrer">Click here to upload your model</a>
+          <h1>Press</h1>
+          <p>No press...yet ;)</p>
         </div>
         <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
       </>
@@ -28,4 +28,4 @@ class CreateModel extends Component {
   }
 }
 
-export default CreateModel;
+export default AboutUs;

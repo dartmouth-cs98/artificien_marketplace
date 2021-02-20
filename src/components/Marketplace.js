@@ -21,7 +21,7 @@ Calls on subcomponents of:
   - DataLibraryCard
 */
 
-class DataLibrary extends Component {
+class Marketplace extends Component {
   constructor(props) {
     super(props);
 
@@ -371,4 +371,4 @@ class DataLibrary extends Component {
   }
 }
 
-export default DataLibrary;
+export default Marketplace;

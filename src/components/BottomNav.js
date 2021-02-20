@@ -16,13 +16,12 @@ class BottomNav extends Component {
       <div className="bottom-nav-container">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
         <div id="bottom-nav-column">Company
-          <p>About Us</p>
-          <p>Leadership</p>
-          <p>Careers</p>
-          <p>Press</p>
+          <p><NavLink ClassName="active" to="/about_us"> About Us </NavLink></p>
+          <p><NavLink to="/careers"> Careers </NavLink></p>
+          <p><NavLink to="/press"> Press </NavLink></p>
         </div>
         <div id="bottom-nav-column">Products
-          <p><NavLink ClassName="active" to="/data_library"> Marketplace </NavLink></p>
+          <p><NavLink ClassName="active" to="/marketplace"> Marketplace </NavLink></p>
           <p><NavLink to="/models"> My Models </NavLink></p>
           <p><NavLink to="/upload_data"> Data Upload </NavLink></p>
         </div>
