@@ -580,8 +580,9 @@ class UploadData extends Component {
             {this.renderAttributeFields()}
             {this.renderAttributeRanges()}
           </div>
+          <div className="footer"> <BottomNav /> </div>
+
         </div>
-        <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
       </>
     );
   }

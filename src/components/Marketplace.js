@@ -364,8 +364,8 @@ class Marketplace extends Component {
               currentUser={this.state.currentUser}
             />
           </div>
+          <div className="footer"> <BottomNav /> </div>
         </div>
-        <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
       </>
     );
   }

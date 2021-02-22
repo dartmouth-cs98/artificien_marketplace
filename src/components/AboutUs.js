@@ -22,8 +22,8 @@ class AboutUs extends Component {
           <h1>Vision</h1>
           <a href="https://jupyter.artificien.com/hub/login" title="embedded jupyter" target="_blank" rel="noreferrer">Click here to upload your model</a>
           <h1>Team</h1>
+          <div className="footer"> <BottomNav /> </div>
         </div>
-        <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
       </>
     );
   }

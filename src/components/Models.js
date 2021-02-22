@@ -261,8 +261,8 @@ class Models extends Component {
               style={this.state.style}
             />
           </div>
+          <div className="footer"> <BottomNav /> </div>
         </div>
-        <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
       </>
     );
   }

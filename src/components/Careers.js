@@ -21,8 +21,8 @@ class Careers extends Component {
         <div className="body">
           <h1>Careers</h1>
           <p>No jobs...yet ;)</p>
+          <div className="footer"> <BottomNav /> </div>
         </div>
-        <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
       </>
     );
   }

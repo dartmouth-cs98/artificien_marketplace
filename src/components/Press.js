@@ -21,8 +21,8 @@ class AboutUs extends Component {
         <div className="body">
           <h1>Press</h1>
           <p>No press...yet ;)</p>
+          <div className="footer"> <BottomNav /> </div>
         </div>
-        <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
       </>
     );
   }
