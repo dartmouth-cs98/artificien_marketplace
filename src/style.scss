@@ -47,6 +47,14 @@ body, html {
   background-size: contain;
 }
 
+.nav-ul {
+  color: black;
+}
+
+.nav-ul li:hover, li:visited, li:link, li:active {
+  color: black;
+}
+
 .flex-container {
 padding: 0;
 margin: 0;
@@ -128,6 +136,7 @@ li a:hover {
 
 .create-model-button {
   background-image: linear-gradient(to right, #580D93, #AF71EB); /* Artificien purple */
+  border: none;
   border-radius: 10px;
   color: white;
   padding: 18px 32px;
@@ -382,20 +391,22 @@ margin: 10px;
   display: inline-block;
   font-size: 16px;
 }
-.footer {
+
+/**
+#footer {
   position: absolute;
   bottom: 0px;
   justify-content: center;
   border-top: 1px solid rgb(224, 221, 221);
   width: 100%;
   background-color:white;
-  display: flex;
   height: 15%;
 }
 
-.footer a:link, a:visited, a:hover, a:active {
+#footer a:link, a:visited, a:hover, a:active {
   color: rgb(175, 171, 171);
 }
+**/
 
 // ----------------------------------------
 .overlay {
@@ -533,8 +544,8 @@ amplify-authenticator{
   background-color:white;
   display: flex;
   justify-content: center;
-  position: relative;
-  height: 18%;
+  position: absolute;
+  height: 0%;
   bottom: 0px;
   border-top: 1px solid rgb(224, 221, 221);
 }
@@ -550,7 +561,7 @@ amplify-authenticator{
 }
 
 #bottom-nav-column p{
-  color: rgb(175, 171, 171);
+  color: black;
   font-size: 13px;
   margin-top: 10px;
   text-align: left;
@@ -563,6 +574,7 @@ amplify-authenticator{
 
 #bottom-nav-column a:hover, a:visited, a:link, a:active{
     text-decoration: none;
+    color: black;
 }
 
 // borrowed below from W3Schools

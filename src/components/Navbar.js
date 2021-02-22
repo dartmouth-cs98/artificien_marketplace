@@ -25,7 +25,7 @@ class Navbar extends Component {
       <div className="navbar-complete">
         <div className="logo" active />
         <nav className="nav">
-          <ul className="nav-ul" style={{ 'font-family': 'Avenir', 'font-size': '1rem' }}>
+          <ul className="nav-ul">
             <li>
               <NavLink to="/" exact> Home </NavLink>
             </li>
