@@ -2,8 +2,6 @@
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
-// import 'bootstrap/dist/css/bootstrap.css';
-// import { Card, Nav, Button } from 'react-bootstrap';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import { getUser, queryModels } from '../database/databaseCalls';
 import '../style.scss';

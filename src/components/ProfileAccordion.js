@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /* eslint-disable no-unused-expressions */
 import React, { Component } from 'react';
 import { withStyles, createMuiTheme } from '@material-ui/core/styles';
@@ -6,6 +7,10 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { connect } from 'react-redux';
+import {
+  getUser,
+} from '../database/databaseCalls';
 
 const artificienTheme = createMuiTheme({
   typography: {
@@ -35,8 +40,52 @@ class ProfileAccordion extends Component {
     super(props);
     this.state = {
       expanded: false,
-    //   setExpanded: false,
+      currentAPIkey: null,
     };
+  }
+
+  retrieveAPIkey = async () => {
+    const name = this.props.content.username.S;
+    const callback = async (successData, error) => {
+      if (error) {
+        console.log(error);
+      } else {
+        const userID = successData.Items[0].user_id.S;
+        console.log(name);
+        // FORMAT FETCH HERE
+        const key = await this.sendKeyRequest(userID);
+        console.log(`key: ${key}`);
+        this.setState({ currentAPIkey: key });
+      }
+    };
+    getUser(callback, name);
+  }
+
+  sendKeyRequest = async (userID) => {
+    const url = 'http://0.0.0.0:5001/generate_key';
+    const xhr = new XMLHttpRequest();
+    const handleError = function (e) {
+      console.log(e.type);
+    };
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Authorization', 'Bearer accessID');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.addEventListener('error', handleError);
+    xhr.onload = function () {
+      console.log('DONE: ', xhr.status);
+    };
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        console.log(xhr.status);
+        console.log(xhr.responseText === '');
+      } else {
+        console.log('not done yet');
+      }
+    };
+    return 1347288882190;
+    // const data = '{"user_id":`${userID}`}';
+    // xhr.send(data);
+    // console.log('sent');
   }
 
   mapDatasetsPurchased = (datasets) => {
@@ -50,10 +99,9 @@ class ProfileAccordion extends Component {
     const classes = this.props;
 
     const handleChange = (panel) => (event, isExpanded) => {
-      // setExpanded(isExpanded ? panel : false); // //previous state manager , now not needed //
       isExpanded ? this.setState({ expanded: panel }) : this.setState({ expanded: false }); // new state manager//
     };
-
+    console.log(this.state.currentAPIkey);
     return (
       <div className={classes.root} style={{ margin: '10%' }}>
         {/* Account information */}
@@ -67,14 +115,14 @@ class ProfileAccordion extends Component {
             {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
           </AccordionSummary>
           <AccordionDetails>
-            {this.props.content
+            {this.props.content.username
               ? (
                 <Typography style={{ 'font-weight': 'bold', 'padding-left': '20px', 'text-align': 'left' }}>
                   {this.props.content.date_joined && <Typography>Date Joined: {this.props.content.date_joined.S}</Typography>}
                   {this.props.content.username && <Typography>Username: {this.props.content.username.S}</Typography>}
                   {this.props.content.user_id && <Typography>User ID: {this.props.content.user_id.S}</Typography>}
                 </Typography>
-              ) : <p>You dont have any payment information yet!</p>}
+              ) : <p>You dont have any personal information yet!</p>}
           </AccordionDetails>
         </Accordion>
         {/* Payment information */}
@@ -87,7 +135,7 @@ class ProfileAccordion extends Component {
             <Typography className={classes.heading}>Payment and Employment</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {this.props.content
+            {this.props.content.bank_info || this.props.content.enterprise
               ? (
                 <Typography style={{ 'padding-left': '20px', 'text-align': 'left' }}>
                   {this.props.content.enterprise && <Typography>Enterprise: {this.props.content.enterprise.S}</Typography>}
@@ -98,7 +146,6 @@ class ProfileAccordion extends Component {
               : <p>You dont have any payment information yet!</p>}
           </AccordionDetails>
         </Accordion>
-        {/* Anything else to put here? */}
         <Accordion expanded={this.state.expanded === 'panel3'} onChange={handleChange('panel3')}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -117,9 +164,40 @@ class ProfileAccordion extends Component {
               : <p>You havent purchased any datasets yet!</p>}
           </AccordionDetails>
         </Accordion>
+        {!!this.props.role && (
+        <Accordion expanded={this.state.expanded === 'panel4'} onChange={handleChange('panel4')}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel4bh-content"
+            id="panel4bh-header"
+          >
+            <Typography className={classes.heading}>Developer API Key</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <button type="button" onClick={() => this.retrieveAPIkey()} id="signup-signin-button" style={{ 'font-size': '16px', border: '2px solid grey' }}> Retrieve your API Key </button>
+            <div style={{
+              'text-align': 'center',
+              display: 'flex',
+              'justify-content': 'center',
+              'align-items': 'center',
+              'margin-left': '50px',
+              'font-weight': 500,
+            }}
+            >
+              <strong>{this.state.currentAPIkey}</strong>
+            </div>
+          </AccordionDetails>
+        </Accordion>
+        )}
       </div>
     );
   }
 }
 
-export default withStyles(useStyles(artificienTheme))(ProfileAccordion);
+const mapStateToProps = (state) => {
+  return {
+    role: state.roleReducer.role,
+  };
+};
+
+export default connect(mapStateToProps)(withStyles(useStyles(artificienTheme))(ProfileAccordion));
