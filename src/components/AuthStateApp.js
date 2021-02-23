@@ -47,37 +47,44 @@ class AuthStateApp extends Component {
     } else {
       return (
         <AmplifyAuthenticator>
-          <AmplifySignUp />
+          <AmplifySignUp
+            slot="sign-up"
+            formFields={[
+              {
+                type: 'username',
+                label: 'username',
+                placeholder: '',
+                required: true,
+              },
+              {
+                type: 'password',
+                label: 'Password',
+                placeholder: '*************',
+                required: true,
+              },
+              {
+                type: 'email',
+                label: 'email',
+                placeholder: 'xxxxxxx@yyyyy.com',
+                required: true,
+              },
+              {
+                type: 'phone_number',
+                label: 'phone number',
+                placeholder: 'xxxxxxxxx@yyyy.com',
+                required: true,
+              },
+              {
+                type: 'custom:Role',
+                label: 'Role',
+                placeholder: ' \'0\' for client or \'1\' for developer',
+                required: true,
+              },
+            ]}
+          />
           <AmplifyConfirmSignUp />
         </AmplifyAuthenticator>
-      // slot="sign-up"
-      // usernameAlias="email"
-      // formFields={[
-      //   {
-      //     type: 'email',
-      //     label: 'email',
-      //     placeholder: 'xxxxxxxxx@yyyy.com',
-      //     required: true,
-      //   },
-      //   {
-      //     type: 'password',
-      //     label: 'Password',
-      //     placeholder: '*************',
-      //     required: true,
-      //   },
-      //   {
-      //     type: 'phone_number',
-      //     label: 'phone number',
-      //     placeholder: 'XXX-XXX-XXXX',
-      //     required: true,
-      //   },
-      //   {
-      //     type: 'role',
-      //     label: 'role',
-      //     placeholder: ' \'0\' for client or \'1\' for developer',
-      //     required: true,
-      //   },
-      // ]}
+
       );
     }
   }

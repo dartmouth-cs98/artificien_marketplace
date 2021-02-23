@@ -2,14 +2,13 @@
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
-// import 'bootstrap/dist/css/bootstrap.css';
-// import { Card, Nav, Button } from 'react-bootstrap';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import { getUser, queryModels } from '../database/databaseCalls';
 import '../style.scss';
 import ChangeUsernameForm from './ChangeUsernameForm';
 import UserMetricsCard from './UserMetricsCard';
 import ProfileAccordion from './ProfileAccordion';
+import BottomNav from './BottomNav';
 
 /*
 Component that provides the user their information, will allow editing capabilities in the future.
@@ -144,6 +143,7 @@ class Profile extends Component {
             <div className="user-metric-container">{this.renderMetricsCards()}</div>
           </div>
           <ProfileAccordion content={this.state.userData} />
+          <BottomNav />
         </>
       );
     } else {

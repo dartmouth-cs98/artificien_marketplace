@@ -26,7 +26,7 @@ class RoleButton extends Component {
           if (error) {
             console.log(error);
           } else {
-            const switchStartState = !!(successData.Items[0].role.N);
+            const switchStartState = !!(successData.Items[0].role.S);
             this.setState({ checkedC: switchStartState }); // switch starts as whatever role they have in DB (optional)
           }
         };
@@ -46,6 +46,7 @@ class RoleButton extends Component {
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
 
   render() {
+    console.log('switch render');
     return (
       <Grid component="label" container alignItems="center" spacing={1}>
         <Grid item>Client</Grid>
