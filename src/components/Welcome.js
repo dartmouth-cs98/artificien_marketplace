@@ -25,7 +25,7 @@ class Welcome extends Component {
       askedForSignIn: false,
       askedForSignUp: false,
       faded: 0,
-      // isSignedIn: false,
+      isSignedIn: false,
     };
   }
 
@@ -36,6 +36,7 @@ class Welcome extends Component {
 
   checkAuth() {
     if (!this.state.isSignedIn) {
+      console.log('auth');
       Auth.currentSession()
         .then((data) => {
           this.setState({ isSignedIn: true });
@@ -46,7 +47,7 @@ class Welcome extends Component {
               console.log(error);
             } else {
               console.log(successData);
-              if (this.props.role === 2 && successData.Items[0].role) this.props.addRole(successData.Items[0].role.N); // can't use ! here, 0 is falsey, add to initial state to redux store
+              if (this.props.role === 2 && successData.Items.length > 0) this.props.addRole(successData.Items[0].role.S); // can't use ! here, 0 is falsey, add to initial state to redux store
             }
           };
           getUser(callback, name);
@@ -57,6 +58,7 @@ class Welcome extends Component {
   }
 
   renderAuth = () => {
+    console.log('renderauth');
     if (this.state.askedForSignIn) {
       return <AuthStateApp signin />;
     } else if (this.state.askedForSignUp) {
@@ -71,8 +73,8 @@ class Welcome extends Component {
   }
 
   render() {
-    this.checkAuth();
-    console.log('render');
+    // this.checkAuth();
+    console.log(this.props.role);
     return (
       <>
         <div className="welcome-body" style={welcomePageStyles[this.state.faded]}>
