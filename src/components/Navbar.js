@@ -25,18 +25,18 @@ class Navbar extends Component {
       <div className="navbar-complete">
         <div className="logo" active />
         <nav className="nav">
-          <ul className="nav-ul" style={{ 'font-family': 'Avenir', 'font-size': '1rem' }}>
+          <ul className="nav-ul">
             <li>
               <NavLink to="/" exact> Home </NavLink>
             </li>
             <li>
-              <NavLink to="/data_library"> Data Library </NavLink>
+              <NavLink to="/marketplace"> Marketplace </NavLink>
             </li>
             <li>
-              <NavLink to="/models"> Models </NavLink>
+              <NavLink to="/models"> My Models </NavLink>
             </li>
             <li>
-              <NavLink to="/upload_data"> Data Upload </NavLink>
+              <NavLink to="/upload_data"> Upload Data </NavLink>
             </li>
             <li>
               <NavLink to="/profile"> Profile </NavLink>

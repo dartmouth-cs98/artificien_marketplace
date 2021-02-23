@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../style.scss';
+import BottomNav from './BottomNav';
 
 /*
 Simple component that links to user-specific jupyterhub instance
@@ -16,10 +17,13 @@ class CreateModel extends Component {
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
     return (
-      <div className="body">
-        <h1>Model Upload</h1>
-        <a href="https://jupyter.artificien.com/hub/login" title="embedded jupyter" target="_blank" rel="noreferrer">Click here to upload your model</a>
-      </div>
+      <>
+        <div className="body">
+          <h1>Model Upload</h1>
+          <a href="https://jupyter.artificien.com/hub/login" title="embedded jupyter" target="_blank" rel="noreferrer">Click here to upload your model</a>
+          <div className="footer"> <BottomNav /> </div>
+        </div>
+      </>
     );
   }
 }

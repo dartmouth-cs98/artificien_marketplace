@@ -143,7 +143,7 @@ class Profile extends Component {
             <div className="user-metric-container">{this.renderMetricsCards()}</div>
           </div>
           <ProfileAccordion content={this.state.userData} />
-          <BottomNav />
+          <div className="footer"> <BottomNav /> </div>
         </>
       );
     } else {

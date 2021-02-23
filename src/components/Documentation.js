@@ -4,6 +4,7 @@ import '../style.scss';
 import { Auth } from 'aws-amplify';
 import DocumentationDrawer from './DocumentationDrawer';
 import { queryDatasetsOwner } from '../database/databaseCalls';
+import BottomNav from './BottomNav';
 // import PersistentDrawerLeft from './PersistentDrawerLeft';
 
 class Documentation extends Component {
@@ -34,9 +35,12 @@ class Documentation extends Component {
 
   render() {
     return (
-      <div className="body">
-        <DocumentationDrawer userDataset={this.state.userDataset} />
-      </div>
+      <>
+        <div className="body">
+          <DocumentationDrawer userDataset={this.state.userDataset} />
+        </div>
+        <BottomNav style={{ position: 'absolute', bottom: '0px' }} />
+      </>
     );
   }
 }
