@@ -8,7 +8,6 @@ import '../style.scss';
 import ChangeUsernameForm from './ChangeUsernameForm';
 import UserMetricsCard from './UserMetricsCard';
 import ProfileAccordion from './ProfileAccordion';
-import BottomNav from './BottomNav';
 
 /*
 Component that provides the user their information, will allow editing capabilities in the future.
@@ -143,7 +142,6 @@ class Profile extends Component {
             <div className="user-metric-container">{this.renderMetricsCards()}</div>
           </div>
           <ProfileAccordion content={this.state.userData} />
-          <div className="footer"> <BottomNav /> </div>
         </>
       );
     } else {

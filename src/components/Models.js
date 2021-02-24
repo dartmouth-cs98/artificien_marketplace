@@ -5,7 +5,6 @@ import { Auth } from 'aws-amplify';
 import { queryModels } from '../database/databaseCalls';
 import ModelDetailsCard from './ModelDetailsCard';
 import ModelSideNav from './ModelSideNav';
-import BottomNav from './BottomNav';
 
 /*
 Component that displays all user models, both active and inactive (in different sections)
@@ -262,7 +261,6 @@ class Models extends Component {
               style={this.state.style}
             />
           </div>
-          <div className="footer"> <BottomNav /> </div>
         </div>
       </>
     );

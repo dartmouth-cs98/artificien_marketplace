@@ -10,6 +10,7 @@ import {
 
 // import { withAuthenticator } from '@aws-amplify/ui-react';
 
+import BottomNav from './BottomNav';
 import Marketplace from './Marketplace';
 import Models from './Models';
 import UploadData from './UploadData';
@@ -32,24 +33,26 @@ import Press from './Press';
 // CHANGE BACK: models, upload data, create model, profile, tutorials
 const App = (props) => {
   return (
-    <Router>
-      <Navbar style={{ 'font-family': 'Avenir' }} />
-      <Switch>
-        <Route exact path="/" component={withAuthorization(Welcome, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-        <Route exact path="/marketplace" component={withAuthorization(Marketplace, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-        <Route exact path="/models" component={withAuthorization(Models, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-        <Route exact path="/upload_data" component={withAuthorization(UploadData, [Roles.DEVELOPER, Roles.GUEST])} />
-        <Route exact path="/create_model" component={withAuthorization(CreateModel, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-        <Route exact path="/profile" component={withAuthorization(Profile, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-        <Route exact path="/documentation" component={withAuthorization(Documentation, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-        <Route exact path="/tutorials" component={withAuthorization(Tutorials, [Roles.DEVELOPER, Roles.GUEST])} />
-        <Route exact path="/about_us" component={withAuthorization(AboutUs, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-        <Route exact path="/careers" component={withAuthorization(Careers, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-        <Route exact path="/press" component={withAuthorization(Press, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-
-        {/* <Route component={withAuthorization(FallBack, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} /> */}
-      </Switch>
-    </Router>
+    <>
+      <Router>
+        <Navbar style={{ 'font-family': 'Avenir' }} />
+        <Switch>
+          <Route exact path="/" component={withAuthorization(Welcome, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/marketplace" component={withAuthorization(Marketplace, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/models" component={withAuthorization(Models, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/upload_data" component={withAuthorization(UploadData, [Roles.DEVELOPER, Roles.GUEST])} />
+          <Route exact path="/create_model" component={withAuthorization(CreateModel, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/profile" component={withAuthorization(Profile, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/documentation" component={withAuthorization(Documentation, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/tutorials" component={withAuthorization(Tutorials, [Roles.DEVELOPER, Roles.GUEST])} />
+          <Route exact path="/about_us" component={withAuthorization(AboutUs, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/careers" component={withAuthorization(Careers, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/press" component={withAuthorization(Press, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          {/* <Route component={withAuthorization(FallBack, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} /> */}
+        </Switch>
+        <BottomNav />
+      </Router>
+    </>
   );
 };
 

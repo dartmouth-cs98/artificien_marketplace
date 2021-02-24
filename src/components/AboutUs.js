@@ -1,7 +1,6 @@
 /* eslint-disable global-require */
 import React, { Component } from 'react';
 import '../style.scss';
-import BottomNav from './BottomNav';
 
 /*
 Simple component that links to user-specific jupyterhub instance
@@ -51,7 +50,6 @@ class AboutUs extends Component {
           <h3>Shreyas Agnihtori</h3>
           <h4><i>iOS Man</i></h4>
           <p>text about mr. shrey</p>
-          <div> <BottomNav /> </div>
         </div>
       </>
     );
