@@ -19,19 +19,23 @@ body, html {
 }
 
 #main {
+  margin-top: 100px;
   background-color: white;
   width: 100%;
   margin-left: 0px;
 }
 
+.navbar-complete {
+  background-color: white;
+  border-bottom: 5px solid purple;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+}
 .nav {
   display: flex;
   justify-content: space-between; 
   width: 90%;
-  background-color: white;
-}
-.navbar-complete {
-  border-bottom: 5px solid purple;
 }
 .active {
   text-decoration: none;
@@ -568,7 +572,7 @@ amplify-authenticator{
   text-decoration: none;
 }
 
-#bottom-nav-column a{
+#bottom-nav-column a {
   text-decoration: none;
 }
 
@@ -604,4 +608,29 @@ amplify-authenticator{
 .fa-linkedin {
   background: #007bb5;
   color: white;
+}
+
+.documentationSidebar {
+  width: 10%;
+  position: fixed;
+  z-index: 1;
+  top: 120px;
+  left: 10px;
+  right: 10px;
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 0;
+
+  a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    // font-size: 25px;
+    color: #2196F3;
+    display: block;
+  }
+}
+
+.documentation {
+  width: 70%;
+  margin: auto;
 }
