@@ -108,11 +108,11 @@ class Navbar extends Component {
     console.log(this.props.role);
     if (this.props.role === 0) {
       return (
-        <div>{this.renderDev()}</div>
+        <div>{this.renderEnterprise()}</div>
       );
     } else if (this.props.role === 1) {
       return (
-        <div>{this.renderEnterprise()}</div>
+        <div>{this.renderDev()}</div>
       );
     } else {
       return (

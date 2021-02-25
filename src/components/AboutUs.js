@@ -24,7 +24,7 @@ class AboutUs extends Component {
             a revolutionary technology paradigm where ML models are trained on-device, and data never has to leave the device.
             We offer a platform where enterprises can purchase access to previously unaccessible user data from app developers, and Artificien organizes the Federated Learning process on the backend.
           </p>
-          <h1>Team</h1>
+          {/* <h1>Team</h1>
           <img src={require('../img/MK_headshot.jpg')} alt="matt" height="200" />
           <h3>Matt Kenney</h3>
           <h4><i>Infra Man</i></h4>
@@ -49,7 +49,7 @@ class AboutUs extends Component {
           <img src={require('../img/SA_headshot.jpg')} alt="shreyas" height="150" />
           <h3>Shreyas Agnihtori</h3>
           <h4><i>iOS Man</i></h4>
-          <p>text about mr. shrey</p>
+          <p>text about mr. shrey</p> */}
         </div>
       </>
     );
