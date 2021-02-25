@@ -11,7 +11,6 @@ import {
 } from '../database/databaseCalls';
 import DataLibraryCard from './DataLibraryCard';
 import DatasetSideNav from './DatasetSideNav';
-import BottomNav from './BottomNav';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
 
 /*
@@ -364,7 +363,6 @@ class Marketplace extends Component {
               currentUser={this.state.currentUser}
             />
           </div>
-          <div className="footer"> <BottomNav /> </div>
         </div>
       </>
     );

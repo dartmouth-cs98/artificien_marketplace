@@ -13,7 +13,6 @@ import HomepageAnimation from '../UtilityComponents/HomepageAnimation';
 import ErrorModal from '../UtilityComponents/Modal';
 import welcomePageStyles from '../styles/stylesDict';
 import AuthStateApp from './AuthStateApp';
-import BottomNav from './BottomNav';
 
 // welcome variable on homepage
 
@@ -89,7 +88,6 @@ class Welcome extends Component {
         </div>
         {this.props.role === 2 && this.renderAuth()}
         <div style={{ 'margin-bottom': '10px' }}><HomepageAnimation /></div>
-        <BottomNav />
         <ErrorModal open={this.props.open} />
       </>
     );
