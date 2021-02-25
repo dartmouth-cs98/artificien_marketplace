@@ -26,6 +26,10 @@ body, html {
   margin-left: 0px;
 }
 
+.ordered-list {
+  display: table-cell;
+}
+
 .navbar-complete {
   background-color: white;
   border-bottom: 5px solid purple;
@@ -34,6 +38,7 @@ body, html {
   width: 100%; /* Full width */
   z-index: 1000;
 }
+
 .nav {
   display: flex;
   justify-content: space-between; 
