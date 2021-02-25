@@ -30,9 +30,9 @@ class BottomNav extends Component {
           <p><NavLink to="/documentation"> Documentation </NavLink></p>
         </div>
         <div id="bottom-nav-column">Contact
-          <p> <a href="https://www.linkedin.com/in/tobias-lange/" className="fa fa-linkedin" /> </p>
+          {/* <p> <a href="https://www.linkedin.com/in/tobias-lange/" className="fa fa-linkedin" /> </p>
           <p> <a href="https://www.facebook.com/tobias.lange.5494/" className="fa fa-facebook" /></p>
-          <p> <a href="https://twitter.com/ShreyasAgnihot4" className="fa fa-twitter" /> <br /> </p>
+          <p> <a href="https://twitter.com/ShreyasAgnihot4" className="fa fa-twitter" /> <br /> </p> */}
         </div>
       </div>
     );
