@@ -27,11 +27,13 @@ class AboutUs extends Component {
           <h1>Team</h1>
           <img src={require('../img/MK_headshot.jpg')} alt="matt" height="200" />
           <h3>Matt Kenney</h3>
-          <h4><i>Infra Man</i></h4>
-          <p>text about mr. matt</p>
+          <h4><i>Role</i></h4>
+          <p>I am a senior double majoring in Computer Science and Neuroscience at Dartmouth College. I have experience interning as both a Product Manager and Software Engineer
+            at large tech companies. I also co-founded a coffee company with Jake Epstein.
+          </p>
           <img src={require('../img/JE_headshot.jpg')} alt="jake" height="200" />
           <h3>Jake Epstein</h3>
-          <h4><i>Jupyta Man</i></h4>
+          <h4><i>Role</i></h4>
           <p>I am a senior double-majoring in Computer Science and Engineering modified by Economics (Operations Research) at Dartmouth College.
             I have experience interning as a Product Manager at large technology companies, working at early stage start-ups, and as an entrepreneur.
           </p>
@@ -40,16 +42,16 @@ class AboutUs extends Component {
           </p>
           <img src={require('../img/AQ_headshot.jpg')} alt="alex" height="150" />
           <h3>Alex Quill</h3>
-          <h4><i>Beast Man</i></h4>
-          <p>text about mr. quill</p>
+          <h4><i>Role</i></h4>
+          <p>I am a senior double majoring in Computer Science and Cognitive Science at Dartmouth College. I have experience interning in both strategy and management consulting roles.</p>
           <img src={require('../img/TL_headshot.jpg')} alt="toby" height="150" />
           <h3>Tobias Lange</h3>
-          <h4><i>frontend Man</i></h4>
-          <p>text about mr. bobe</p>
+          <h4><i>Role</i></h4>
+          <p>I am a senior double majoring in Computer Science and Economics at Dartmouth College. I have experience interning in strategy consulting and technology growth equity.</p>
           <img src={require('../img/SA_headshot.jpg')} alt="shreyas" height="150" />
           <h3>Shreyas Agnihtori</h3>
-          <h4><i>iOS Man</i></h4>
-          <p>text about mr. shrey</p>
+          <h4><i>Role</i></h4>
+          <p>I am a senior majoring in Computer Science at Dartmouth College. I have experieincing interning as a Software Engineer and management consultant.</p>
         </div>
       </>
     );

@@ -39,12 +39,12 @@ function App(props) {
         <Navbar style={{ 'font-family': 'Avenir' }} />
         <Switch>
           <Route exact path="/" component={withAuthorization(Welcome, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-          <Route exact path="/marketplace" component={withAuthorization(Marketplace, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-          <Route exact path="/models" component={withAuthorization(Models, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-          <Route exact path="/upload_data" component={withAuthorization(UploadData, [Roles.DEVELOPER, Roles.GUEST])} />
-          <Route exact path="/create_model" component={withAuthorization(CreateModel, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-          <Route exact path="/profile" component={withAuthorization(Profile, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-          <Route exact path="/documentation" component={withAuthorization(Documentation, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/marketplace" component={withAuthorization(Marketplace, [Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/models" component={withAuthorization(Models, [Roles.CLIENT])} />
+          <Route exact path="/upload_data" component={withAuthorization(UploadData, [Roles.DEVELOPER])} />
+          <Route exact path="/create_model" component={withAuthorization(CreateModel, [Roles.CLIENT])} />
+          <Route exact path="/profile" component={withAuthorization(Profile, [Roles.DEVELOPER, Roles.CLIENT])} />
+          <Route exact path="/documentation" component={withAuthorization(Documentation, [Roles.DEVELOPER, Roles.CLIENT])} />
           <Route exact path="/tutorials" component={withAuthorization(Tutorials, [Roles.DEVELOPER, Roles.GUEST])} />
           <Route exact path="/about_us" component={withAuthorization(AboutUs, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
           <Route exact path="/careers" component={withAuthorization(Careers, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
