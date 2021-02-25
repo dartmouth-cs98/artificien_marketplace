@@ -87,7 +87,7 @@ class Welcome extends Component {
           </p>
         </div>
         {this.props.role === 2 && this.renderAuth()}
-        <div style={{ 'margin-bottom': '10px' }}><HomepageAnimation /></div>
+        <div style={{ 'margin-top': '100px' }}><HomepageAnimation /></div>
         <ErrorModal open={this.props.open} />
       </>
     );

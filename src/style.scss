@@ -8,6 +8,7 @@ body, html {
   margin-left: 0px;
   text-align: center;
   overflow-x: hidden; // to prevent scrolling from side to side. thank you stack overflow for the advice here!
+  scroll-behavior: smooth;
 }
 
 .drawer-font-body {
@@ -19,6 +20,7 @@ body, html {
 }
 
 #main {
+  margin-top: 110px;
   background-color: white;
   width: 100%;
   margin-left: 0px;
@@ -28,14 +30,19 @@ body, html {
   display: table-cell;
 }
 
+.navbar-complete {
+  background-color: white;
+  border-bottom: 5px solid purple;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+  z-index: 1000;
+}
+
 .nav {
   display: flex;
   justify-content: space-between; 
   width: 90%;
-  background-color: white;
-}
-.navbar-complete {
-  border-bottom: 5px solid purple;
 }
 .active {
   text-decoration: none;
@@ -552,6 +559,7 @@ amplify-authenticator{
   height: 0%;
   bottom: 0px;
   border-top: 1px solid rgb(224, 221, 221);
+  z-index: 999;
 }
 
 #bottom-nav-column{
@@ -572,7 +580,7 @@ amplify-authenticator{
   text-decoration: none;
 }
 
-#bottom-nav-column a{
+#bottom-nav-column a {
   text-decoration: none;
 }
 
@@ -608,4 +616,53 @@ amplify-authenticator{
 .fa-linkedin {
   background: #007bb5;
   color: white;
+}
+
+.documentationSidebar {
+  width: 18%;
+  position: fixed;
+  float: left;
+  z-index: 1;
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 0;
+
+  a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    // font-size: 25px;
+    color: purple;
+    display: block;
+    text-align: left;
+  }
+}
+
+.documentation {
+  width: 55%;
+  margin: auto;
+  text-align: left;
+
+  a {
+    color: purple;
+    text-decoration: underline;
+  }
+
+  * {
+    scroll-margin-top: 110px;
+  }
+
+  > p > code {
+    background-color: #eee;
+    color: purple;
+    border-radius: 3px;
+    padding: 0 3px;
+  }
+  
+  img {
+    width: 100%;
+  }
+}
+
+code {
+  font-family: courier, monospace !important;
 }
