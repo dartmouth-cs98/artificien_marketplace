@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable jsx-a11y/anchor-has-content */
 import '../style.scss';
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';

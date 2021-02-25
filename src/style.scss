@@ -24,6 +24,10 @@ body, html {
   margin-left: 0px;
 }
 
+.ordered-list {
+  display: table-cell;
+}
+
 .nav {
   display: flex;
   justify-content: space-between; 
