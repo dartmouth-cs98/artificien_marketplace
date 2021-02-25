@@ -457,7 +457,9 @@ avg_plan = sf.def_avg_plan(model_params)`;
 
     const sendingModel =
 `from artificienlib import syftfunctions as sf
-sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.2, max_updates=10, model_params=model_params, training_plan=training_plan, avg_plan=avg_plan, \`dataset_id\`=dataset_id, \`password\`=cognito_password)`;
+sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.2, max_updates=10,
+  model_params=model_params, training_plan=training_plan, avg_plan=avg_plan, \`dataset_id\`=dataset_id,
+  \`password\`=cognito_password)`;
 
     return (
       <div>
@@ -646,7 +648,7 @@ sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.
   render() {
     if (this.props.role === 0) {
       return (
-        <div>{this.renderDevDocumentation()}</div> // Showing the ios docs here when it should be python, fix later
+        <div>{this.renderClientDocumentation()}</div> // Showing the ios docs here when it should be python, fix later
       );
     } else if (this.props.role === 1) {
       return (

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import '../style.scss';
@@ -66,6 +67,7 @@ class Navbar extends Component {
               <NavLink to="/profile"> Profile </NavLink>
             </li>
             <li>
+              {/* <a href="https://github.com/dartmouth-cs98/artificien_python_library" target="_blank">Documentation</a> */}
               <NavLink to="/documentation"> Documentation </NavLink>
             </li>
           </ul>
