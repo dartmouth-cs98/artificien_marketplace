@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CopyBlock, obsidian } from 'react-code-blocks';
+import { CopyBlock, dracula } from 'react-code-blocks';
 
 function codeboxContent(userText) {
   if (userText) {
@@ -38,11 +38,10 @@ class CodeSnippet extends Component {
     return (
       <CopyBlock
         text={codeboxContent(this.props.content)}
-        language="javascript"
+        language={this.props.language}
         showLineNumbers
-        theme={obsidian}
+        theme={dracula}
         codeBlock
-        style={{ 'font-family': 'Roboto' }}
       />
     );
   }

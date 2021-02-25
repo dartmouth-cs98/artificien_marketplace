@@ -8,6 +8,7 @@ body, html {
   margin-left: 0px;
   text-align: center;
   overflow-x: hidden; // to prevent scrolling from side to side. thank you stack overflow for the advice here!
+  scroll-behavior: smooth;
 }
 
 .drawer-font-body {
@@ -19,7 +20,7 @@ body, html {
 }
 
 #main {
-  margin-top: 100px;
+  margin-top: 110px;
   background-color: white;
   width: 100%;
   margin-left: 0px;
@@ -31,6 +32,7 @@ body, html {
   position: fixed; /* Set the navbar to fixed position */
   top: 0; /* Position the navbar at the top of the page */
   width: 100%; /* Full width */
+  z-index: 1000;
 }
 .nav {
   display: flex;
@@ -611,12 +613,10 @@ amplify-authenticator{
 }
 
 .documentationSidebar {
-  width: 10%;
+  width: 18%;
   position: fixed;
+  float: left;
   z-index: 1;
-  top: 120px;
-  left: 10px;
-  right: 10px;
   background: #eee;
   overflow-x: hidden;
   padding: 8px 0;
@@ -625,12 +625,38 @@ amplify-authenticator{
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     // font-size: 25px;
-    color: #2196F3;
+    color: purple;
     display: block;
+    text-align: left;
   }
 }
 
 .documentation {
-  width: 70%;
+  width: 55%;
   margin: auto;
+  text-align: left;
+
+  a {
+    color: purple;
+    text-decoration: underline;
+  }
+
+  * {
+    scroll-margin-top: 110px;
+  }
+
+  > p > code {
+    background-color: #eee;
+    color: purple;
+    border-radius: 3px;
+    padding: 0 3px;
+  }
+  
+  img {
+    width: 100%;
+  }
+}
+
+code {
+  font-family: courier, monospace !important;
 }
