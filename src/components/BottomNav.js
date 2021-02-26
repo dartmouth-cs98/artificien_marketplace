@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable jsx-a11y/anchor-has-content */
 import '../style.scss';
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -13,10 +11,10 @@ class BottomNav extends Component {
     };
   }
 
+  // W3 i used: https://www.w3schools.com/howto/howto_css_social_media_buttons.asp; but the way we do it causes an error!
   render() {
     return (
       <div className="bottom-nav-container">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
         <div id="bottom-nav-column">Company
           <p><NavLink ClassName="active" to="/about_us"> About Us </NavLink></p>
           <p><NavLink to="/careers"> Careers </NavLink></p>
@@ -33,9 +31,9 @@ class BottomNav extends Component {
           <p><a href="https://artificien.zendesk.com/hc/en-us">Support Desk</a></p>
         </div>
         <div id="bottom-nav-column">Contact
-          {/* <p> <a href="https://www.linkedin.com/in/tobias-lange/" className="fa fa-linkedin" /> </p>
-          <p> <a href="https://www.facebook.com/tobias.lange.5494/" className="fa fa-facebook" /></p>
-          <p> <a href="https://twitter.com/ShreyasAgnihot4" className="fa fa-twitter" /> <br /> </p> */}
+          <p />
+          <p> <a href="https://www.linkedin.com/in/tobias-lange/" className="fa fa-linkedin">li</a> <br /></p>
+          <p> <a href="https://www.facebook.com/tobias.lange.5494/" className="fa fa-facebook">f</a></p>
         </div>
       </div>
     );

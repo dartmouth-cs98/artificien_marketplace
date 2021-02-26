@@ -23,12 +23,20 @@ class DatasetSideNav extends Component {
         console.log(data);
         if (data.Items[0].datasets_purchased) { // if list exists, append to list
           const datasetsPurchased = data.Items[0].datasets_purchased.L;
+          console.log(datasetsPurchased);
           const datasetsPurchasedNew = [...datasetsPurchased];
+          console.log(datasetsPurchasedNew);
           datasetsPurchasedNew.push({ S: datasetID });
+          console.log(datasetsPurchasedNew);
           this.updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S);
+          this.props.alreadyPurchased = true;
+          console.log(datasetsPurchasedNew);
+          console.log(this.props);
         } else { // if field doesn't exist (user hasn't purchased yet?), create a new list and add
           const newDatasetsPurchasedList = [{ S: datasetID }];
           this.updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S);
+          this.props.alreadyPurchased = true;
+          console.log(this.props.content.alreadyPurchased);
         }
       }
     };
@@ -58,7 +66,7 @@ class DatasetSideNav extends Component {
 
   // make a seperate render for the purchase button!
   renderPurchased = () => {
-    if (this.props.content.alreadyPurchased && (this.props.content.alreadyPurchased.contains(this.props.content.app.S))) {
+    if (this.props.alreadyPurchased) {
       return (
         <div className="dataset_existing">You already own access to this dataset!</div>
       );

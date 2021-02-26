@@ -58,7 +58,7 @@ class AuthStateApp extends Component {
               },
               {
                 type: 'password',
-                label: 'Password',
+                label: 'Password (must be 8 characters)',
                 placeholder: '*************',
                 required: true,
               },

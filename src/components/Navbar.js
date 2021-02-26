@@ -22,12 +22,9 @@ class Navbar extends Component {
     console.log('rendering');
     return (
       <div className="navbar-complete">
-        <div className="logo" active />
+        <NavLink to="/" exact> <div className="logo" active /> </NavLink>
         <nav className="nav">
           <ul className="nav-ul">
-            <li>
-              <NavLink to="/" exact> Home </NavLink>
-            </li>
             <li>
               <NavLink to="/upload_data"> Upload Data </NavLink>
             </li>
@@ -36,6 +33,9 @@ class Navbar extends Component {
             </li>
             <li>
               <NavLink to="/documentation"> Documentation </NavLink>
+            </li>
+            <li>
+              <NavLink to="/how_it_works"> How Artificien Works </NavLink>
             </li>
           </ul>
           <ul className="nav-role-button-ul">
@@ -51,12 +51,9 @@ class Navbar extends Component {
   renderEnterprise = () => {
     return (
       <div className="navbar-complete">
-        <div className="logo" active />
+        <NavLink to="/" exact> <div className="logo" active /> </NavLink>
         <nav className="nav">
           <ul className="nav-ul">
-            <li>
-              <NavLink to="/" exact> Home </NavLink>
-            </li>
             <li>
               <NavLink to="/marketplace"> Marketplace </NavLink>
             </li>
@@ -67,8 +64,10 @@ class Navbar extends Component {
               <NavLink to="/profile"> Profile </NavLink>
             </li>
             <li>
-              {/* <a href="https://github.com/dartmouth-cs98/artificien_python_library" target="_blank">Documentation</a> */}
               <NavLink to="/documentation"> Documentation </NavLink>
+            </li>
+            <li>
+              <NavLink to="/how_it_works"> How Artificien Works </NavLink>
             </li>
           </ul>
           <ul className="nav-role-button-ul">
@@ -84,14 +83,11 @@ class Navbar extends Component {
   renderGuest = () => {
     return (
       <div className="navbar-complete">
-        <div className="logo" active />
+        <NavLink to="/" exact> <div className="logo" active /> </NavLink>
         <nav className="nav">
           <ul className="nav-ul">
             <li>
-              <NavLink to="/" exact> Home </NavLink>
-            </li>
-            <li>
-              <NavLink to="/marketplace"> Marketplace </NavLink>
+              <NavLink to="/how_it_works"> How Artificien Works </NavLink>
             </li>
           </ul>
           <ul className="nav-role-button-ul">
