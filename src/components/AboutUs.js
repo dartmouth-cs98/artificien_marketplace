@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import '../style.scss';
-import Matt from '../img/MK_headshot.jpg';
-import Jake from '../img/JE_headshot.jpg';
-import Toby from '../img/TL_headshot.jpg';
-import Quill from '../img/AQ_headshot.jpg';
-import Shreyas from '../img/SA_headshot.jpg';
+import Matt from '../img/MK_Headshot.jpg';
+import Jake from '../img/JE_Headshot.jpg';
+import Toby from '../img/TL_Headshot.jpg';
+import Quill from '../img/AQ_Headshot.jpg';
+import Shreyas from '../img/SA_Headshot.jpg';
 
 /*
 Simple component that links to user-specific jupyterhub instance

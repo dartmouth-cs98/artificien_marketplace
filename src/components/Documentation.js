@@ -13,7 +13,7 @@ import { queryDatasetsOwner } from '../database/databaseCalls';
 // import BottomNav from './BottomNav';
 // import PersistentDrawerLeft from './PersistentDrawerLeft';
 import enableBackgroundTasksImage from '../img/documentation/EnableBackgroundTasks.png';
-import configureArtificienImage from '../img/documentation/configureArtificienPlist.png';
+import configureArtificienImage from '../img/documentation/ConfigureArtificienPlist.png';
 import configureInfoImage from '../img/documentation/ConfigureInfoPlist.png';
 import registerTaskIDImage from '../img/documentation/RegisterATaskID.png';
 
