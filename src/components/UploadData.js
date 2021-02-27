@@ -13,13 +13,11 @@ class UploadData extends Component {
     this.state = {
       appName: null,
       appCategory: null,
-      datasetName: null,
       numAttributes: null,
       numUsers: null,
 
       appNameSubmitted: false,
       categorySubmitted: false,
-      datasetNameSubmitted: false,
       numUsersSubmitted: false,
       readyForRangesButton: false,
       readyForRanges: false,
@@ -189,7 +187,7 @@ class UploadData extends Component {
     console.log('names');
     console.log(this.state.attributeNameList);
 
-    putDataset(callback, this.state.datasetName, this.state.appName,
+    putDataset(callback, this.state.appName,
       'bingus', this.state.appCategory, this.state.numUsers,
       this.state.attributeNameList, this.state.attributeTypeList,
       this.state.attributeRangeMins, this.state.attributeRangeMaxes);
@@ -200,7 +198,6 @@ class UploadData extends Component {
 
     this.setState({ appName: null });
     this.setState({ appCategory: null });
-    this.setState({ datasetName: null });
     this.setState({ numAttributes: null });
     this.setState({ attributeNameList: [] });
     this.setState({ attributeNameDict: {} });
@@ -216,7 +213,6 @@ class UploadData extends Component {
 
     this.setState({ appNameSubmitted: false });
     this.setState({ categorySubmitted: false });
-    this.setState({ datasetNameSubmitted: false });
     this.setState({ numUsersSubmitted: false });
     this.setState({ readyOnce: false });
 
@@ -274,6 +270,7 @@ class UploadData extends Component {
                 <option value="Health">Health</option>
                 <option value="Location">Location</option>
                 <option value="Consumer">Consumer</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <h4><i>invalid - app must have a category</i></h4>
@@ -291,6 +288,7 @@ class UploadData extends Component {
                 <option value="Health">Health</option>
                 <option value="Location">Location</option>
                 <option value="Consumer">Consumer</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <h4><i><span>&#10003;</span></i></h4>
@@ -335,43 +333,8 @@ class UploadData extends Component {
     }
   }
 
-  addDatasetName = (event) => {
-    if (!(event.target.value === '')) {
-      console.log('dataset name submitted');
-      this.setState({ datasetName: event.target.value });
-      this.setState({ datasetNameSubmitted: true });
-    } else {
-      console.log('dataset name unsubmitted');
-      this.setState({ datasetNameSubmitted: false });
-    }
-  }
-
-  renderDatasetNameInput = () => {
-    if (!this.state.datasetNameSubmitted) {
-      return (
-        <div>
-          <h2>What is your dataset named?</h2>
-          <div>
-            <input id="nameInput" type="text" placeholder="name" onChange={(e) => this.addDatasetName(e)} />
-            <h4><i>invalid - dataset must have a name</i></h4>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <h2>What is your dataset named?</h2>
-          <div>
-            <input id="nameInput" type="text" placeholder="name" onChange={(e) => this.addDatasetName(e)} />
-            <h4><i><span>&#10003;</span></i></h4>
-          </div>
-        </div>
-      );
-    }
-  }
-
   readyForSubmit = () => {
-    if (this.state.finalRangesEntered && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.datasetNameSubmitted && this.state.categorySubmitted) {
+    if (this.state.finalRangesEntered && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
       this.setState({ readyForSubmit: true });
       this.setState({ readyOnce: true });
       console.log('ready!');
@@ -481,7 +444,7 @@ class UploadData extends Component {
   }
 
   checkForSubmit = () => {
-    if (this.state.finalRangesEntered && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.datasetNameSubmitted && this.state.categorySubmitted) {
+    if (this.state.finalRangesEntered && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
       console.log('run readyForSubmit()');
       this.readyForSubmit();
     }
@@ -489,7 +452,7 @@ class UploadData extends Component {
 
   renderAttributeRanges = () => {
     if (this.state.readyForRanges) { // we are ready to render the ranges
-      if (this.state.readyForSubmit && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.datasetNameSubmitted && this.state.categorySubmitted) { // all ranges have been put in
+      if (this.state.readyForSubmit && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) { // all ranges have been put in
         console.log('readyForSubmit');
         if (this.getNumNumberAttributes() < 1) {
           return (
@@ -563,7 +526,7 @@ class UploadData extends Component {
 
   render() {
     if (!this.state.readyForRangesButton) {
-      if (this.state.datasetNameSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted && this.state.numUsersSubmitted) {
+      if (this.state.appNameSubmitted && this.state.categorySubmitted && this.state.numUsersSubmitted) {
         this.setState({ readyForRangesButton: true });
       }
     }
@@ -572,7 +535,6 @@ class UploadData extends Component {
         <div>
           <h1>Upload Your Data</h1>
           <div>
-            {this.renderDatasetNameInput()}
             {this.renderAppNameInput()}
             {this.renderNumUsersInput()}
             {this.renderAppCategory()}

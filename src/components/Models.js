@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import '../style.scss';
 import { Auth } from 'aws-amplify';
 import { queryModels } from '../database/databaseCalls';
@@ -109,7 +109,8 @@ class Models extends Component {
 
   // get only the models in progress
   renderModelsInProgress = () => {
-    if (!this.state.models) { return 'You have no Models in progress. Go to Create Model to make one'; }
+    // console.log(this.state.models.count);
+    if (!this.state.models || !this.state.models.count) { return 'You have no Models in progress. Go to Create Model to make one'; }
     // if (!this.state.models.Items) { return null; }
 
     // if the user has models, map each to a card
@@ -171,7 +172,7 @@ class Models extends Component {
 
   // get only the models completed
   renderModelsCompleted = () => {
-    if (!this.state.models) { return 'You have no completed models'; }
+    if (!this.state.models || !this.state.models.count) { return 'You have no completed models'; }
 
     if (!this.state.models.Items) {
       return (
@@ -223,11 +224,11 @@ class Models extends Component {
     return (
       <div>
         <h1 align="center">My Models</h1>
-        <Link to="/create_model" style={{ textDecoration: 'none' }}>
+        <a href="https://jupyter.artificien.com/hub/login" style={{ textDecoration: 'none' }}>
           <button type="button" className="create-model-button">
-            Upload New Model <span>&#43;</span>
+            Create Model <span>&#43;</span>
           </button>
-        </Link>
+        </a>
       </div>
     );
   }

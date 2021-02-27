@@ -332,10 +332,10 @@ export async function putModel(callback, PK, owner) {
   });
 }
 
-export async function putDataset(callback, PK, app, name, category, numDevices, attributes, attributeTypes, attributeRangeMins, attributeRangeMaxes) {
+export async function putDataset(callback, app, name, category, numDevices, attributes, attributeTypes, attributeRangeMins, attributeRangeMaxes) {
   const putParams = {
     Item: {
-      dataset_id: { S: PK },
+      dataset_id: { S: 'ahhh' },
       app: { S: app },
       name: { S: name },
       placeholder: { S: 'placeholder' },
