@@ -14,11 +14,11 @@ class UploadData extends Component {
       appName: null,
       appCategory: null,
       numAttributes: null,
-      numUsers: null,
+      appURL: null,
 
       appNameSubmitted: false,
       categorySubmitted: false,
-      numUsersSubmitted: false,
+      appURLSubmitted: false,
       readyForRangesButton: false,
       readyForRanges: false,
       addAttributeForms: true,
@@ -187,14 +187,14 @@ class UploadData extends Component {
     console.log('names');
     console.log(this.state.attributeNameList);
 
+    // including the app url
     putDataset(callback, this.state.appName,
-      'bingus', this.state.appCategory, this.state.numUsers,
+      this.state.appCategory, this.state.appURL,
       this.state.attributeNameList, this.state.attributeTypeList,
       this.state.attributeRangeMins, this.state.attributeRangeMaxes);
 
     document.getElementById('appNameInput').value = '';
-    document.getElementById('nameInput').value = '';
-    document.getElementById('numUsersInput').value = '';
+    document.getElementById('appURLInput').value = '';
 
     this.setState({ appName: null });
     this.setState({ appCategory: null });
@@ -213,10 +213,10 @@ class UploadData extends Component {
 
     this.setState({ appNameSubmitted: false });
     this.setState({ categorySubmitted: false });
-    this.setState({ numUsersSubmitted: false });
+    this.setState({ appURLSubmitted: false });
     this.setState({ readyOnce: false });
 
-    this.setState({ numUsers: null });
+    this.setState({ appURL: null });
     this.setState({ inputDatatypeFormList: [] });
     this.setState({ attributeRangeInputs: [] });
     this.setState({ attributeTypeSubmitted: 0 });
@@ -229,15 +229,16 @@ class UploadData extends Component {
     // window.location.reload(false);
   }
 
-  // change app specified num users, make sure it is a positive integer
-  addNumUsers = (event) => {
-    if (!Number.isNaN(parseInt(event.target.value, 10)) && parseInt(event.target.value, 10) > 0) {
-      console.log('num users submitted');
-      this.setState({ numUsers: event.target.value });
-      this.setState({ numUsersSubmitted: true });
+  // change app specified num users, make sure it is an apple app store URL and not some junk
+  addAppURL = (event) => {
+    console.log(event.target.value.startsWith('https://apps.apple.com'));
+    if (!(event.target.value === '') && (event.target.value.startsWith('https://apps.apple.com'))) {
+      console.log('appURL submitted');
+      this.setState({ appURL: event.target.value });
+      this.setState({ appURLSubmitted: true });
     } else {
-      console.log('num users unsubmitted');
-      this.setState({ numUsersSubmitted: false });
+      console.log('appURL not yet submitted');
+      this.setState({ appURLSubmitted: false });
     }
   }
 
@@ -334,7 +335,7 @@ class UploadData extends Component {
   }
 
   readyForSubmit = () => {
-    if (this.state.finalRangesEntered && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
+    if (this.state.finalRangesEntered && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
       this.setState({ readyForSubmit: true });
       this.setState({ readyOnce: true });
       console.log('ready!');
@@ -444,7 +445,7 @@ class UploadData extends Component {
   }
 
   checkForSubmit = () => {
-    if (this.state.finalRangesEntered && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
+    if (this.state.finalRangesEntered && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
       console.log('run readyForSubmit()');
       this.readyForSubmit();
     }
@@ -452,7 +453,7 @@ class UploadData extends Component {
 
   renderAttributeRanges = () => {
     if (this.state.readyForRanges) { // we are ready to render the ranges
-      if (this.state.readyForSubmit && this.state.numUsersSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) { // all ranges have been put in
+      if (this.state.readyForSubmit && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) { // all ranges have been put in
         console.log('readyForSubmit');
         if (this.getNumNumberAttributes() < 1) {
           return (
@@ -498,23 +499,23 @@ class UploadData extends Component {
   }
 
   // render number of users to input
-  renderNumUsersInput = () => {
-    if (!this.state.numUsersSubmitted) { // if number of users hasn't been submitted yet, give invalid message, make sure the number is positive!
+  renderAppURLInput = () => {
+    if (!this.state.appURLSubmitted) { // if number of users hasn't been submitted yet, give invalid message, make sure the number is positive!
       return (
         <div>
-          <h2>How many users does this app have?</h2>
+          <h2>What is your app URL?</h2>
           <div>
-            <input id="numUsersInput" type="number" onChange={(e) => this.addNumUsers(e)} />
-            <h4><i>invalid - must input a positive number of users</i></h4>
+            <input id="appURLInput" type="text" placeholder="https://apps.apple.com" onChange={(e) => this.addAppURL(e)} />
+            <h4><i>invalid - must submit a url that begins with https://apps.apple.com...</i></h4>
           </div>
         </div>
       );
     } else { // number of users submitted, valid
       return (
         <div>
-          <h2>How many users does this app have?</h2>
+          <h2>What is your app URL?</h2>
           <div>
-            <input id="numUsersInput" type="number" onChange={(e) => this.addNumUsers(e)} />
+            <input id="appURLInput" type="text" placeholder="https://apps.apple.com" onChange={(e) => this.addAppURL(e)} />
             <h4><i><span>&#10003;</span></i></h4>
           </div>
         </div>
@@ -526,7 +527,7 @@ class UploadData extends Component {
 
   render() {
     if (!this.state.readyForRangesButton) {
-      if (this.state.appNameSubmitted && this.state.categorySubmitted && this.state.numUsersSubmitted) {
+      if (this.state.appNameSubmitted && this.state.categorySubmitted && this.state.appURLSubmitted) {
         this.setState({ readyForRangesButton: true });
       }
     }
@@ -536,7 +537,7 @@ class UploadData extends Component {
           <h1>Upload Your Data</h1>
           <div>
             {this.renderAppNameInput()}
-            {this.renderNumUsersInput()}
+            {this.renderAppURLInput()}
             {this.renderAppCategory()}
             {this.renderAttributeFields()}
             {this.renderAttributeRanges()}
