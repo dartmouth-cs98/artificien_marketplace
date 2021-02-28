@@ -12,26 +12,24 @@ class DatasetSideNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      alreadyPurchased: this.props.alreadyPurchased,
     };
   }
 
   purchaseDataset = async (datasetID, username) => {
+    this.setState({ alreadyPurchased: true });
     const callback = (data, error) => {
       if (error) {
         console.log(error);
       } else {
         console.log(data);
+        this.setState({ alreadyPurchased: true });
         if (data.Items[0].datasets_purchased) { // if list exists, append to list
           const datasetsPurchased = data.Items[0].datasets_purchased.L;
           console.log(datasetsPurchased);
           const datasetsPurchasedNew = [...datasetsPurchased];
-          console.log(datasetsPurchasedNew);
           datasetsPurchasedNew.push({ S: datasetID });
-          console.log(datasetsPurchasedNew);
           this.updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S);
-          this.props.alreadyPurchased = true;
-          console.log(datasetsPurchasedNew);
-          console.log(this.props);
         } else { // if field doesn't exist (user hasn't purchased yet?), create a new list and add
           const newDatasetsPurchasedList = [{ S: datasetID }];
           this.updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S);
@@ -66,7 +64,7 @@ class DatasetSideNav extends Component {
 
   // make a seperate render for the purchase button!
   renderPurchased = () => {
-    if (this.props.alreadyPurchased) {
+    if (this.props.alreadyPurchased || this.state.alreadyPurchased) {
       return (
         <div className="dataset_existing">You already own access to this dataset!</div>
       );
@@ -101,6 +99,12 @@ class DatasetSideNav extends Component {
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
+    console.log('====');
+    console.log(this.props.alreadyPurchased);
+    console.log('====');
+    console.log(this.state.alreadyPurchased);
+    console.log('====');
+    if (this.props.style.width === 0 && this.state.alreadyPurchased) this.setState({ alreadyPurchased: false });
     return (
       <div>{this.props.content && <div>{this.renderDatasetCard()}</div>}</div>
     );

@@ -280,7 +280,7 @@ class Marketplace extends Component {
   renderSearchTermDatasets = () => {
     const searchTerm = this.state.finalizedSearchTerm;
     const allMatchingDatasets = this.state.allDatasets.Items.reduce((finalDatasets, dataset) => {
-      if (dataset.app.S.includes(searchTerm)) {
+      if (dataset.app.S.toLowerCase().includes(searchTerm.toLowerCase())) {
         finalDatasets.push(
           <DataLibraryCard
             onClick={this.openNav}
