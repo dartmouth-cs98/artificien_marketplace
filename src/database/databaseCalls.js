@@ -332,16 +332,16 @@ export async function putModel(callback, PK, owner) {
   });
 }
 
-export async function putDataset(callback, app, name, category, numDevices, attributes, attributeTypes, attributeRangeMins, attributeRangeMaxes) {
+// switched app to be datset_id as placeholder
+export async function putDataset(callback, app, category, appURL, attributes, attributeTypes, attributeRangeMins, attributeRangeMaxes) {
   const putParams = {
     Item: {
-      dataset_id: { S: 'ahhh' },
-      app: { S: app },
-      name: { S: name },
+      dataset_id: { S: app },
+      app: { S: 'placeholder' },
       placeholder: { S: 'placeholder' },
       logo_image_url: { S: 'bingus' },
       category: { S: category },
-      num_devices: { N: numDevices },
+      appURL: { S: appURL },
       attributes: { L: attributes },
       attributeTypes: { L: attributeTypes },
       attributeRangeMins: { L: attributeRangeMins },
