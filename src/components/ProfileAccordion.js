@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 /* eslint-disable func-names */
 /* eslint-disable no-unused-expressions */
 import React, { Component } from 'react';
@@ -65,7 +66,7 @@ class ProfileAccordion extends Component {
     const url = 'http://0.0.0.0:5001/generate_key';
     const xhr = new XMLHttpRequest();
     const handleError = function (e) {
-      console.log(e.type);
+      console.log(e);
     };
     xhr.open('POST', url);
     xhr.setRequestHeader('Authorization', 'Bearer accessID');
@@ -77,15 +78,13 @@ class ProfileAccordion extends Component {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         console.log(xhr.status);
-        console.log(xhr.responseText === '');
       } else {
         console.log('not done yet');
       }
     };
-    return 1347288882190;
-    // const data = '{"user_id":`${userID}`}';
-    // xhr.send(data);
-    // console.log('sent');
+    const data = `{ user_id: ${userID} }`;
+    xhr.send(data);
+    console.log('sent');
   }
 
   mapDatasetsPurchased = (datasets) => {
@@ -101,7 +100,6 @@ class ProfileAccordion extends Component {
     const handleChange = (panel) => (event, isExpanded) => {
       isExpanded ? this.setState({ expanded: panel }) : this.setState({ expanded: false }); // new state manager//
     };
-    console.log(this.state.currentAPIkey);
     return (
       <div className={classes.root} style={{ margin: '10%' }}>
         {/* Account information */}
@@ -164,7 +162,7 @@ class ProfileAccordion extends Component {
               : <p>You havent purchased any datasets yet!</p>}
           </AccordionDetails>
         </Accordion>
-        {!!this.props.role && (
+        {!!Number.parseInt(this.props.role, 10) && (
         <Accordion expanded={this.state.expanded === 'panel4'} onChange={handleChange('panel4')}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}

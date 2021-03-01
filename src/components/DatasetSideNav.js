@@ -79,6 +79,13 @@ class DatasetSideNav extends Component {
     }
   }
 
+  attributeList = (atrList) => {
+    const attributeList = atrList.map((attribute) => {
+      return <p>{attribute.S}</p>;
+    });
+    return attributeList;
+  }
+
   renderDatasetCard = () => {
     // if we have predictable attributes for the card...
     return (
@@ -88,7 +95,8 @@ class DatasetSideNav extends Component {
           <div className="text-center">
             <h2>{this.props.content.app.S}</h2>
             <p>Category: {this.props.content.category.S}</p>
-            {this.props.content.predictable_attributes && <p>Predictable Attributes: {this.props.content.predictable_attributes.S}</p>}
+            {this.props.content.attributes && <p>Attributes: {this.attributeList(this.props.content.attributes.L)}</p>}
+            {this.props.content.appURL && <p>App URL: <a href={this.props.content.appURL.S} style={{ color: 'white' }}>{this.props.content.appURL.S}</a></p>}
             {this.renderPurchased()};
           </div>
           <div className="list-group" />
@@ -99,11 +107,6 @@ class DatasetSideNav extends Component {
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
-    console.log('====');
-    console.log(this.props.alreadyPurchased);
-    console.log('====');
-    console.log(this.state.alreadyPurchased);
-    console.log('====');
     if (this.props.style.width === 0 && this.state.alreadyPurchased) this.setState({ alreadyPurchased: false });
     return (
       <div>{this.props.content && <div>{this.renderDatasetCard()}</div>}</div>
