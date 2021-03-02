@@ -47,14 +47,16 @@ class ProfileAccordion extends Component {
 
   retrieveAPIkey = async () => {
     const name = this.props.content.username.S;
+    const accessID = this.props.id;
     const callback = async (successData, error) => {
       if (error) {
         console.log(error);
       } else {
         const userID = successData.Items[0].user_id.S;
         console.log(name);
+        console.log(userID);
         // FORMAT FETCH HERE
-        const key = await this.sendKeyRequest(userID);
+        const key = await this.sendKeyRequest(userID, accessID);
         console.log(`key: ${key}`);
         this.setState({ currentAPIkey: key });
       }
@@ -62,14 +64,14 @@ class ProfileAccordion extends Component {
     getUser(callback, name);
   }
 
-  sendKeyRequest = async (userID) => {
-    const url = 'http://0.0.0.0:5001/generate_key';
+  sendKeyRequest = async (userID, accessID) => {
+    const url = 'http://orche-pygri-1otammo0acarg-74b44bcdcc5f77f0.elb.us-east-1.amazonaws.com:5001/';
     const xhr = new XMLHttpRequest();
     const handleError = function (e) {
       console.log(e);
     };
     xhr.open('POST', url);
-    xhr.setRequestHeader('Authorization', 'Bearer accessID');
+    xhr.setRequestHeader('Authorization', `${accessID}`);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.addEventListener('error', handleError);
     xhr.onload = function () {
@@ -92,6 +94,16 @@ class ProfileAccordion extends Component {
       return <Typography>{dataset.S}</Typography>;
     });
     return <div>{datasetList}</div>;
+  }
+
+  mapAppsManaged = (datasets) => {
+    // we're gonna loop over a list of dataset objects (from dynamo datasets table)
+    // each of these datasets has an app field
+    // we want to return the app
+    const appList = datasets.map((dataset) => {
+      return <Typography>{dataset.app.S}</Typography>;
+    });
+    return <div>{appList}</div>;
   }
 
   render() {
@@ -150,17 +162,33 @@ class ProfileAccordion extends Component {
             aria-controls="panel3bh-content"
             id="panel3bh-header"
           >
-            <Typography className={classes.heading}>Datasets Purchased</Typography>
+            {Number.parseInt(this.props.role, 10) === 0
+              ? <Typography className={classes.heading}>Datasets Purchased</Typography>
+              : <Typography className={classes.heading}>Apps Managing</Typography>}
           </AccordionSummary>
-          <AccordionDetails>
-            {this.props.content.datasets_purchased
-              ? (
-                <Typography style={{ 'padding-left': '20px', 'text-align': 'left' }}>
-                  {this.mapDatasetsPurchased(this.props.content.datasets_purchased.L)}
-                </Typography>
-              )
-              : <p>You havent purchased any datasets yet!</p>}
-          </AccordionDetails>
+          {Number.parseInt(this.props.role, 10) === 0
+            ? (
+              <AccordionDetails>
+                {this.props.content.datasets_purchased
+                  ? (
+                    <Typography style={{ 'padding-left': '20px', 'text-align': 'left' }}>
+                      {this.mapDatasetsPurchased(this.props.content.datasets_purchased.L)}
+                    </Typography>
+                  )
+                  : <p>You havent purchased any datasets yet!</p>}
+              </AccordionDetails>
+            )
+            : (
+              <AccordionDetails>
+                {this.props.appsManaged.Items.length > 0
+                  ? (
+                    <Typography style={{ 'padding-left': '20px', 'text-align': 'left' }}>
+                      {this.mapAppsManaged(this.props.appsManaged.Items)}
+                    </Typography>
+                  )
+                  : <p>You don&apos;t manage any apps yet!</p>}
+              </AccordionDetails>
+            )}
         </Accordion>
         {!!Number.parseInt(this.props.role, 10) && (
         <Accordion expanded={this.state.expanded === 'panel4'} onChange={handleChange('panel4')}>

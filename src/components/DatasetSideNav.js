@@ -1,3 +1,4 @@
+/* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
@@ -13,11 +14,18 @@ class DatasetSideNav extends Component {
     super(props);
     this.state = {
       alreadyPurchased: this.props.alreadyPurchased,
+      recentlyPurchased: [],
     };
   }
 
   purchaseDataset = async (datasetID, username) => {
     this.setState({ alreadyPurchased: true });
+    this.setState((state) => {
+      state.recentlyPurchased.push(datasetID);
+      return {
+        ...state,
+      };
+    });
     const callback = (data, error) => {
       if (error) {
         console.log(error);
@@ -64,7 +72,7 @@ class DatasetSideNav extends Component {
 
   // make a seperate render for the purchase button!
   renderPurchased = () => {
-    if (this.props.alreadyPurchased || this.state.alreadyPurchased) {
+    if (this.props.alreadyPurchased || this.state.alreadyPurchased || (this.state.recentlyPurchased.includes(this.props.content.dataset_id.S))) {
       return (
         <div className="dataset_existing">You already own access to this dataset!</div>
       );
