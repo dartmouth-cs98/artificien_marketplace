@@ -32,7 +32,7 @@ class ErrorModal extends Component {
         <h2 id="simple-modal-title">Unauthorized Route!</h2>
         <div style={{ display: 'flex', 'justify-content': 'center' }}><div className="caution" active /></div>
         <p id="simple-modal-description">
-          You aren&apos;t allowed to visit that page - try signing in or switching modes!
+          You aren&apos;t allowed to visit that page - try switching modes!
         </p>
       </div>
     );

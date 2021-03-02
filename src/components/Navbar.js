@@ -2,8 +2,10 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import '../style.scss';
+import { Auth } from 'aws-amplify';
 import { connect } from 'react-redux';
-// import { addRole } from '../store/reducers/role-reducer';
+import { getUser } from '../database/databaseCalls';
+import { addRole } from '../store/reducers/role-reducer';
 import RoleButton from './RoleButton';
 
 /*
@@ -16,6 +18,27 @@ class Navbar extends Component {
 
     this.state = {
     };
+  }
+
+  componentDidMount() {
+    Auth.currentSession()
+      .then((data) => {
+        const name = data.accessToken.payload.username;
+        const callback = (successData, error) => { // requires current user to be in database
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('');
+            if (this.props.role === 2 && successData.Items.length > 0) {
+              this.props.addRole(successData.Items[0].role.S); // can't use ! here, 0 is falsey, add to initial state to redux store
+              console.log('adding role');
+            }
+          }
+        };
+        getUser(callback, name);
+      }).catch(() => {
+        console.log('caught navbar');
+      });
   }
 
   renderDev = () => {
@@ -104,11 +127,11 @@ class Navbar extends Component {
 
   render() {
     console.log(this.props.role);
-    if (this.props.role === 0) {
+    if (Number.parseInt(this.props.role, 10) === 0) {
       return (
         <div>{this.renderEnterprise()}</div>
       );
-    } else if (this.props.role === 1) {
+    } else if (Number.parseInt(this.props.role, 10) === 1) {
       return (
         <div>{this.renderDev()}</div>
       );
@@ -126,4 +149,4 @@ const mapStateToProps = (state) => {
 };
 
 // export default withRouter(withAuthenticator(Navbar)); // might be some sort of login flow thing here
-export default withRouter(connect(mapStateToProps)(Navbar)); // might be some sort of login flow thing here
+export default withRouter(connect(mapStateToProps, { addRole })(Navbar)); // might be some sort of login flow thing here

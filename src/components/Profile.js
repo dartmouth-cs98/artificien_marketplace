@@ -2,8 +2,9 @@
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
+import { connect } from 'react-redux';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
-import { getUser, queryModels } from '../database/databaseCalls';
+import { getUser, queryModels, queryDatasetsOwner } from '../database/databaseCalls';
 import '../style.scss';
 import ChangeUsernameForm from './ChangeUsernameForm';
 import UserMetricsCard from './UserMetricsCard';
@@ -19,12 +20,16 @@ class Profile extends Component {
     super(props);
 
     this.state = {
+      accessID: null,
       userData: null,
       usernameChange: false,
-      metricsDict: {
+      clientMetricsDict: {
         userModels: null,
-        numDevicesReached: 1000,
-        averageTrainingTime: [7, 16],
+        numDevicesReached: 0,
+        averageTrainingTime: [0, 0],
+      },
+      devMetricsDict: {
+        userDatasets: null,
       },
     };
   }
@@ -35,17 +40,33 @@ class Profile extends Component {
       .then((data) => {
         console.log(data);
         const name = data.accessToken.payload.username;
+        // for apiKey
+        const clientID = data.accessToken.jwtToken;
+        this.setState({ accessID: clientID });
+        //
         this.queryUser(name);
+        // check if user has any models, preps metrics cards
         const modelsQueryCallback = (success, error) => {
           if (error) {
             console.log(error);
           } else {
             console.log(success);
-            const newMetricsDict = { ...this.state.metricsDict, userModels: success };
-            this.setState({ metricsDict: newMetricsDict });
+            const newclientMetricsDict = { ...this.state.clientMetricsDict, userModels: success }; // get the user's models that allow for deeper summary
+            this.setState({ clientMetricsDict: newclientMetricsDict });
           }
         };
         queryModels(modelsQueryCallback, name);
+        // check if user owns any datasets/apps, preps metrics cards
+        const datasetsQueryCallback = (success, error) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log(success);
+            const newDevMetricsDict = { ...this.state.devMetricsDict, userDatasets: success }; // get the user's datasets
+            this.setState({ devMetricsDict: newDevMetricsDict });
+          }
+        };
+        queryDatasetsOwner(datasetsQueryCallback, name);
       });
     // get metrics here
   }
@@ -73,75 +94,47 @@ class Profile extends Component {
     getUser(callback, name);
   }
 
-  renderFirstRow = () => {
-    return (
-      <div className="profile-page-user-info-body-row">
-        <div id="profile-page-user-info">
-          <div id="change-profile-info">
-            <h3 id="profile-page-user-info-item">Username: {this.state.userData.username.S}</h3>
-            {/* <button type="button" className="change-user-data-button" onClick={() => this.setState({ usernameChange: true })}>Change</button>
-            {this.renderChangeButton()} */}
-          </div>
-        </div>
-        <div id="profile-page-user-info"> {this.state.userData.user_id && <h3 id="profile-page-user-info-item">User ID: {this.state.userData.user_id.S}</h3>} </div>
-        <div id="profile-page-user-info"> {this.state.userData.user_account_email && <h3 id="profile-page-user-info-item">Email: {this.state.userData.user_account_email.S}</h3>} </div>
-      </div>
-    );
-  }
-
-  renderSecondRow = () => {
-    const infoItemList = [];
-    if (this.state.userData.enterprise) {
-      infoItemList.push(<div id="profile-page-user-info"> <h3 id="profile-page-user-info-item">Enterprise: {this.state.userData.enterprise.S}</h3></div>);
-    }
-    if (this.state.userData.date_joined) {
-      infoItemList.push(<div id="profile-page-user-info"> <h3 id="profile-page-user-info-item">Date Joined: {this.state.userData.date_joined.S}</h3></div>);
-    }
-    if (this.state.userData.bank_info && this.state.userData.bank_info.bank) {
-      infoItemList.push(<div id="profile-page-user-info"> <h3 id="profile-page-user-info-item">Bank Name: {this.state.userData.bank_info.bank}</h3></div>);
-    }
-    if (this.state.userData.bank_info && this.state.userData.bank_info.bank_number) {
-      infoItemList.push(<div id="profile-page-user-info"> <h3 id="profile-page-user-info-item">Bank Number: {this.state.userData.bank_info.bank_number}</h3></div>);
-    }
-    return (
-      <div className="profile-page-user-info-body-row">
-        {infoItemList}
-      </div>
-    );
-  }
-
-  renderMetricsCards = () => {
+  renderClientMetricsCards = () => { // loops over client clientMetricsDict
     const metricCards = [];
-    console.log(this.state.metricsDict);
-    if (!this.state.metricsDict.userModels) return null;
+    console.log(this.state.clientMetricsDict);
+    if (!this.state.clientMetricsDict.userModels) return null;
 
-    for (let i = 0; i < Object.keys(this.state.metricsDict).length; i += 1) {
-      if (String(Object.keys(this.state.metricsDict)[i]) === 'userModels') {
+    for (let i = 0; i < Object.keys(this.state.clientMetricsDict).length; i += 1) {
+      if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'userModels') {
         console.log('models');
-        metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models Created" body={this.state.metricsDict.userModels.Items.length} username={this.state.userData.username.S} />);
-      } else if (String(Object.keys(this.state.metricsDict)[i]) === 'numDevicesReached') {
+        metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models Created" body={this.state.clientMetricsDict.userModels.Items.length} username={this.state.userData.username.S} />);
+      } else if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'numDevicesReached') {
         console.log('numDevices');
-        metricCards.push(<UserMetricsCard id="user-metric" title="Number of Devices Reached" body={this.state.metricsDict.numDevicesReached} username={this.state.userData.username.S} />);
-      } else if (String(Object.keys(this.state.metricsDict)[i]) === 'averageTrainingTime') {
+        metricCards.push(<UserMetricsCard id="user-metric" title="Number of Devices Reached" body={this.state.clientMetricsDict.numDevicesReached} username={this.state.userData.username.S} />);
+      } else if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'averageTrainingTime') {
         console.log('training');
-        metricCards.push(<UserMetricsCard id="user-metric" title="Average Training Time" body={this.state.metricsDict.averageTrainingTime} username={this.state.userData.username.S} />);
+        metricCards.push(<UserMetricsCard id="user-metric" title="Average Training Time" body={this.state.clientMetricsDict.averageTrainingTime} username={this.state.userData.username.S} />);
       } else {
-        console.log(Object.keys(this.state.metricsDict)[i]);
+        console.log(Object.keys(this.state.clientMetricsDict)[i]);
       }
     }
     return metricCards;
   }
 
+  renderDevMetricsCards = () => {
+    const metricCards = [];
+    console.log(this.state.devMetricsDict);
+    if (!this.state.devMetricsDict.userDatasets) return null;
+    metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Running" body="bingo bongo" username={this.state.userData.username.S} />);
+    return metricCards;
+  }
+
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
-    if (this.state.userData && this.state.metricsDict.userModels) {
+    if (this.state.userData && this.state.clientMetricsDict.userModels) {
       return (
         <>
           <h1 align="center">My Profile</h1>
           <div className="profile-page-user-metrics-body">
-            <div className="user-metric-container">{this.renderMetricsCards()}</div>
+            {Number.parseInt(this.props.role, 10) === 0 && <div className="user-metric-container">{this.renderClientMetricsCards()}</div>}
+            {Number.parseInt(this.props.role, 10) === 1 && <div className="user-metric-container">{this.renderDevMetricsCards()}</div>}
           </div>
-          <ProfileAccordion content={this.state.userData} />
+          <ProfileAccordion content={this.state.userData} id={this.state.accessID} appsManaged={this.state.devMetricsDict.userDatasets} />
         </>
       );
     } else {
@@ -152,4 +145,10 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+const mapStateToProps = (state) => {
+  return {
+    role: state.roleReducer.role,
+  };
+};
+
+export default connect(mapStateToProps)(Profile);

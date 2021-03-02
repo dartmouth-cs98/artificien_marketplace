@@ -529,17 +529,17 @@ amplify-authenticator{
 
 #signup-signin-button {
   border: none;
-  background-color: white;
+  background-color: rgb(224, 221, 221);
   color: black;
   padding: 12px 21px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 12px;
+  font-size: 18px;
 }
 
 #signup-signin-button:hover {
-  background-color: rgb(224, 221, 221);
+  background-color: rgb(199, 197, 197);
 }
 
 .caution {

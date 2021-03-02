@@ -46,7 +46,10 @@ class Welcome extends Component {
               console.log(error);
             } else {
               console.log(successData);
-              if (this.props.role === 2 && successData.Items.length > 0) this.props.addRole(successData.Items[0].role.S); // can't use ! here, 0 is falsey, add to initial state to redux store
+              if (this.props.role === 2 && successData.Items.length > 0) {
+                this.props.addRole(successData.Items[0].role.S); // can't use ! here, 0 is falsey, add to initial state to redux store
+                console.log('adding role');
+              }
             }
           };
           getUser(callback, name);
