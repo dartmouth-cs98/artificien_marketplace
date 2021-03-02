@@ -106,9 +106,6 @@ class Profile extends Component {
       } else if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'numDevicesReached') {
         console.log('numDevices');
         metricCards.push(<UserMetricsCard id="user-metric" title="Number of Devices Reached" body={this.state.clientMetricsDict.numDevicesReached} username={this.state.userData.username.S} />);
-      } else if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'averageTrainingTime') {
-        console.log('training');
-        metricCards.push(<UserMetricsCard id="user-metric" title="Average Training Time" body={this.state.clientMetricsDict.averageTrainingTime} username={this.state.userData.username.S} />);
       } else {
         console.log(Object.keys(this.state.clientMetricsDict)[i]);
       }
@@ -126,6 +123,7 @@ class Profile extends Component {
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
+    console.log(this.state.userData);
     if (this.state.userData && this.state.clientMetricsDict.userModels) {
       return (
         <>

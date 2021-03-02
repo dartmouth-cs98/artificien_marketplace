@@ -130,7 +130,7 @@ class ProfileAccordion extends Component {
                 <Typography style={{ 'font-weight': 'bold', 'padding-left': '20px', 'text-align': 'left' }}>
                   {this.props.content.date_joined && <Typography>Date Joined: {this.props.content.date_joined.S}</Typography>}
                   {this.props.content.username && <Typography>Username: {this.props.content.username.S}</Typography>}
-                  {this.props.content.user_id && <Typography>User ID: {this.props.content.user_id.S}</Typography>}
+                  {this.props.content.user_account_email && <Typography>Email: {this.props.content.user_account_email.S}</Typography>}
                 </Typography>
               ) : <p>You dont have any personal information yet!</p>}
           </AccordionDetails>
@@ -142,15 +142,16 @@ class ProfileAccordion extends Component {
             aria-controls="panel2bh-content"
             id="panel2bh-header"
           >
-            <Typography className={classes.heading}>Payment and Employment</Typography>
+            {Number.parseInt(this.props.role, 10) === 0
+              ? <Typography className={classes.heading}>Payment Information</Typography>
+              : <Typography className={classes.heading}>Bank Information</Typography>}
           </AccordionSummary>
           <AccordionDetails>
             {this.props.content.bank_info || this.props.content.enterprise
               ? (
                 <Typography style={{ 'padding-left': '20px', 'text-align': 'left' }}>
-                  {this.props.content.enterprise && <Typography>Enterprise: {this.props.content.enterprise.S}</Typography>}
                   {this.props.content.bank_info && this.props.content.bank_info.bank && <Typography>Bank Name: {this.props.content.bank_info.bank.S}</Typography>}
-                  {this.props.content.bank_info && this.props.content.bank_info.bank_number && <Typography>User ID: {this.props.content.bank_info.bank_number.S}</Typography>}
+                  {this.props.content.bank_info && this.props.content.bank_info.bank_number && <Typography>Bank Number: {this.props.content.bank_info.bank_number.S}</Typography>}
                 </Typography>
               )
               : <p>You dont have any payment information yet!</p>}
