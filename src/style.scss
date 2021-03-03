@@ -1,7 +1,7 @@
 @import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@4/distr/fira_code.css);
 
 body, html {
-  font-family: "Avenir";
+  font-family: 'Nunito Sans';
   position: absolute;
   min-height: 100%;
   min-width: 100%;
@@ -9,10 +9,6 @@ body, html {
   text-align: center;
   overflow-x: hidden; // to prevent scrolling from side to side. thank you stack overflow for the advice here!
   scroll-behavior: smooth;
-}
-
-.drawer-font-body {
-  font-family: "Avenir";
 }
 
 .welcome-body {
