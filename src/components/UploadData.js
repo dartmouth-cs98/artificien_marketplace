@@ -57,6 +57,7 @@ class UploadData extends Component {
       console.log(event.target.value);
       this.state.attributeNameDict[i] = { S: event.target.value };
       this.setState({ addAttributeForms: false });
+      this.setState({ attributeNonEmpty: true });
     }
   }
 
@@ -82,6 +83,7 @@ class UploadData extends Component {
     if (!(event.target.value === '')) {
       console.log(event.target.value);
       console.log(this.state.attributeTypeSubmitted);
+      console.log(this.state.attributeTypeDict);
       // if you are changing the value back to none!
       // if this exists even
       if (this.state.attributeTypeDict[i]) {
@@ -89,6 +91,8 @@ class UploadData extends Component {
         console.log(event.target.value);
         console.log(this.state.attributeTypeDict[i].S);
         console.log(this.state.readyForRangesButton);
+
+        // if yu're putting it back to none from a non-none value
         if (event.target.value === 'O' && !(event.target.value === this.state.attributeTypeDict[i].S)) {
           // this.setState({
           // attributeTypeDict: update(this.state.ttributeTypeDict, { i: event.target.value }),
@@ -100,6 +104,7 @@ class UploadData extends Component {
           // this.setState({ attributeTypeSubmitted: this.state.attributeTypeSubmitted - 1 });
           console.log(this.state.attributeTypeSubmitted);
           console.log('decrementing counter');
+          // if you are changing it not none, it was none
         } else if (!(event.target.value === 'O') && (this.state.attributeTypeDict[i].S === 'O')) {
           this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
           this.setState((state) => {
@@ -107,6 +112,9 @@ class UploadData extends Component {
           });
           console.log(this.state.attributeTypeSubmitted);
           console.log('incrementing counter');
+          // otherwise, still need to change it so you can get the value
+        } else {
+          this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
         }
       } else {
         console.log('not exists');
@@ -360,7 +368,7 @@ class UploadData extends Component {
     console.log('checking array');
     for (let i = 0; i < Object.keys(this.state.attributeNameDict).length; i += 1) {
       console.log(this.state.attributeNameDict[i].S);
-      if (this.state.attributeNameDict[i].S === '') {
+      if (this.state.attributeNameDict[i].S === '' && this.state.attributeNonEmpty) {
         console.log('arghh!');
         this.setState({ attributeNonEmpty: false });
       }
@@ -445,6 +453,7 @@ class UploadData extends Component {
           );
         } else {
           this.checkArray();
+          // if we have all attribute names, types etc, BUT one of them is none...
           if (!this.state.attributeNonEmpty) {
             return (
               <div className="dataLists">
