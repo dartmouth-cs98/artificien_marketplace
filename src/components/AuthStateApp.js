@@ -71,7 +71,7 @@ class AuthStateApp extends Component {
               {
                 type: 'phone_number',
                 label: 'phone number',
-                placeholder: 'xxxxxxxxx@yyyy.com',
+                placeholder: '(000)000-0000',
                 required: true,
               },
               {
@@ -84,7 +84,6 @@ class AuthStateApp extends Component {
           />
           <AmplifyConfirmSignUp />
         </AmplifyAuthenticator>
-
       );
     }
   }
