@@ -96,7 +96,7 @@ class Profile extends Component {
 
   renderClientMetricsCards = () => { // loops over client clientMetricsDict
     const metricCards = [];
-    //console.log(this.state.clientMetricsDict);
+    console.log(this.state.clientMetricsDict);
     if (!this.state.clientMetricsDict.userModels) return null;
 
     for (let i = 0; i < Object.keys(this.state.clientMetricsDict).length; i += 1) {

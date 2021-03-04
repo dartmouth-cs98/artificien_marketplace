@@ -31,6 +31,7 @@ class UploadData extends Component {
       attributeTypeSubmitted: 0, // counter of number of attributes with a type
       attributeTypeDict: {},
       attributeNameDict: {},
+      attributeNonEmpty: true,
 
       attributeRangeMins: [],
       attributeRangeMaxes: [],
@@ -215,6 +216,7 @@ class UploadData extends Component {
     this.setState({ categorySubmitted: false });
     this.setState({ appURLSubmitted: false });
     this.setState({ readyOnce: false });
+    this.setState({ attributeNonEmpty: true });
 
     this.setState({ appURL: null });
     this.setState({ inputDatatypeFormList: [] });
@@ -354,6 +356,17 @@ class UploadData extends Component {
     }
   }
 
+  checkArray = () => {
+    console.log('checking array');
+    for (let i = 0; i < Object.keys(this.state.attributeNameDict).length; i += 1) {
+      console.log(this.state.attributeNameDict[i].S);
+      if (this.state.attributeNameDict[i].S === '') {
+        console.log('arghh!');
+        this.setState({ attributeNonEmpty: false });
+      }
+    }
+  }
+
   readyForRanges = () => {
     this.setState({ readyForRanges: true });
     for (let i = 0; i < Object.keys(this.state.attributeTypeDict).length; i += 1) {
@@ -372,6 +385,13 @@ class UploadData extends Component {
   }
 
   renderAttributeFields = () => {
+    if (this.state.readyForRanges) {
+      return (
+        <div>
+          <h3>Please reload page if you want to see the attributes</h3>
+        </div>
+      );
+    }
     if (!this.state.numAttributes) {
       return (
         <div>
@@ -407,9 +427,13 @@ class UploadData extends Component {
       }
       console.log(this.state.attributeTypeSubmitted);
       console.log(this.state.numAttributes);
+      console.log(Object.keys(this.state.attributeNameDict));
+      console.log(this.state.attributeNonEmpty);
+      console.log(this.state.attributeNameDict);
+
       if (this.state.readyForRangesButton) {
-        if (Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes
-        || this.state.attributeTypeSubmitted < this.state.numAttributes) {
+        if ((Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes
+        || this.state.attributeTypeSubmitted < this.state.numAttributes)) {
           return (
             <div className="dataLists">
               <div className="typesList">
@@ -420,15 +444,28 @@ class UploadData extends Component {
             </div>
           );
         } else {
-          return (
-            <div className="dataLists">
-              <div className="typesList">
-                <h2>Add Your Attributes</h2>
-                {this.state.inputDatatypeFormList}
-                <button type="submit" className="submit" onClick={() => { this.readyForRanges(); }}>Ranges</button>
+          this.checkArray();
+          if (!this.state.attributeNonEmpty) {
+            return (
+              <div className="dataLists">
+                <div className="typesList">
+                  <h2>Add Your Attributes</h2>
+                  {this.state.inputDatatypeFormList}
+                  <h3><i>An attribute name is empty! please fix.</i></h3>
+                </div>
               </div>
-            </div>
-          );
+            );
+          } else {
+            return (
+              <div className="dataLists">
+                <div className="typesList">
+                  <h2>Add Your Attributes</h2>
+                  {this.state.inputDatatypeFormList}
+                  <button type="submit" className="submit" onClick={() => { this.readyForRanges(); }}>Ranges</button>
+                </div>
+              </div>
+            );
+          }
         }
       } else {
         return (
