@@ -47,46 +47,16 @@ class ProfileAccordion extends Component {
 
   retrieveAPIkey = async () => {
     const name = this.props.content.username.S;
-    const accessID = this.props.id;
     const callback = async (successData, error) => {
       if (error) {
         console.log(error);
       } else {
-        const userID = successData.Items[0].user_id.S;
-        console.log(name);
-        console.log(userID);
-        // FORMAT FETCH HERE
-        const key = await this.sendKeyRequest(userID, accessID);
-        console.log(`key: ${key}`);
+        console.log(successData);
+        const key = successData.Items[0].api_key.S;
         this.setState({ currentAPIkey: key });
       }
     };
     getUser(callback, name);
-  }
-
-  sendKeyRequest = async (userID, accessID) => {
-    const url = 'http://orche-pygri-1otammo0acarg-74b44bcdcc5f77f0.elb.us-east-1.amazonaws.com:5001/';
-    const xhr = new XMLHttpRequest();
-    const handleError = function (e) {
-      console.log(e);
-    };
-    xhr.open('POST', url);
-    xhr.setRequestHeader('Authorization', `${accessID}`);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.addEventListener('error', handleError);
-    xhr.onload = function () {
-      console.log('DONE: ', xhr.status);
-    };
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        console.log(xhr.status);
-      } else {
-        console.log('not done yet');
-      }
-    };
-    const data = `{ user_id: ${userID} }`;
-    xhr.send(data);
-    console.log('sent');
   }
 
   mapDatasetsPurchased = (datasets) => {
@@ -180,7 +150,7 @@ class ProfileAccordion extends Component {
             )
             : (
               <AccordionDetails>
-                {this.props.appsManaged.Items.length > 0
+                {this.props.appsManaged && this.props.appsManaged.Items.length > 0
                   ? (
                     <Typography style={{ 'padding-left': '20px', 'text-align': 'left' }}>
                       {this.mapAppsManaged(this.props.appsManaged.Items)}
