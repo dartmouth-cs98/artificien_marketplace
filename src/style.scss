@@ -444,6 +444,8 @@ margin: 10px;
 
 .role-button {
   display: flex;
+  margin-left: 50px;
+  margin-right: 50px;
   justify-content: center;
 }
 
@@ -666,4 +668,9 @@ amplify-authenticator{
 
 code {
   font-family: courier, monospace !important;
+}
+
+#host::shadow div{
+  --container-height: 0px;
+  width: 0%;
 }

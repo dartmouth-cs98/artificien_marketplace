@@ -150,7 +150,7 @@ class ProfileAccordion extends Component {
             )
             : (
               <AccordionDetails>
-                {this.props.appsManaged.Items.length > 0
+                {this.props.appsManaged && this.props.appsManaged.Items.length > 0
                   ? (
                     <Typography style={{ 'padding-left': '20px', 'text-align': 'left' }}>
                       {this.mapAppsManaged(this.props.appsManaged.Items)}

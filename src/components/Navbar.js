@@ -41,6 +41,15 @@ class Navbar extends Component {
       });
   }
 
+  // signOut = async () => {
+  //   try {
+  //     console.log('SIGNING OUT');
+  //     await Auth.signOut();
+  //   } catch (error) {
+  //     console.log('error signing out: ', error);
+  //   }
+  // }
+
   renderDev = () => {
     console.log('rendering');
     return (
@@ -64,6 +73,19 @@ class Navbar extends Component {
           <ul className="nav-role-button-ul">
             <li className="role-button">
               {this.props.role !== 2 && <RoleButton />}
+            </li>
+            <li className="signout-button">
+              <button
+                type="button"
+                onClick={() => {
+                  Auth.signOut();
+                  window.location.reload(false);
+                }}
+                variant="outlined"
+                id="signup-signin-button"
+                color="primary"
+              > Signout
+              </button>
             </li>
           </ul>
         </nav>
@@ -96,6 +118,19 @@ class Navbar extends Component {
           <ul className="nav-role-button-ul">
             <li className="role-button">
               {this.props.role !== 2 && <RoleButton />}
+            </li>
+            <li className="signout-button">
+              <button
+                type="button"
+                onClick={() => {
+                  Auth.signOut();
+                  window.location.reload(false);
+                }}
+                variant="outlined"
+                id="signup-signin-button"
+                color="primary"
+              > Signout
+              </button>
             </li>
           </ul>
         </nav>
