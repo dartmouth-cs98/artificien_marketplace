@@ -13,7 +13,6 @@ import { addRole } from '../store/reducers/role-reducer';
 import HomepageAnimation from '../UtilityComponents/HomepageAnimation';
 import ErrorModal from '../UtilityComponents/ErrorModal';
 import welcomePageStyles from '../styles/stylesDict';
-import AuthStateApp from './AuthStateApp';
 
 // welcome variable on homepage
 
@@ -22,8 +21,6 @@ class Welcome extends Component {
     super(props);
 
     this.state = {
-      askedForSignIn: false,
-      askedForSignUp: false,
       faded: 0,
       isSignedIn: false,
     };
@@ -111,23 +108,14 @@ class Welcome extends Component {
   }
 
   renderAuth = () => {
-    console.log('renderauth');
-    if (this.state.askedForSignIn) {
-      return <AuthStateApp signin />;
-    } else if (this.state.askedForSignUp) {
-      return <AuthStateApp signin={false} />;
-    } else {
-      return (
-        <div style={{ display: 'flex', 'justify-content': 'center' }}>
-          <button type="button" onClick={() => this.setState({ askedForSignUp: true })} id="signup-signin-button">Sign In or Create Account</button>
-        </div>
-      );
-    }
+    return (
+      <div style={{ display: 'flex', 'justify-content': 'center' }}>
+        <button type="button" onClick={() => this.props.history.push('/auth')} id="signup-signin-button">Sign In or Create Account</button>
+      </div>
+    );
   }
 
   render() {
-    // this.checkAuth();
-    console.log(this.props.role);
     return (
       <>
         <div className="welcome-body" style={welcomePageStyles[this.state.faded]}>

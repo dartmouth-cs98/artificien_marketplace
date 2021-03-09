@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {
   AmplifySignIn, AmplifySignUp, AmplifyConfirmSignUp, AmplifyAuthenticator,
 } from '@aws-amplify/ui-react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { onAuthUIStateChange, AuthState } from '@aws-amplify/ui-components';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import '../style.scss';
@@ -39,6 +41,7 @@ class AuthStateApp extends Component {
     }
 
     if (this.state.authState === AuthState.SignedIn && this.state.user) {
+      this.props.history.push('/');
       window.location.reload(false);
       return (
         <div>
@@ -100,4 +103,11 @@ class AuthStateApp extends Component {
   }
 }
 
-export default AuthStateApp;
+const mapStateToProps = (state) => {
+  return {
+    role: state.roleReducer.role,
+    open: state.modalReducer.open,
+  };
+};
+
+export default withRouter(connect(mapStateToProps)(AuthStateApp));

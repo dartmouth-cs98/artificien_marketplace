@@ -26,10 +26,7 @@ import AboutUs from './AboutUs';
 import Careers from './Careers';
 import Press from './Press';
 import HowItWorks from './HowItWorks';
-
-// const FallBack = (props) => {
-//   return <div> No Authorized Access to this page! </div>;
-// };
+import AuthPage from './AuthPage';
 
 // CHANGE BACK: models, upload data, create model, profile, tutorials
 function App(props) {
@@ -50,7 +47,7 @@ function App(props) {
           <Route exact path="/careers" component={withAuthorization(Careers, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
           <Route exact path="/press" component={withAuthorization(Press, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
           <Route exact path="/how_it_works" component={withAuthorization(HowItWorks, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-
+          <Route exact path="/auth" component={withAuthorization(AuthPage, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
         </Switch>
         <BottomNav />
       </Router>
