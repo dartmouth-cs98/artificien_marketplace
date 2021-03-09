@@ -16,7 +16,7 @@ class AuthPage extends Component {
     console.log(this.props.role);
     return (
       <>
-        {Number.parseInt(this.props.role, 10) === 2 && <AuthStateApp signin />}
+        {Number.parseInt(this.props.role, 10) === 2 && <AuthStateApp signin={false} />}
         {/* {Number.parseInt(this.props.role, 10) !== 2 && (
         <li className="signout-button">
           <button

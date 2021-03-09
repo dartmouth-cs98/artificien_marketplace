@@ -58,7 +58,7 @@ class AuthStateApp extends Component {
       );
     } else {
       return (
-        <div style={{ color: 'red', margin: '10px' }}>
+        <div style={{ margin: '10px' }}>
           <AmplifyAuthenticator className="amplifyAuth">
             <AmplifySignUp
               slot="sign-up"
