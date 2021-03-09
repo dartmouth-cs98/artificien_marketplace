@@ -148,6 +148,7 @@ class Profile extends Component {
 const mapStateToProps = (state) => {
   return {
     role: state.roleReducer.role,
+    open: state.appReducer.open,
   };
 };
 

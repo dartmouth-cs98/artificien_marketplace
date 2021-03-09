@@ -1,4 +1,5 @@
 export const INCREMENT = 'INCREMENT';
 export const DECREMENT = 'DECREMENT';
 export const ADDROLE = 'ADDROLE';
-export const OPENMODAL = 'OPENMODAL';
+export const OPENERRORMODAL = 'OPENERRORMODAL';
+export const OPENAPPMODAL = 'OPENAPPMODAL';

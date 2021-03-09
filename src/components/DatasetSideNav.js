@@ -18,7 +18,7 @@ class DatasetSideNav extends Component {
     };
   }
 
-  purchaseDataset = async (datasetID, username) => {
+  purchaseDataset = async (datasetID, username, oldNumPurchased) => {
     this.setState({ alreadyPurchased: true });
     this.setState((state) => {
       state.recentlyPurchased.push(datasetID);
@@ -34,13 +34,12 @@ class DatasetSideNav extends Component {
         this.setState({ alreadyPurchased: true });
         if (data.Items[0].datasets_purchased) { // if list exists, append to list
           const datasetsPurchased = data.Items[0].datasets_purchased.L;
-          console.log(datasetsPurchased);
           const datasetsPurchasedNew = [...datasetsPurchased];
           datasetsPurchasedNew.push({ S: datasetID });
-          this.updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S);
+          this.updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S, datasetID, oldNumPurchased);
         } else { // if field doesn't exist (user hasn't purchased yet?), create a new list and add
           const newDatasetsPurchasedList = [{ S: datasetID }];
-          this.updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S);
+          this.updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S, datasetID, oldNumPurchased);
           this.props.alreadyPurchased = true;
           console.log(this.props.content.alreadyPurchased);
         }
@@ -49,8 +48,9 @@ class DatasetSideNav extends Component {
     getUser(callback, username);
   }
 
-  updateDatasetsPurchased = (newDatasetsList, userID) => {
-    const upParams = {
+  updateDatasetsPurchased = (newDatasetsList, userID, datasetID, oldNumPurchased) => {
+    const newNumPurchased = String(Number.parseInt(oldNumPurchased, 10) + 1);
+    const upParamsUser = {
       Key: {
         user_id: {
           S: userID,
@@ -67,7 +67,25 @@ class DatasetSideNav extends Component {
       ReturnValues: 'ALL_NEW',
       TableName: 'user_table',
     };
-    updateItem(upParams);
+    const upParamsDataset = {
+      Key: {
+        dataset_id: {
+          S: datasetID,
+        },
+      },
+      AttributeUpdates: {
+        numPurchases: {
+          Action: 'PUT',
+          Value: {
+            N: newNumPurchased,
+          },
+        },
+      },
+      ReturnValues: 'ALL_NEW',
+      TableName: 'dataset_table',
+    };
+    updateItem(upParamsUser);
+    updateItem(upParamsDataset);
   }
 
   // make a seperate render for the purchase button!
@@ -80,7 +98,7 @@ class DatasetSideNav extends Component {
       return (
         <button type="button"
           className="data-card-button"
-          onClick={() => this.purchaseDataset(this.props.content.dataset_id.S, this.props.currentUser)}
+          onClick={() => this.purchaseDataset(this.props.content.dataset_id.S, this.props.currentUser, this.props.content.numPurchases.N)}
         >Purchase This Dataset
         </button>
       );

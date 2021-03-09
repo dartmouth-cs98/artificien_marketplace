@@ -11,7 +11,7 @@ import {
 import { addRole } from '../store/reducers/role-reducer';
 // import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import HomepageAnimation from '../UtilityComponents/HomepageAnimation';
-import ErrorModal from '../UtilityComponents/Modal';
+import ErrorModal from '../UtilityComponents/ErrorModal';
 import welcomePageStyles from '../styles/stylesDict';
 import AuthStateApp from './AuthStateApp';
 

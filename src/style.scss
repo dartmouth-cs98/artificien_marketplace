@@ -670,7 +670,16 @@ code {
   font-family: courier, monospace !important;
 }
 
-#host::shadow div{
-  --container-height: 0px;
-  width: 0%;
+.app-modal-description {
+  // text-align: left;
+  margin-left: 33%;
+  margin-right: 33%;
+}
+
+.artificien-modal {
+  background-image: url('img/NavbarLogo.png');
+  background-repeat: no-repeat;
+  height: 100px;
+  width: 100%;
+  background-position: center;
 }

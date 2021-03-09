@@ -346,6 +346,7 @@ export async function putDataset(callback, app, category, appURL, attributes, at
       attributeTypes: { L: attributeTypes },
       attributeRangeMins: { L: attributeRangeMins },
       attributeRangeMaxes: { L: attributeRangeMaxes },
+      numPurchases: { N: 0 },
     },
     TableName: 'dataset_table',
     ReturnConsumedCapacity: 'TOTAL',

@@ -79,15 +79,9 @@ class UploadData extends Component {
   // if you are changing to a type AND it is either from none OR it is none of the existing types (i.e. it hasn't been made yet!)
   addAttributeType = (event, i) => {
     if (!(event.target.value === '')) {
-      console.log(event.target.value);
-      console.log(this.state.attributeTypeSubmitted);
       // if you are changing the value back to none!
       // if this exists even
       if (this.state.attributeTypeDict[i]) {
-        console.log('exists');
-        console.log(event.target.value);
-        console.log(this.state.attributeTypeDict[i].S);
-        console.log(this.state.readyForRangesButton);
         if (event.target.value === 'O' && !(event.target.value === this.state.attributeTypeDict[i].S)) {
           // this.setState({
           // attributeTypeDict: update(this.state.ttributeTypeDict, { i: event.target.value }),
@@ -97,15 +91,11 @@ class UploadData extends Component {
             return { attributeTypeSubmitted: state.attributeTypeSubmitted - 1 };
           });
           // this.setState({ attributeTypeSubmitted: this.state.attributeTypeSubmitted - 1 });
-          console.log(this.state.attributeTypeSubmitted);
-          console.log('decrementing counter');
         } else if (!(event.target.value === 'O') && (this.state.attributeTypeDict[i].S === 'O')) {
           this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
           this.setState((state) => {
             return { attributeTypeSubmitted: state.attributeTypeSubmitted + 1 };
           });
-          console.log(this.state.attributeTypeSubmitted);
-          console.log('incrementing counter');
         }
       } else {
         console.log('not exists');
@@ -114,8 +104,6 @@ class UploadData extends Component {
           this.setState((state) => {
             return { attributeTypeSubmitted: state.attributeTypeSubmitted + 1 };
           });
-          console.log('incrementing counter on new input');
-          console.log(this.state.attributeTypeSubmitted);
         } else {
           this.state.attributeTypeDict[i] = { S: event.target.value }; // { indexOfInput : Type }
         }
@@ -141,10 +129,7 @@ class UploadData extends Component {
       for (let i = 0; i < numNumberAttributes; i += 1) {
         const supposedMin = this.state.attributeRangeMins[i];
         const supposedMax = this.state.attributeRangeMaxes[i];
-        console.log('Min');
-        console.log(supposedMin);
         if (Number.parseInt(supposedMin.S, 10) > Number.parseInt(supposedMax.S, 10)) {
-          console.log('swap min and max');
           this.state.attributeRangeMins[i] = supposedMax;
           this.state.attributeRangeMaxes[i] = supposedMin;
         }
@@ -164,8 +149,6 @@ class UploadData extends Component {
   // get range list
   buildAttributeRangeLists = () => {
     for (let i = 0; i < Object.keys(this.state.attributeRangeMinDict).length; i += 1) {
-      console.log('building: //');
-      console.log(this.state.attributeRangeMinDict[i]);
       this.state.attributeRangeMins.push(this.state.attributeRangeMinDict[i]);
       this.state.attributeRangeMaxes.push(this.state.attributeRangeMaxDict[i]);
     }
@@ -183,9 +166,6 @@ class UploadData extends Component {
     this.buildAttributeNameAndTypeLists();
     this.buildAttributeRangeLists();
     this.checkValidRanges();
-
-    console.log('names');
-    console.log(this.state.attributeNameList);
 
     // including the app url
     putDataset(callback, this.state.appName,
@@ -225,8 +205,6 @@ class UploadData extends Component {
     this.setState({ readyForRangesButton: false });
     this.setState({ addAttributeForms: true });
     this.setState({ finalRangesEntered: false });
-    console.log('put!');
-    // window.location.reload(false);
   }
 
   // change app specified num users, make sure it is an apple app store URL and not some junk

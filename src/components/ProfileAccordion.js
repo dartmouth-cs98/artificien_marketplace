@@ -12,6 +12,8 @@ import { connect } from 'react-redux';
 import {
   getUser,
 } from '../database/databaseCalls';
+import { openAppModal } from '../store/reducers/app-reducer';
+import AppModal from '../UtilityComponents/AppModal';
 
 const artificienTheme = createMuiTheme({
   typography: {
@@ -42,6 +44,7 @@ class ProfileAccordion extends Component {
     this.state = {
       expanded: false,
       currentAPIkey: null,
+      clickedDataset: null,
     };
   }
 
@@ -66,12 +69,24 @@ class ProfileAccordion extends Component {
     return <div>{datasetList}</div>;
   }
 
+  showAppSummary = (dataset) => {
+    this.setState({ clickedDataset: dataset });
+    this.props.openAppModal(true);
+    console.log('work with this:');
+    console.log(dataset);
+  }
+
   mapAppsManaged = (datasets) => {
     // we're gonna loop over a list of dataset objects (from dynamo datasets table)
     // each of these datasets has an app field
     // we want to return the app
     const appList = datasets.map((dataset) => {
-      return <Typography>{dataset.app.S}</Typography>;
+      return (
+        <div style={{ display: 'flex', 'justify-content': 'space-evenly' }}>
+          <Typography>{dataset.app.S}</Typography>
+          <button type="button" style={{ 'margin-left': '20px' }} onClick={() => this.showAppSummary(dataset)}>Learn More</button>
+        </div>
+      );
     });
     return <div>{appList}</div>;
   }
@@ -185,6 +200,7 @@ class ProfileAccordion extends Component {
           </AccordionDetails>
         </Accordion>
         )}
+        <AppModal open={this.props.open} dataset={this.state.clickedDataset} />
       </div>
     );
   }
@@ -193,7 +209,8 @@ class ProfileAccordion extends Component {
 const mapStateToProps = (state) => {
   return {
     role: state.roleReducer.role,
+    open: state.appReducer.open,
   };
 };
 
-export default connect(mapStateToProps)(withStyles(useStyles(artificienTheme))(ProfileAccordion));
+export default connect(mapStateToProps, { openAppModal })(withStyles(useStyles(artificienTheme))(ProfileAccordion));
