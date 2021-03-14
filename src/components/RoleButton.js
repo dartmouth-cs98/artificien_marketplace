@@ -28,7 +28,7 @@ class RoleButton extends Component {
           } else {
             console.log('switch role: ');
             console.log(successData.Items[0].role.S);
-            const switchStartState = !!(successData.Items[0].role.S);
+            const switchStartState = !(successData.Items[0].role.S);
             this.setState({ checkedC: !switchStartState }); // switch starts as whatever role they have in DB (optional)
           }
         };
