@@ -1,15 +1,15 @@
-import { OPENMODAL } from '../actionTypes';
+import { OPENERRORMODAL } from '../actionTypes';
 
 export function openModal(pay) {
   return {
-    type: OPENMODAL,
+    type: OPENERRORMODAL,
     payload: pay,
   };
 }
 
 const modalReducer = (state = { open: false }, action) => {
   switch (action.type) {
-    case OPENMODAL:
+    case OPENERRORMODAL:
       return {
         ...state,
         open: action.payload,
