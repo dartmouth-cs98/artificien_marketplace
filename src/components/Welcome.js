@@ -10,9 +10,12 @@ import {
 } from '../database/databaseCalls';
 import { addRole } from '../store/reducers/role-reducer';
 // import LoadingScreen from '../UtilityComponents/LoadingScreen';
-import HomepageAnimation from '../UtilityComponents/HomepageAnimation';
-import ErrorModal from '../UtilityComponents/ErrorModal';
-import welcomePageStyles from '../styles/stylesDict';
+// import HomepageAnimation from '../UtilityComponents/HomepageAnimation';
+// import ErrorModal from '../UtilityComponents/Modal';
+// import welcomePageStyles from '../styles/stylesDict';
+// import AuthStateApp from './AuthStateApp';
+import HeroImg from '../img/hero-img.png';
+import AppScreenshot from '../img/LoginPage.png';
 
 // welcome variable on homepage
 
@@ -21,7 +24,7 @@ class Welcome extends Component {
     super(props);
 
     this.state = {
-      faded: 0,
+      // faded: 0,
       isSignedIn: false,
     };
   }
@@ -117,7 +120,7 @@ class Welcome extends Component {
   render() {
     return (
       <>
-        <div className="welcome-body" style={welcomePageStyles[this.state.faded]}>
+        {/* <div className="welcome-body" style={welcomePageStyles[this.state.faded]}>
           <h1>Distributed data, democratized.</h1>
           <p>
             <i>
@@ -129,7 +132,66 @@ class Welcome extends Component {
         </div>
         {this.props.role === 2 && this.renderAuth()}
         <div style={{ 'margin-top': '100px' }}><HomepageAnimation /></div>
-        <ErrorModal open={this.props.open} />
+        <ErrorModal open={this.props.open} /> */}
+        <section id="hero" className="hero d-flex align-items-center">
+
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-6 d-flex flex-column justify-content-center left-align-text">
+                <h1 data-aos="fade-up">Distributed data, democratized</h1>
+                <h2 data-aos="fade-up" data-aos-delay="400">
+                  The world&#39;s first federated learning marketplace, allowing data analysts to train models on
+                  public application data without compromising user privacy.
+                </h2>
+                <div data-aos="fade-up" data-aos-delay="600">
+                  <div className="text-center text-lg-start">
+                    <a href="#about" className="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
+                      <span>Get Started</span>
+                      <i className="bi bi-arrow-right" />
+                    </a>
+                  </div>
+                  {this.props.role === 2 && this.renderAuth()}
+                </div>
+              </div>
+              <div className="col-lg-6" data-aos="zoom-out" data-aos-delay="200">
+                {/* <HomepageAnimation /> */}
+                <img src={HeroImg} className="img-fluid" alt="" />
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <section id="about" className="about">
+
+          <div className="container" data-aos="fade-up">
+            <div className="row gx-0">
+
+              <div className="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+                <div className="content">
+                  <h3>Who We Are</h3>
+                  <h2>Expedita voluptas omnis cupiditate totam eveniet nobis sint iste. Dolores est repellat corrupti reprehenderit.</h2>
+                  <p>
+                    Quisquam vel ut sint cum eos hic dolores aperiam. Sed deserunt et. Inventore et et dolor consequatur
+                    itaque ut voluptate sed et. Magnam nam ipsum tenetur suscipit voluptatum nam et est corrupti.
+                  </p>
+                  <div className="text-center text-lg-start">
+                    <a href="/" className="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
+                      <span>Read More</span>
+                      <i className="bi bi-arrow-right" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
+                <img src={AppScreenshot} className="img-fluid" alt="" />
+              </div>
+
+            </div>
+          </div>
+
+        </section>
       </>
     );
   }

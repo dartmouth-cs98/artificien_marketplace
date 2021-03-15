@@ -10,7 +10,7 @@ import {
 
 // import { withAuthenticator } from '@aws-amplify/ui-react';
 
-import BottomNav from './BottomNav';
+// import BottomNav from './BottomNav';
 import Marketplace from './Marketplace';
 import Models from './Models';
 import UploadData from './UploadData';
@@ -49,7 +49,7 @@ function App(props) {
           <Route exact path="/how_it_works" component={withAuthorization(HowItWorks, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
           <Route exact path="/auth" component={withAuthorization(AuthPage, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
         </Switch>
-        <BottomNav />
+        {/* <BottomNav /> */}
       </Router>
     </>
   );
