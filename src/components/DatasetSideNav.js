@@ -18,7 +18,7 @@ class DatasetSideNav extends Component {
     };
   }
 
-  purchaseDataset = async (datasetID, username, oldNumPurchased) => {
+  purchaseDataset = async (datasetID, username, oldNumPurchases) => {
     this.setState({ alreadyPurchased: true });
     this.setState((state) => {
       state.recentlyPurchased.push(datasetID);
@@ -36,10 +36,10 @@ class DatasetSideNav extends Component {
           const datasetsPurchased = data.Items[0].datasets_purchased.L;
           const datasetsPurchasedNew = [...datasetsPurchased];
           datasetsPurchasedNew.push({ S: datasetID });
-          this.updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S, datasetID, oldNumPurchased);
+          this.updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S, datasetID, oldNumPurchases);
         } else { // if field doesn't exist (user hasn't purchased yet?), create a new list and add
           const newDatasetsPurchasedList = [{ S: datasetID }];
-          this.updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S, datasetID, oldNumPurchased);
+          this.updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S, datasetID, oldNumPurchases);
           this.props.alreadyPurchased = true;
           console.log(this.props.content.alreadyPurchased);
         }
@@ -48,8 +48,8 @@ class DatasetSideNav extends Component {
     getUser(callback, username);
   }
 
-  updateDatasetsPurchased = (newDatasetsList, userID, datasetID, oldNumPurchased) => {
-    const newNumPurchased = String(Number.parseInt(oldNumPurchased, 10) + 1);
+  updateDatasetsPurchased = (newDatasetsList, userID, datasetID, oldNumPurchases) => {
+    const newNumPurchases = String(Number.parseInt(oldNumPurchases, 10) + 1);
     const upParamsUser = {
       Key: {
         user_id: {
@@ -77,7 +77,7 @@ class DatasetSideNav extends Component {
         numPurchases: {
           Action: 'PUT',
           Value: {
-            N: newNumPurchased,
+            N: newNumPurchases,
           },
         },
       },

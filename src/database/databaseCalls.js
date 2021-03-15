@@ -123,7 +123,7 @@ export function getApp(callback, PK) {
   });
 }
 
-export function getDataset(callback, PK) {
+export async function getDataset(callback, PK) {
   const getParams = {
     Key: { dataset_id: { S: PK } },
     TableName: 'dataset_table',
@@ -333,7 +333,7 @@ export async function putModel(callback, PK, owner) {
 }
 
 // switched app to be datset_id as placeholder
-export async function putDataset(callback, app, category, appURL, attributes, attributeTypes, attributeRangeMins, attributeRangeMaxes) {
+export async function putDataset(callback, app, category, appURL, attributes, attributeTypes, attributeRangeMins, attributeRangeMaxes, attributeDescriptions, owner) {
   const putParams = {
     Item: {
       dataset_id: { S: app },
@@ -346,7 +346,9 @@ export async function putDataset(callback, app, category, appURL, attributes, at
       attributeTypes: { L: attributeTypes },
       attributeRangeMins: { L: attributeRangeMins },
       attributeRangeMaxes: { L: attributeRangeMaxes },
-      numPurchases: { N: 0 },
+      attributeDescriptions: { L: attributeDescriptions },
+      numPurchases: { N: '0' },
+      owner_username: { S: owner },
     },
     TableName: 'dataset_table',
     ReturnConsumedCapacity: 'TOTAL',
@@ -406,6 +408,7 @@ export function queryDatasetsOwner(callback, PK) {
       console.log(err, err.stack);
       callback(err);
     } else {
+      console.log(data);
       callback(data);
     }
   });
@@ -437,7 +440,7 @@ export function queryDatasetsMount(callback) {
     IndexName: 'placeholder-num_devices-index',
     ScanIndexForward: false,
     ExpressionAttributeValues: { ':partitionKeyVal': { S: 'placeholder' } },
-    KeyConditionExpression: 'placeholder = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
+    KeyConditionExpression: 'placeholder = :partitionKeyVal',
     TableName: 'dataset_table',
   };
 

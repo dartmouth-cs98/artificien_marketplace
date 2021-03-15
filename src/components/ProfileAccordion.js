@@ -1,3 +1,6 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable guard-for-in */
+/* eslint-disable react/sort-comp */
 /* eslint-disable no-template-curly-in-string */
 /* eslint-disable func-names */
 /* eslint-disable no-unused-expressions */
@@ -10,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { connect } from 'react-redux';
 import {
-  getUser,
+  getUser, getDataset,
 } from '../database/databaseCalls';
 import { openAppModal } from '../store/reducers/app-reducer';
 import AppModal from '../UtilityComponents/AppModal';
@@ -45,6 +48,8 @@ class ProfileAccordion extends Component {
       expanded: false,
       currentAPIkey: null,
       clickedDataset: null,
+      purchasedDatasets: [],
+      gatheringPurchases: false,
     };
   }
 
@@ -72,7 +77,6 @@ class ProfileAccordion extends Component {
   showAppSummary = (dataset) => {
     this.setState({ clickedDataset: dataset });
     this.props.openAppModal(true);
-    console.log('work with this:');
     console.log(dataset);
   }
 
@@ -81,6 +85,53 @@ class ProfileAccordion extends Component {
     // each of these datasets has an app field
     // we want to return the app
     const appList = datasets.map((dataset) => {
+      console.log(dataset);
+      return (
+        <div style={{ display: 'flex', 'justify-content': 'space-evenly' }}>
+          <Typography>{dataset.app.S}</Typography>
+          <button type="button" style={{ 'margin-left': '20px' }} onClick={() => this.showAppSummary(dataset)}>Learn More</button>
+        </div>
+      );
+    });
+    return <div>{appList}</div>;
+  }
+
+  async setPurchasedDatasetsState(datasetNames) {
+    this.setState({ gatheringPurchases: true });
+    console.log('setting state');
+    console.log(datasetNames);
+    if (datasetNames.length > 0) {
+      for (let i = 0; i < datasetNames.length; i += 1) {
+        console.log(datasetNames[i]);
+        const stringName = datasetNames[i].S;
+        const callback = (data, error) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log(data);
+            this.setState((state) => {
+              state.purchasedDatasets.push(data.Item);
+              return {
+                ...state,
+              };
+            });
+          }
+        };
+        getDataset(callback, stringName);
+      }
+    }
+  }
+
+  makeDatasetsPurchasedCard = () => {
+    if (this.state.purchasedDatasets.length === 0) {
+      console.log('no datasets');
+      return null;
+    }
+
+    console.log('datasets!');
+
+    const appList = this.state.purchasedDatasets.map((dataset) => {
+      console.log(dataset);
       return (
         <div style={{ display: 'flex', 'justify-content': 'space-evenly' }}>
           <Typography>{dataset.app.S}</Typography>
@@ -93,6 +144,7 @@ class ProfileAccordion extends Component {
 
   render() {
     const classes = this.props;
+    if (this.props.content.datasets_purchased && !this.state.gatheringPurchases) this.setPurchasedDatasetsState(this.props.content.datasets_purchased.L);
 
     const handleChange = (panel) => (event, isExpanded) => {
       isExpanded ? this.setState({ expanded: panel }) : this.setState({ expanded: false }); // new state manager//
@@ -157,7 +209,7 @@ class ProfileAccordion extends Component {
                 {this.props.content.datasets_purchased
                   ? (
                     <Typography style={{ 'padding-left': '20px', 'text-align': 'left' }}>
-                      {this.mapDatasetsPurchased(this.props.content.datasets_purchased.L)}
+                      {this.makeDatasetsPurchasedCard()}
                     </Typography>
                   )
                   : <p>You havent purchased any datasets yet!</p>}
