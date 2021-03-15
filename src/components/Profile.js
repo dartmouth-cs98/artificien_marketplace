@@ -119,8 +119,11 @@ class Profile extends Component {
   renderDevMetricsCards = () => {
     const metricCards = [];
     console.log(this.state.devMetricsDict);
-    if (!this.state.devMetricsDict.userDatasets) return null;
-    metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Running" body="bingo bongo" username={this.state.userData.username.S} />);
+    if (!this.state.devMetricsDict.userDatasets) {
+      metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Running" body={0} username={this.state.userData.username.S} />);
+    } else {
+      metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Running" body={this.state.devMetricsDict.userDatasets.length} username={this.state.userData.username.S} />);
+    }
     return metricCards;
   }
 

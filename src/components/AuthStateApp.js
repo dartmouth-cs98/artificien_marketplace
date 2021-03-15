@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import {
-  AmplifySignIn, AmplifySignUp, AmplifyConfirmSignUp, AmplifyAuthenticator,
+  AmplifySignUp, AmplifyConfirmSignUp, AmplifyAuthenticator,
 } from '@aws-amplify/ui-react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { onAuthUIStateChange, AuthState } from '@aws-amplify/ui-components';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import '../style.scss';
@@ -39,6 +41,7 @@ class AuthStateApp extends Component {
     }
 
     if (this.state.authState === AuthState.SignedIn && this.state.user) {
+      this.props.history.push('/');
       window.location.reload(false);
       return (
         <div>
@@ -47,57 +50,22 @@ class AuthStateApp extends Component {
         </div>
       );
     }
-    if (this.props.signin) {
-      return (
-        <div style={{ color: 'red', margin: '10px' }}>
-          <AmplifySignIn slot="sign-in" usernameAlias="email" />
-        </div>
-      );
-    } else {
-      return (
-        <div style={{ color: 'red', margin: '10px' }}>
-          <AmplifyAuthenticator className="amplifyAuth">
-            <AmplifySignUp
-              slot="sign-up"
-              formFields={[
-                {
-                  type: 'username',
-                  label: 'username',
-                  placeholder: '',
-                  required: true,
-                },
-                {
-                  type: 'password',
-                  label: 'Password (must be 8 characters)',
-                  placeholder: '*************',
-                  required: true,
-                },
-                {
-                  type: 'email',
-                  label: 'email',
-                  placeholder: 'xxxxxxx@yyyyy.com',
-                  required: true,
-                },
-                {
-                  type: 'phone_number',
-                  label: 'phone number',
-                  placeholder: '(000)000-0000',
-                  required: true,
-                },
-                {
-                  type: 'custom:Role',
-                  label: 'Role',
-                  placeholder: ' \'0\' for client or \'1\' for developer',
-                  required: true,
-                },
-              ]}
-            />
-            <AmplifyConfirmSignUp />
-          </AmplifyAuthenticator>
-        </div>
-      );
-    }
+    return (
+      <div style={{ margin: '10px' }}>
+        <AmplifyAuthenticator className="amplifyAuth">
+          <AmplifySignUp />
+          <AmplifyConfirmSignUp />
+        </AmplifyAuthenticator>
+      </div>
+    );
   }
 }
 
-export default AuthStateApp;
+const mapStateToProps = (state) => {
+  return {
+    role: state.roleReducer.role,
+    open: state.modalReducer.open,
+  };
+};
+
+export default withRouter(connect(mapStateToProps)(AuthStateApp));

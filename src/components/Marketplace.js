@@ -50,7 +50,8 @@ class Marketplace extends Component {
       if (error) {
         console.log(error);
       } else {
-        this.setState({ allDatasets: data }); // display all datasets in db as catalog
+        const approvedDatasets = data.Items.filter((dataset) => dataset.properlySetUp && dataset.properlySetUp.BOOL === true);
+        this.setState({ allDatasets: approvedDatasets }); // display all datasets in db as catalog
       }
     };
     queryDatasetsMount(callbackMount);
@@ -94,12 +95,12 @@ class Marketplace extends Component {
   };
 
   mountDisplayDatasets = () => {
-    if (!this.state.allDatasets) {
-      return 'No datasets found in category';
+    if (!this.state.allDatasets || this.state.allDatasets.length === 0) {
+      return null;
     }
 
     // for array
-    const renderedDatasets = this.state.allDatasets.Items.map((dataset) => { // make a card for all datasets
+    const renderedDatasets = this.state.allDatasets.map((dataset) => { // make a card for all datasets
       return (
         <DataLibraryCard
           key={Math.random()}
@@ -123,11 +124,11 @@ class Marketplace extends Component {
   getDisplayDataset = () => {
     if (this.state.clickedDataset) {
       let toDisplayTemp = null;
-      for (let i = 0; i < this.state.allDatasets.Items.length; i += 1) {
+      for (let i = 0; i < this.state.allDatasets.length; i += 1) {
         if (
-          this.state.allDatasets.Items[i].dataset_id.S === this.state.clickedDataset // iterating over all datasets, we've found the currently-clicked-on dataset
+          this.state.allDatasets[i].dataset_id.S === this.state.clickedDataset // iterating over all datasets, we've found the currently-clicked-on dataset
         ) {
-          toDisplayTemp = this.state.allDatasets.Items[i];
+          toDisplayTemp = this.state.allDatasets[i];
           this.setState({ toDisplayDataset: toDisplayTemp });
           this.setState({ clickedDataset: null });
         }
@@ -180,7 +181,7 @@ class Marketplace extends Component {
       return <LoadingScreen />;
     }
     // make cards for datasets in category by sort
-    const renderedDatasets = this.state.inCategory.Items.map((dataset) => {
+    const renderedDatasets = this.state.inCategory.map((dataset) => {
       if (dataset.category.S === this.state.sortedCategory) {
         return (
           <DataLibraryCard
@@ -279,7 +280,7 @@ class Marketplace extends Component {
 
   renderSearchTermDatasets = () => {
     const searchTerm = this.state.finalizedSearchTerm;
-    const allMatchingDatasets = this.state.allDatasets.Items.reduce((finalDatasets, dataset) => {
+    const allMatchingDatasets = this.state.allDatasets.reduce((finalDatasets, dataset) => {
       if (dataset.app.S.toLowerCase().includes(searchTerm.toLowerCase())) {
         finalDatasets.push(
           <DataLibraryCard
@@ -305,11 +306,12 @@ class Marketplace extends Component {
 
   // get all unique categories for all datasets available
   renderUniqueCategories = () => {
-    if (!this.state.allDatasets) {
+    console.log(this.state.allDatasets);
+    if (!this.state.allDatasets || this.state.allDatasets.length === 0) {
       return 'No datasets found';
     }
 
-    const allCategories = this.state.allDatasets.Items.map((dataset) => {
+    const allCategories = this.state.allDatasets.map((dataset) => {
       return dataset.category.S;
     });
 
