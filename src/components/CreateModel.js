@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../style.scss';
 
 /*
-Simple component that links to user-specific jupyterhub instance
+UPDATE - we decided not to use this, pretty self-explanaotry why. Realized we could direct to the Jupyter directly from the 'create model +' button
 */
 
 class CreateModel extends Component {

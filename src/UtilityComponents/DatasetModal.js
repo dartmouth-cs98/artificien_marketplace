@@ -129,7 +129,7 @@ class DatasetModal extends Component {
         attributeList.push(
           <div style={{ display: 'flex', 'justify-content': 'space-evenly', 'margin-top': '5px' }}>
             <p style={{ width: '15%' }}><strong>{attrName}</strong></p>
-            <p style={{ width: '15%' }}>Number</p>
+            <p style={{ width: '15%' }}>Float</p>
             <p style={{ width: '40%' }}>{attrDes}</p>
           </div>,
         );

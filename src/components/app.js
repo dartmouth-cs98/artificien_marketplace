@@ -30,7 +30,6 @@ import UserGuide from './UserGuide';
 import AuthPage from './AuthPage';
 import BottomNav from './BottomNav';
 
-// CHANGE BACK: models, upload data, create model, profile, tutorials
 function App(props) {
   return (
     <>
