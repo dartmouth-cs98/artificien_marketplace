@@ -52,11 +52,11 @@ class RoleButton extends Component {
     console.log('switch render');
     return (
       <Grid component="label" container alignItems="center" spacing={1}>
-        <Grid item>Client</Grid>
+        <Grid item>Data Scientist</Grid>
         <Grid item>
           <AntSwitch checked={this.state.checkedC} onChange={this.handleChange} name="checkedC" />
         </Grid>
-        <Grid item>Dev</Grid>
+        <Grid item>App Developer</Grid>
       </Grid>
     );
   }

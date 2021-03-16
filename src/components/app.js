@@ -27,6 +27,7 @@ import Careers from './Careers';
 import Press from './Press';
 import HowItWorks from './HowItWorks';
 import AuthPage from './AuthPage';
+import BottomNav from './BottomNav';
 
 // CHANGE BACK: models, upload data, create model, profile, tutorials
 function App(props) {
@@ -49,7 +50,7 @@ function App(props) {
           <Route exact path="/how_it_works" component={withAuthorization(HowItWorks, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
           <Route exact path="/auth" component={withAuthorization(AuthPage, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
         </Switch>
-        {/* <BottomNav /> */}
+        <BottomNav />
       </Router>
     </>
   );
