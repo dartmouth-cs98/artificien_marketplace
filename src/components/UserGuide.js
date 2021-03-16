@@ -6,14 +6,10 @@ import React, { Component } from 'react';
 import '../style.scss';
 // import DocumentationDrawer from './DocumentationDrawer';
 import { NavLink, withRouter } from 'react-router-dom';
-import { CopyBlock, dracula } from 'react-code-blocks';
+// import { CopyBlock, dracula } from 'react-code-blocks';
 import { connect } from 'react-redux';
 // import BottomNav from './BottomNav';
 // import PersistentDrawerLeft from './PersistentDrawerLeft';
-import enableBackgroundTasksImage from '../img/documentation/EnableBackgroundTasks.png';
-import configureArtificienImage from '../img/documentation/ConfigureArtificienPlist.png';
-import configureInfoImage from '../img/documentation/ConfigureInfoPlist.png';
-import registerTaskIDImage from '../img/documentation/RegisterATaskID.png';
 
 class UserGuide extends Component {
   constructor(props) {
@@ -27,378 +23,286 @@ class UserGuide extends Component {
   }
 
   renderUserGuide = () => {
-    const podfileCode =
-
-`# Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
-
-target 'Sample-App' do
-  # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for Sample-App
-  pod 'Artificien', :git => 'https://github.com/dartmouth-cs98/artificien_ios_library.git'
-  ...
-
-end`;
-
-    const registerBackgroundTask =
-
-`// Override point for customization after application launch.
-BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.artificien.background", using: DispatchQueue.global()) { task in
-
-    let artificien = Artificien(chargeDetection: true, wifiDetection: true)
-    self.executeSyftJob(backgroundTask: task)
-
-    let trainingDictionary = prepareTrainingDictionary() // Write this yourself
-    let validationDictionary = prepareValidationDictionary() // Write this yourself
-    artificien.train(trainingData: trainingDictionary, validationData: validationDictionary, backgroundTask: task)
-
-}`;
-
-    const processingTaskRequest =
-
-`do {
-    let processingTaskRequest = BGProcessingTaskRequest(identifier: "com.artificien.background")
-    processingTaskRequest.requiresExternalPower = true
-    processingTaskRequest.requiresNetworkConnectivity = true
-    try BGTaskScheduler.shared.submit(processingTaskRequest)
-} catch {
-    print(error.localizedDescription)
-}`;
-
-    const appDelegate =
-
-`import Artificien
-
-...
-
-func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-    ...
-
-    // Override point for customization after application launch.
-    BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.artificien.background", using: DispatchQueue.global()) { task in
-                    
-        let artificien = Artificien()
-        self.executeSyftJob(backgroundTask: task)
-                    
-        artificien.train(trainingData: trainDict, validationData: valDict, backgroundTask: task)
-
-    }
-
-    do {
-        let processingTaskRequest = BGProcessingTaskRequest(identifier: "com.artificien.background")
-        processingTaskRequest.requiresExternalPower = true
-        processingTaskRequest.requiresNetworkConnectivity = true
-        try BGTaskScheduler.shared.submit(processingTaskRequest)
-    } catch {
-        print(error.localizedDescription)
-    }
-
-    ...
-
-    return true
-}`;
-
     return (
       <div>
         <h1> User Guide </h1>
         <div>
           <div className="documentationSidebar">
             <strong><a href="#introduction">Introduction</a></strong>
-            <strong><a href="#setup">Setup</a></strong>
-            <a href="#installCocoapods">&nbsp;&nbsp;&nbsp;&nbsp;Install CocoaPods</a>
-            <a href="#installArtificien">&nbsp;&nbsp;&nbsp;&nbsp;Install the Artificien Pod</a>
-            <a href="#enableBackground">&nbsp;&nbsp;&nbsp;&nbsp;Enable background tasks</a>
-            <a href="#registerBackgroundID">&nbsp;&nbsp;&nbsp;&nbsp;Register a task ID</a>
-            <a href="#configureInfo">&nbsp;&nbsp;&nbsp;&nbsp;Configure Info.plist</a>
-            <a href="#configureArtificien">&nbsp;&nbsp;&nbsp;&nbsp;Configure Artificien.plist</a>
-            <strong><a href="#usage">Usage</a></strong>
-            <a href="#importArtificien">&nbsp;&nbsp;&nbsp;&nbsp;Import Artificien</a>
-            <a href="#scheduleTraining">&nbsp;&nbsp;&nbsp;&nbsp;Schedule training</a>
-            <a href="#dataPreparation">&nbsp;&nbsp;&nbsp;&nbsp;Write data prep functions</a>
+            <a href="#what-is-artificien">&nbsp;&nbsp;&nbsp;&nbsp;What is Artificien?</a>
+            <a href="#basic-app-developer-process">&nbsp;&nbsp;&nbsp;&nbsp;Basic App Developer Process</a>
+            <a href="#basic-data-scientist-process">&nbsp;&nbsp;&nbsp;&nbsp;Basic Data Scientist Process</a>
+            <strong><a href="#app-developers">App Developers</a></strong>
+            <a href="#register-your-app">&nbsp;&nbsp;&nbsp;&nbsp;1. Register Your App</a>
+            <a href="#integrate-our-code">&nbsp;&nbsp;&nbsp;&nbsp;2. Integrate Our Code</a>
+            <a href="#monitor-your-profile">&nbsp;&nbsp;&nbsp;&nbsp;3. Monitor Your Profile</a>
+            <strong><a href="#data-scientists">Data Scientists</a></strong>
+            <a href="#purchase-a-dataset">&nbsp;&nbsp;&nbsp;&nbsp;1. Purchase a Dataset</a>
+            <a href="#create-and-deploy-your-model">&nbsp;&nbsp;&nbsp;&nbsp;2. Create Your Model</a>
+            <a href="#monitor-and-download-your-model">&nbsp;&nbsp;&nbsp;&nbsp;3. Monitor Your Model</a>
+            <strong><a href="#next-steps">Next Steps</a></strong>
           </div>
           <div className="documentation">
-
             <h2 id="introduction">Introduction</h2>
             <p>
-              This documentation outlines how to integrate your existing iOS app with Artificien's on-device training.
-              Before you do this, please fill out <NavLink to="/upload_data">the form here</NavLink> to register your
-              app and describe its data. You can also read our <NavLink to="/how_it_works">How It Works</NavLink> page
-              to understand how your app fits into the Artificien ecosystem.
-            </p>
-            <p>
-              Integrating Artificien's on-device training with your existing iOS app is extremely simple. At a high level,
-              it consists of 2 steps: setting up the Artificien CocoaPod and passing your data to Artificien's training
-              function through a background task. We'll show you how to do both below, in under 10 minutes.
-            </p>
-            <p>
-              Following the below instructions closely is absolutely essential in order to make your app's data available
-              on the Artificien platform. Please reach out if you have any questions, comments, or concerns about this material.
-            </p>
-            <p>
-              <strong>Note:</strong> Artificien is distributed through the CocoaPods framework and is thus only compatible with Swift
-              and Objective-C Cocoa projects (in other words, native Swift apps built within Xcode). It cannot be used with
-              any Android-compatible or ReactNative applications.
+              This article serves as a step-by-step user guide explaining the different parts and pages of the
+              Artificien web platform. The following will cover the entire flow for both app developers and data
+              scientists from sign up to finish. For instructions on coding with and implementing our Python and
+              Swift libraries, refer to
+              the <NavLink to="/app_developer_documentation">App Developer Documentation</NavLink> and
+              the <NavLink to="/data_scientist_documentation">Data Scientist Documentation</NavLink>.
             </p>
 
-            <h2 id="setup">Setup</h2>
+            <h3 id="what-is-artificien">What is Artificien?</h3>
             <p>
-              Artificien's training functions are accessible through the Artificien CocoaPod. If your iOS app already uses
-              CocoaPods, jump straight to <a href="#installArtificien">installing the Artificien pod</a>. Otherwise, start
-              directly below.
+              At a high level, Artificien is a marketplace like any other. App developers can supply access to the data
+              their users generate and data scientists can purchase that data and train machine learning models on it.
+              Artificien is built on the concept of on-device training, which allow machine learning models to be written
+              remotely and trained bit-by-bit on individual devices. It works like this: "your device downloads the
+              current model, improves it by learning from data on your phone, and then summarizes the changes as a small
+              focused update. Only this update to the model is sent to the cloud, using encrypted communication, where it
+              is immediately averaged with other user updates to improve the shared model. All the training data remains
+              on your device, and no individual updates are stored in the cloud." We highly recommend
+              reading Google's <a href="https://ai.googleblog.com/2017/04/federated-learning-collaborative.html">pioneering article</a> on
+              federated learning for more details.
+            </p>
+            <p>
+              Federated learning enables Data Scientists on the Artificien platform to train models any data stored
+              widely across iOS devices without needing to aggregate or see that data centrally. This preserves the privacy
+              of users and avoids legal and ethical data collection complications. App Developers, meanwhile, can ethically
+              monetize their users' data by offering it on the Artificien platform.
+            </p>
+            <p>
+              One account with Artificien gives you access to both sides of the marketplace: you can register and expose
+              data as an App Developer and buy and train on data as a Data Scientist. Switch between these roles using the
+              toggle in the navigation bar.
             </p>
 
-            <h3 id="installCocoapods">Install and initialize CocoaPods</h3>
+            <h3 id="basic-app-developer-process">Basic App Developer Process</h3>
+            <p>The process of offering your application's data on Artificien consists of 3 steps:</p>
             <p>
-              <strong>Note:</strong> for the latest instructions on setting up CocoaPods, follow <a href="https://guides.cocoapods.org/using/getting-started.html">the official documentation</a>.
+              <strong>1. Register Your App.</strong> Fill out the <NavLink to="/register_app">Register App</NavLink> form,
+              describing your native iOS app and the data it will be exposing to Artificien.
             </p>
             <p>
-              To start, run the following code via the command line, in any directory. This will install CocoaPods, a package
-              and dependency manager for iOS, on your machine. Your machine may ask for your password before beginning the
-              installation.
+              <strong>2. Integrate Our Code.</strong> Integrate the Artificien CocoaPod with your registered app to
+              expose your data for on-device training. See
+              the <NavLink to="/app_developer_documentation">App Developer Documentation</NavLink> for guided instructions.
             </p>
-            <CopyBlock
-              text="sudo gem install cocoapods"
-              language="shell"
-              showLineNumbers
-              theme={dracula}
-              codeBlock
-            />
             <p>
-              Now run the following via the command line, in the root directory of your iOS project (the one that contains your
-              <code>.xcodeproj</code> file). This creates a <code>Podfile</code> that you will use to configure CocoaPod dependencies.
-            </p>
-            <CopyBlock
-              text="pod init"
-              language="shell"
-              showLineNumbers
-              theme={dracula}
-              codeBlock
-            />
-
-            <h3 id="installArtificien">Install the Artificien Pod</h3>
-            <p>
-              Open your <code>Podfile</code> and add Artificien as a dependency to your project with the following line. Our pod is
-              distributed through <a href="https://github.com/dartmouth-cs98/artificien_ios_library">an open-source Github repository</a>.
-            </p>
-            <CopyBlock
-              text="pod 'Artificien', :git => 'https://github.com/dartmouth-cs98/artificien_ios_library.git'"
-              language="python"
-              showLineNumbers
-              theme={dracula}
-              codeBlock
-            />
-            <p>Your <code>Podfile</code> should now look something like this.</p>
-            <CopyBlock
-              text={podfileCode}
-              language="python"
-              showLineNumbers
-              theme={dracula}
-              codeBlock
-            />
-            <p>
-              Now run the following, in the same directory as your <code>Podfile</code>, to download Artificien. This will
-              install the Artificien package and create a new file with the <code>.xcworkspace</code> extension in your
-              current directory. Use this file, instead of the standard <code>.xcodeproj</code> file, for future development
-              in order for your app to access Artificien's functions.
-            </p>
-            <CopyBlock
-              text="pod install"
-              language="shell"
-              showLineNumbers
-              theme={dracula}
-              codeBlock
-            />
-            <p>
-              At this point, open the <code>.xcworkspace</code> file to view your project in Xcode.
+              <strong>3. Monitor Your Profile.</strong> Monitor your <NavLink to="/profile">Profile</NavLink> as
+              Data Scientists purchase access to and train models on your app.
             </p>
 
-            <h3 id="enableBackground">Enable background tasks</h3>
+            <h3 id="basic-data-scientist-process">Basic Data Scientist Process</h3>
+            <p>The process of training on data with Artificien also consists of 3 steps:</p>
             <p>
-              Background Task Scheduler was introduced in iOS 13 as a way to run background tasks for maintenance, content
-              updates, or machine learning. We will be setting these up in your iOS app to allow Artificien to run federated
-              learning tasks in the background.
+              <strong>1. Purchase a Dataset.</strong> Browse the <NavLink to="/marketplace">Marketplace</NavLink> to
+              view and purchase an application dataset submitted by an App Developer.
             </p>
             <p>
-              <strong>Note:</strong> Apple requires use of iOS 13.0 or higher in order to execute background tasks. If your
-              application has a lower deployment target, only those devices with iOS 13.0 will be able to run the Artificien's
-              training functions. For the latest instructions on setting up background tasks in iOS,
-              follow <a href="https://developer.apple.com/documentation/backgroundtasks/bgtaskscheduler">the official documentation</a>.
+              <strong>2. Create and Deploy Your Model.</strong> Create a standard machine learning model using PyTorch in our
+              JupyterHub environment. Use the Artificien Python library to configure and send your model to your
+              purchased application.
             </p>
             <p>
-              1. Open the project editor in Xcode (the blue icon in the file pane) and select the desired target.
-            </p>
-            <p>
-              2. Click Signing &amp; Capabilities.
-            </p>
-            <p>
-              3. Expand the Background Modes section. If there’s no Background Modes section, click the “+ Capability” button
-              and choose Background Modes in the window that appears.
-            </p>
-            <p>
-              4. Select both the check boxes for both Background fetch and Background processing.
-            </p>
-            <img src={enableBackgroundTasksImage} alt="Xcode screenshot" />
-
-            <h3 id="registerBackgroundID">Register a task ID</h3>
-            <p>
-              We've now enabled the background task capability in your app. But the system runs only tasks registered
-              with identifiers on a list of permitted task identifiers. To create this list, we need to add the identifiers
-              to the <code>Info.plist</code> file.
-            </p>
-            <p>
-              1. Open the Project navigator and select your target.
-            </p>
-            <p>
-              2. Click Info and expand "Custom iOS Target Properties."
-            </p>
-            <p>
-              3. Add a new item to the list and choose “Permitted background task scheduler identifiers,” which corresponds
-              to the <code>BGTaskSchedulerPermittedIdentifiers</code> array.
-            </p>
-            <p>
-              4. Add the following String to the array, marking it as an authorized task identifier. The key will default
-              to "Item 0." We will use this unique identifier later when implementing the background task.
-            </p>
-            <CopyBlock
-              text="com.artificien.background"
-              language="shell"
-              showLineNumbers
-              theme={dracula}
-              codeBlock
-            />
-            <img src={registerTaskIDImage} alt="Xcode screenshot" />
-
-            <h3 id="configureInfo">Configure Info.plist</h3>
-            <p>
-              We will need to add 2 additional configuration properties before moving on from this section. Both are
-              default iOS properties that should auto-fill when you search for them.
-            </p>
-            <p>
-              1. Add an item to the property list called "Privacy - Camera Usage Description." This allows you to display
-              a message to your users in the case that you need to access their camera. No part of Artificien's library uses
-              the camera by default, but some portions of the federated learning codebase do trigger a privacy warning during
-              App Store deployment that requires you to input a description.
-            </p>
-            <p>
-              2. Add a dictionary called "App Transport Security Settings." Within this, add a Boolean called "Allow Arbitrary
-              Loads" and set its value to "YES." This will allow Artificien to connect to its orchestration layer over HTTP
-              and download the models that need to train on your app.
-            </p>
-            <img src={configureInfoImage} alt="Xcode screenshot" />
-
-            <h3 id="configureArtificien">Configure Artificien.plist</h3>
-            <p>
-              The final step before using Artificien in your codebase is to store the keys needed to uniquely identify
-              your app. This is accomplished by creating a new <code>.plist</code> file.
-            </p>
-            <p>
-              Create a new file called <code>Artificien.plist</code>, in the same directory that contains your <code>Info.plist</code> file.
-              This is where your unique key will be stored, and for this reason we recommend keeping this file out of source
-              control (typically by adding it to your <code>.gitignore</code>).
-            </p>
-            <p>
-              After creating and removing the file from source control, locate and open the file as a property list in Xcode
-              and add a single key called "dataset_id" of type String. For the value, input the name of the dataset you are
-              currently setting up. You can find a list of all datasets you've registered on your Profile page.
-            </p>
-            <img src={configureArtificienImage} alt="Xcode screenshot" />
-            <p>
-              The Artificien library will look for this file and use the key within it to authenticate and filter its
-              communication with the Artificien orchestration layer when downloading models and sending training updates.
+              <strong>3. Monitor and Download Your Model.</strong> Track your model's progress and loss on
+              the <NavLink to="/models">Models</NavLink> page. When training is complete, it will be available for download there.
             </p>
 
-            <h2 id="usage">Usage</h2>
+            <h2 id="app-developers">App Developers</h2>
             <p>
-              You are now ready to integrate Artificien with your codebase to perform on-device training. By installing the
-              CocoaPod and configuring those <code>.plist</code> files, you've given your application access to Artificien's
-              library. Training can be achieved with under 20 lines of code, most of which you can simply copy and paste from
-              below.
-            </p>
-            <p>
-              All of the training happens within your <code>AppDelegate.swift</code> file, where your background task will
-              be registered and run. Open that file — it's typically in your Xcode project's root directory.
+              As an App Developer, you should be using the Artificien platform if you hope to monetize your app and
+              allow Data Scientists to securely and privately train on your users' data. Artificien is currently compatible
+              with Swift and Objective-C Cocoa projects (in other words, native Swift apps built within Xcode).
             </p>
 
-            <h3 id="importArtificien">Import Artificien</h3>
+            <h3 id="register-your-app">1. Register Your App</h3>
             <p>
-              To begin, you will need to import the Artificien library. At the top of the file, together with any other
-              import statements, paste the following line.
+              The first stop for an app developer looking to integrate with the Artificien platform is the App
+              Registration page. This page asks for several pieces of information about your app. The first 3 are quite
+              straightforward:
             </p>
-            <CopyBlock
-              text="import Artificien"
-              language="swift"
-              showLineNumbers
-              theme={dracula}
-              codeBlock
-            />
+            <p>
+              <strong>1. Your app's name.</strong> This should be the unique name of your application as it is
+              listed on the iOS app store. Data Scientists will identify your app by this name in the Marketplace.
+              You will not be able to proceed to the next step until you hit the button to check and verify
+              that this name is unique.
+            </p>
+            <p>
+              <strong>2. Your App Store link.</strong> This is the URL to your published application in the iOS
+              app store. Data Scientists can explore this link to understand what your app does and how many users you serve.
+            </p>
+            <p>
+              <strong>3. Your app's category.</strong> Select this from the dropdown. This will help us organize your
+              application and let it be better discovered by Data Scientists with specific model training needs.
+            </p>
+            <p>
+              The 4th is the most important and worth explaining. It is <strong>your attributes:</strong> the data your app will be
+              exposing to Artificien from each user device. Every model trained on your app will expect to have access
+              to these variables at the time of training. Let's walk through an example, filling out this form as our
+              sample Artificien Health app:
+            </p>
+            <p>
+              1. Start by selecting the number of attributes your app has. Artificien Health exposes 4 pieces of data
+              about users: age, sex, BMI, and step count.
+            </p>
+            <p>
+              2. For each attribute, input a descriptive name. For Artificien Health, these would
+              be "Age", "Sex", "BMI", and "Past Week's Step Count".
+            </p>
+            <p>
+              3. For each attribute, select its data type. Because machine learning models only accept numeric data,
+              the only option for the time being is Float: a floating point number. For non-numeric variables (like sex,
+              in this example), report them as attributes of your app only if you plan to convert them to Floats (in
+              our example, we convert to either 0 or 1).
+            </p>
+            <p>
+              4. For each attribute, submit a description. This should explain what the variable measures, in what
+              units, and over what time period. A strong description will allow Data Scientists to understand the
+              data you are providing. For Artificien Health, we might describe the "Sex" variable as: "The user's
+              self-reported sex, converted to 1 for male and 0 for female."
+            </p>
+            <p>
+              5. Once each attribute is filled out, click the Ranges button. This will open a section where you can
+              input a minimum and maximum value for each of your submitted attributes. Fill this out as accurately
+              as possible. Artificien uses these ranges to generate sample datasets for your app that Data Scientists
+              can test with prior to officially submitting a model for training.
+            </p>
+            <p>
+              Now you can hit "Submit Ranges" and "Submit" the form as a whole, registering your app in our system.
+              An App Developer can submit and manage multiple apps on the Artificien platform, always beginning with this step.
+            </p>
 
-            <h3 id="scheduleTraining">Schedule training</h3>
+            <h3 id="integrate-our-code">2. Integrate Our Code</h3>
             <p>
-              Now, we will register a background task within the <code>application(didFinishLaunchingWithOptions:)</code> function.
+              The next step is to integrate Artificien's Swift library with the app you described in the App Registration.
+              This involves a few steps:
             </p>
             <p>
-              Paste the following code within that function. Here we register a closure to be called whenever the system wants to
-              execute a background task for your app. Inside this closure is where we'll execute federated learning tasks, like
-              searching for and executing a model training cycle. We use the same task identifier for this call that we registered
-              earlier in our <code>Info.plist</code>.
-            </p>
-            <CopyBlock
-              text={registerBackgroundTask}
-              language="swift"
-              showLineNumbers
-              theme={dracula}
-              codeBlock
-            />
-            <p>
-              The <code>train</code> function above is where most of the federated learning magic occurs. You're welcome to
-              access our open-source repository to understand how we package and use your data to train locally in conjunction
-              with the <a href="https://github.com/OpenMined/SwiftSyft">SwiftSyft library</a> from OpenMined.
+              1. Installing the Artificien CocoaPod
             </p>
             <p>
-              Now, paste the following code below the code from the previous section. Here we specify a <code>BGProcessingTaskRequest</code>,
-              again with the same task identifier. While configuring this, we need to specify that the phone should be
-              charging, which removes the CPU usage limits for processing tasks. We also need to specify network connectivity,
-              since we need to connect to Artificien's orchestration layer to download models and submit the results of our
-              training. These 2 parameters also ensure training doesn't maliciously use device resources.
+              2. Setting up a background task
             </p>
-            <CopyBlock
-              text={processingTaskRequest}
-              language="swift"
-              showLineNumbers
-              theme={dracula}
-              codeBlock
-            />
             <p>
-              If you've done this correctly, your <code>AppDelegate.swift</code> file should look something like the following.
+              3. Configuring your app information in Plists
             </p>
-            <CopyBlock
-              text={appDelegate}
-              language="swift"
-              showLineNumbers
-              theme={dracula}
-              codeBlock
-            />
+            <p>
+              4. Passing your data to Artificien's <code>train</code> function
+            </p>
+            <p>
+              This process sets up Artificien's federated learning logic in your app and enables Artificien to
+              train models sent by Data Scientists quietly and securely on your users' devices. Trainings occurs in the
+              background and is configured by default to only happen while your users' phones are charging and connected
+              to WiFi. Artificien's entire codebase is open-source, and at no point transports your user's data off-device.
+            </p>
+            <p>
+              The first time your app is run with Artificien's code enabled and properly configured, our platform
+              will record your connection to the system and make your app available for purchase on the marketplace.
+            </p>
+            <p>
+              For the full, detailed integration instructions see the <NavLink to="/app_developer_documentation">App Developer Documentation</NavLink>.
+            </p>
 
-            <h3 id="dataPreparation">Write data preparation functions</h3>
+            <h3 id="monitor-your-profile">Monitor Your Profile</h3>
             <p>
-              In the step above, you'll notice the functions <code>prepareTrainingDictionary()</code> and <code>prepareValidationDictionary()</code>,
-              the outputs of which are passed to the Artificien <code>train</code> function. These functions are not a part of
-              the Artificien library, and will throw an error in Xcode — they're placeholders for functions you will write that
-              prepare your app's data to pass to the training function.
+              Once your app is deployed and integrated with Artificien, Data Scientists will be able to train models
+              on your users' devices. You can at any time view the apps you've submitted and other account information
+              from your <NavLink to="/profile">Profile</NavLink> page. Clicking the "View Details" button for any of
+              your submitted apps (under Apps Managing) allows you to see the information you provided about the app
+              as well as how many people have purchased it.
+            </p>
+
+            <h2 id="data-scientists">Data Scientists</h2>
+            <p>
+              As a Data Scientist, you should use Artificien if you want to securely analyze and learn
+              from distributed data from consumer iOS applications.
+            </p>
+            <h3 id="purchase-a-dataset">1. Purchase A Dataset</h3>
+            <p>
+              The first step for a Data Scientist is to peruse the available datasets in
+              Artificien's <NavLink to="/marketplace">marketplace</NavLink>. Datasets in the Artificien platform
+              are synonymous with applications; an application registered with us exposes certain attributes for
+              training, forming a dataset. Applications are only displayed in the marketplace after they are
+              registered by an App Developer and successfully expose their data to Artificien for training.
             </p>
             <p>
-              When you registered your dataset with Artificien, you described your app's attributes: these are what should
-              be passed to Artificien's <code>train</code> function in the form of a Swift dictionary. Below is the expected
-              dictionary format for your application's data. Your <code>prepareTrainingDictionary()</code> and <code>prepareValidationDictionary()</code>
-              functions should collect your on-device data and return it as a dictionary, with these exact keys and values
-              as Booleans, Floats, or Strings.
+              Each application has a preview with thorough information about the app:
+            </p>
+            <p>1. Name</p>
+            <p>2. App Store link</p>
+            <p>3. Category</p>
+            <p>4. Attributed and descriptions</p>
+            <p>
+              All of this information is reported by the contributing App Developer during the app registration
+              process. The attributes represent variables that will be provided by each user device and passed
+              to your model.
             </p>
             <p>
-              Be sure to expose your data preparation functions to the <code>AppDelegate.swift</code> file, either by
-              writing them directly within the file or importing them from an external file.
+              The marketplace also allows you to search for individual apps and filter by category, should
+              you need a specific type of data or application.
+            </p>
+            <p>
+              To purchase a dataset, click on the "Purchase" button within the application's preview card.
+              This will add the dataset to your Artificien account and enable you to send models to that
+              application's users for training.
+            </p>
+
+            <h3 id="create-and-deploy-your-model">2. Create and Deploy Your Model</h3>
+            <p>
+              Once you've purchased a dataset you'd like to use, it is time to build a model around it.
+              Navigate to the <NavLink to="/models">Models</NavLink> page and "Create Model." This will
+              take you to Artificien's secure JupyterHub environment, where you'll be prompted to sign in again.
+            </p>
+            <p>
+              In this environment, you can build a PyTorch model and use Artificien's Python library to
+              configure and deploy your model to your purchased application. The library allows you to specify
+              which of the app's attributes you'd like to use as input and output variables as part of models
+              creation, as well as model parameters like batch size and devices required. This environment
+              will also be auto-populated with sample data for your application, allowing you to test and more
+              easily develop a strong model.
+            </p>
+            <p>
+              View the full instructions for creating and deploying a model with Artificien in
+              the <NavLink to="/data_scientist_documentation">Data Scientist Documentation</NavLink>.
+            </p>
+            <p>
+              Data Scientists can create and send multiple models to any datasets they own using this process.
+              Any models created can always be accessed by returning to the Jupyter environment.
+            </p>
+
+            <h3 id="monitor-and-download-your-model">Monitor and Download Your Model</h3>
+            <p>
+              The <NavLink to="/models">Models</NavLink> page will contain information about all the models,
+              past and present, you've created with Artificien.
+            </p>
+            <p>
+              Models currently training on devices will be displayed in the In Progress section. Typically,
+              models take multiple days to train, depending on your parameters, your requirements for data
+              volume, and the availability of devices for training. As a model trains, you can view its progress
+              and its loss value based on the loss function you've configured.
+            </p>
+            <p>
+              Models that have finished training are displayed in the Completed section. Artificien automatically
+              moves models here when their progress reaches 100%. Models in this section are enabled with a download
+              link, under "View Model", allowing you to retrieve the final model updated with averaged insights
+              from all user devices. From here, you can take your model off the Artificien platform and mold it to your use case.
+            </p>
+            <p>
+              For reference, the Profile page also shows aggregate information about models created as well as
+              general account information.
+            </p>
+
+            <h2 id="next-steps">Next Steps</h2>
+            <p>
+              After reading the user guide and understanding the components of the platform, you should feel
+              comfortable using Artificien as both an App Developer and Data Scientist.
+            </p>
+            <p>
+              For more help and concrete examples while getting started, please reference
+              the <NavLink to="/tutorial">Tutorial</NavLink> page, which explains how to use the sample model and
+              app pre-installed on your account.
             </p>
           </div>
         </div>
