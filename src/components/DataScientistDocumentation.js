@@ -63,7 +63,7 @@ sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.
             <p>
               As a data scientist, or client, you will be purchasing access to Artificien datasets and writing models in PyTorch to train
               on those datasets on-device. The Artificien Python library enables you to set up and trigger a federated learning training
-              cycle with a model of your design. To understand the full app developer flow, reference our <NavLink to="/how_it_works">How It Works</NavLink> page.
+              cycle with a model of your design. To understand the full app developer flow, reference our <NavLink to="/tutorial">Tutorials</NavLink> page.
             </p>
             <p>
               The following is a basic use guide for <code>artificienlib</code> in Jupyter. For more step-by-step documentation, refer to the tutorials

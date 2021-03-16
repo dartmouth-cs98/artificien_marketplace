@@ -69,7 +69,7 @@ class Welcome extends Component {
               <div className="col-lg-6 d-flex flex-column justify-content-center left-align-text">
                 <h1 data-aos="fade-up">Distributed data, democratized.</h1>
                 <h2 data-aos="fade-up" data-aos-delay="400">
-                  The world&#39;s first federated learning marketplace, allowing data analysts to train models on
+                  The world&#39;s first federated learning marketplace, allowing data scientists to train models on
                   public application data without compromising user privacy.
                 </h2>
                 <div data-aos="fade-up" data-aos-delay="600">

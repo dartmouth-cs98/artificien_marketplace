@@ -111,7 +111,7 @@ class Models extends Component {
   // get only the models in progress
   renderModels = () => {
     console.log(this.state.models);
-    if (!this.state.models) { return 'You have no Models. Go to Create Model to make one'; }
+    if (!this.state.models || this.state.models.Items.length === 0) { return 'You have no Models. Go to Create Model to make one'; }
     // if (!this.state.models || !this.state.models.count) { return 'You have no Models in progress. Go to Create Model to make one'; }
 
     // if the user has models, map each to a card
