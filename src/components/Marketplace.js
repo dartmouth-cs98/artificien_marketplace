@@ -181,7 +181,9 @@ class Marketplace extends Component {
       return <LoadingScreen />;
     }
     // make cards for datasets in category by sort
-    const renderedDatasets = this.state.inCategory.map((dataset) => {
+    // console.log(this.state.inCategory.Items);
+    const renderedDatasets = this.state.inCategory.Items.map((dataset) => {
+      console.log('hello');
       if (dataset.category.S === this.state.sortedCategory) {
         return (
           <DataLibraryCard

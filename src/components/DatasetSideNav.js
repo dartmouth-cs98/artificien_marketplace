@@ -1,6 +1,6 @@
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../style.scss';
 import { getUser, updateItem } from '../database/databaseCalls';
 
@@ -49,6 +49,7 @@ class DatasetSideNav extends Component {
   }
 
   updateDatasetsPurchased = (newDatasetsList, userID, datasetID, oldNumPurchases) => {
+    console.log(this.props.datasetID);
     const newNumPurchases = String(Number.parseInt(oldNumPurchases, 10) + 1);
     const upParamsUser = {
       Key: {
@@ -90,7 +91,17 @@ class DatasetSideNav extends Component {
 
   // make a seperate render for the purchase button!
   renderPurchased = () => {
-    if (this.props.alreadyPurchased || this.state.alreadyPurchased || (this.state.recentlyPurchased.includes(this.props.content.dataset_id.S))) {
+    console.log(this.props.alreadyPurchased);
+    console.log(this.state.alreadyPurchased);
+    console.log(this.state.recentlyPurchased);
+    if (this.state.recentlyPurchased.includes(this.props.content.dataset_id.S)) {
+      return (
+        <div className="dataset_existing">Congratulations on purchasing this dataset!
+          Please navigate to <Link className="dataset_navlink" to="/models">models</Link> to be able to
+          access the <i>Artificien JupyterHub</i> and upload a model to train on this data.
+        </div>
+      );
+    } else if (this.props.alreadyPurchased || this.state.alreadyPurchased) {
       return (
         <div className="dataset_existing">You already own access to this dataset!</div>
       );
@@ -98,7 +109,7 @@ class DatasetSideNav extends Component {
       return (
         <button type="button"
           className="data-card-button"
-          onClick={() => this.purchaseDataset(this.props.content.dataset_id.S, this.props.currentUser, this.props.content.numPurchases.N)}
+          onClick={() => this.purchaseDataset(this.props.content.dataset_id.S, this.props.currentUser)}
         >Purchase This Dataset
         </button>
       );
