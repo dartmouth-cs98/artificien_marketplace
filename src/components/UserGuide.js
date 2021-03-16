@@ -15,7 +15,7 @@ import configureArtificienImage from '../img/documentation/ConfigureArtificienPl
 import configureInfoImage from '../img/documentation/ConfigureInfoPlist.png';
 import registerTaskIDImage from '../img/documentation/RegisterATaskID.png';
 
-class Tutorial extends Component {
+class UserGuide extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -103,7 +103,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
     return (
       <div>
-        <h1> Tutorial </h1>
+        <h1> User Guide </h1>
         <div>
           <div className="documentationSidebar">
             <strong><a href="#introduction">Introduction</a></strong>
@@ -420,4 +420,4 @@ const mapStateToProps = (state) => {
 };
 
 // export default withRouter(withAuthenticator(Navbar)); // might be some sort of login flow thing here
-export default withRouter(connect(mapStateToProps)(Tutorial)); // might be some sort of login flow thing here
+export default withRouter(connect(mapStateToProps)(UserGuide)); // might be some sort of login flow thing here

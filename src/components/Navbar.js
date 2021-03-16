@@ -58,16 +58,19 @@ class Navbar extends Component {
         <nav className="nav">
           <ul className="nav-ul">
             <li>
-              <NavLink to="/upload_data"> Upload Data </NavLink>
+              <NavLink to="/user_guide"> User Guide </NavLink>
+            </li>
+            <li>
+              <NavLink to="/tutorial"> Tutorial </NavLink>
+            </li>
+            <li>
+              <NavLink to="/app_developer_documentation"> Documentation </NavLink>
             </li>
             <li>
               <NavLink to="/profile"> Profile </NavLink>
             </li>
             <li>
-              <NavLink to="/documentation"> Documentation </NavLink>
-            </li>
-            <li>
-              <NavLink to="/how_it_works"> How Artificien Works </NavLink>
+              <NavLink to="/register_app"> Register App </NavLink>
             </li>
           </ul>
           <ul className="nav-role-button-ul">
@@ -101,19 +104,22 @@ class Navbar extends Component {
         <nav className="nav">
           <ul className="nav-ul">
             <li>
-              <NavLink to="/marketplace"> Marketplace </NavLink>
+              <NavLink to="/user_guide"> User Guide </NavLink>
             </li>
             <li>
-              <NavLink to="/models"> My Models </NavLink>
+              <NavLink to="/tutorial"> Tutorial </NavLink>
+            </li>
+            <li>
+              <NavLink to="/data_scientist_documentation"> Documentation </NavLink>
             </li>
             <li>
               <NavLink to="/profile"> Profile </NavLink>
             </li>
             <li>
-              <NavLink to="/documentation"> Documentation </NavLink>
+              <NavLink to="/marketplace"> Marketplace </NavLink>
             </li>
             <li>
-              <NavLink to="/how_it_works"> How Artificien Works </NavLink>
+              <NavLink to="/models"> My Models </NavLink>
             </li>
           </ul>
           <ul className="nav-role-button-ul">
@@ -146,7 +152,13 @@ class Navbar extends Component {
         <nav className="nav">
           <ul className="nav-ul">
             <li>
-              <NavLink to="/how_it_works"> How Artificien Works </NavLink>
+              <NavLink to="/"> Home </NavLink>
+            </li>
+            <li>
+              <NavLink to="/user_guide"> User Guide </NavLink>
+            </li>
+            <li>
+              <NavLink to="/tutorial"> Tutorial </NavLink>
             </li>
           </ul>
           <ul className="nav-role-button-ul">

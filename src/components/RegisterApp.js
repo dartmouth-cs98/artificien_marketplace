@@ -7,7 +7,7 @@ import { putDataset } from '../database/databaseCalls';
 
 // import { Button } from 'reactstrap';
 
-class UploadData extends Component {
+class RegisterApp extends Component {
   constructor(props) {
     super(props);
 
@@ -413,7 +413,7 @@ class UploadData extends Component {
       return (
         <div>
           <h2>Add Your Attributes</h2>
-          <label htmlFor="attrNum">Number of Attributes:  </label>
+          <label htmlFor="attrNum">Number of Attributes:&nbsp;</label>
           <select id="attrNum" onChange={(e) => this.numAttributesOnChange(e)}>
             <option value="1">0</option>
             <option value="1">1</option>
@@ -583,7 +583,7 @@ class UploadData extends Component {
     return (
       <>
         <div>
-          <h1>Upload Your Data</h1>
+          <h1>Register App</h1>
           <div>
             {this.renderAppNameInput()}
             {this.renderAppURLInput()}
@@ -597,4 +597,4 @@ class UploadData extends Component {
   }
 }
 
-export default UploadData;
+export default RegisterApp;
