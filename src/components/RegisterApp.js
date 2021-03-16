@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import update from 'react-addons-update'; // ES6
 import { Link } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { putDataset, getDataset } from '../database/databaseCalls';
+import { putDataset, getDataset, purchaseDataset } from '../database/databaseCalls';
 
 // import { Button } from 'reactstrap';
 
@@ -214,7 +214,7 @@ class RegisterApp extends Component {
     }
   }
 
-  submitAttributes = () => {
+  submitAttributes = async () => {
     const callback = (data, error) => {
       if (error) {
         console.log(error);
@@ -239,6 +239,8 @@ class RegisterApp extends Component {
     // this.purchaseDataset(this.state.appName, this.props.currentUser, test);
     document.getElementById('appNameInput').value = '';
     document.getElementById('appURLInput').value = '';
+
+    purchaseDataset(this.state.appName, this.state.currentUser, 0);
 
     this.setState({ appName: null });
     this.setState({ appCategory: null });
