@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import update from 'react-addons-update'; // ES6
 import { Link } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { putDataset, getUser, updateItem } from '../database/databaseCalls';
+import { putDataset } from '../database/databaseCalls';
 
 // import { Button } from 'reactstrap';
 
@@ -24,6 +24,7 @@ class UploadData extends Component {
       readyForRanges: false,
       addAttributeForms: true,
       readyForSubmit: false,
+      intermediateRangesEntered: false,
       finalRangesEntered: false,
       readyOnce: false,
 
@@ -57,77 +58,6 @@ class UploadData extends Component {
     this.setState({ numAttributes: event.target.value });
   }
 
-  // bringing over code
-  purchaseDataset = async (datasetID, username, oldNumPurchases) => {
-    this.setState({ alreadyPurchased: true });
-    this.setState((state) => {
-      state.recentlyPurchased.push(datasetID);
-      return {
-        ...state,
-      };
-    });
-    const callback = (data, error) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(data);
-        this.setState({ alreadyPurchased: true });
-        if (data.Items[0].datasets_purchased) { // if list exists, append to list
-          const datasetsPurchased = data.Items[0].datasets_purchased.L;
-          const datasetsPurchasedNew = [...datasetsPurchased];
-          datasetsPurchasedNew.push({ S: datasetID });
-          this.updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S, datasetID, oldNumPurchases);
-        } else { // if field doesn't exist (user hasn't purchased yet?), create a new list and add
-          const newDatasetsPurchasedList = [{ S: datasetID }];
-          this.updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S, datasetID, oldNumPurchases);
-          this.props.alreadyPurchased = true;
-          console.log(this.props.content.alreadyPurchased);
-        }
-      }
-    };
-    getUser(callback, username);
-  }
-
-  updateDatasetsPurchased = (newDatasetsList, userID, datasetID, oldNumPurchases) => {
-    const newNumPurchases = String(Number.parseInt(oldNumPurchases, 10) + 1);
-    const upParamsUser = {
-      Key: {
-        user_id: {
-          S: userID,
-        },
-      },
-      AttributeUpdates: {
-        datasets_purchased: {
-          Action: 'PUT',
-          Value: {
-            L: newDatasetsList,
-          },
-        },
-      },
-      ReturnValues: 'ALL_NEW',
-      TableName: 'user_table',
-    };
-    const upParamsDataset = {
-      Key: {
-        dataset_id: {
-          S: datasetID,
-        },
-      },
-      AttributeUpdates: {
-        numPurchases: {
-          Action: 'PUT',
-          Value: {
-            N: newNumPurchases,
-          },
-        },
-      },
-      ReturnValues: 'ALL_NEW',
-      TableName: 'dataset_table',
-    };
-    updateItem(upParamsUser);
-    updateItem(upParamsDataset);
-  }
-
   // add the attribute name, make sure it only enters once (with the repeat stuff)
   addAttributeName = (event, i) => {
     let repeat = false;
@@ -139,6 +69,14 @@ class UploadData extends Component {
       this.state.attributeNameDict[i] = { S: event.target.value };
       this.setState({ addAttributeForms: false });
     }
+  }
+
+  isemptyAttributeName = () => {
+    console.log(this.state.attributeNameDict);
+    for (let i = 0; i < Object.keys(this.state.attributeNameDict).length; i += 1) {
+      if (this.state.attributeNameDict[i].S === '') return true;
+    }
+    return false;
   }
 
   addAttributeDescription = (event, i) => {
@@ -163,6 +101,12 @@ class UploadData extends Component {
   addAttributeRangeMin = (event, i) => {
     // this.state.attributeRangeMins.push({ S: event.target.value });
     this.state.attributeRangeMinDict[i] = { S: event.target.value };
+    console.log(this.state.attributeRangeMinDict);
+    console.log('min');
+    const output = this.checkValidRanges();
+    this.setState({ intermediateRangesEntered: output });
+    console.log(event.target.value);
+    console.log(this.state.intermediateRangesEntered);
   }
 
   // set the range maximum to the value (stringify)
@@ -170,6 +114,11 @@ class UploadData extends Component {
     // this.state.attributeRangeMaxes.push({ S: event.target.value });
     this.state.attributeRangeMaxDict[i] = { S: event.target.value };
     this.setState({ addAttributeForms: false });
+    console.log('max');
+    const output = this.checkValidRanges();
+    this.setState({ intermediateRangesEntered: output });
+    console.log(event.target.value);
+    console.log(this.state.intermediateRangesEntered);
   }
 
   // make sure that the attribute type is NOT none!
@@ -221,16 +170,31 @@ class UploadData extends Component {
   // make sure max > min!
   checkValidRanges = () => {
     const numNumberAttributes = this.getNumNumberAttributes();
+    console.log('yes');
+
+    // this goes through, if max > min OR one of them is NaN (i.e. empty, not a number), return false, this makes sure you cannot submit ranges
     if (numNumberAttributes > 0) {
       for (let i = 0; i < numNumberAttributes; i += 1) {
-        const supposedMin = this.state.attributeRangeMins[i];
-        const supposedMax = this.state.attributeRangeMaxes[i];
-        if (Number.parseInt(supposedMin.S, 10) > Number.parseInt(supposedMax.S, 10)) {
-          this.state.attributeRangeMins[i] = supposedMax;
-          this.state.attributeRangeMaxes[i] = supposedMin;
+        console.log('iterating');
+        if (this.state.attributeRangeMinDict[i] && this.state.attributeRangeMaxDict[i]) {
+          console.log('in the beast');
+          const supposedMin = this.state.attributeRangeMinDict[i];
+          const supposedMax = this.state.attributeRangeMaxDict[i];
+          //  console.log(Number.parseInt(supposedMin.S, 10));
+          // console.log(Number.parseInt(supposedMax.S, 10));
+          if ((Number.parseInt(supposedMin.S, 10) > Number.parseInt(supposedMax.S, 10)) || (Number.isNaN(Number.parseInt(supposedMin.S, 10))) || (Number.isNaN(Number.parseInt(supposedMax.S, 10)))) {
+            console.log('oooo no');
+            return false;
+          }
+        } else {
+          console.log('not good enough');
+          return false;
         }
-        if (supposedMin === supposedMax) this.state.attributeRangeMins[i] = String(Number.parseInt(supposedMin, 10) - 0.1);
       }
+      console.log('ranges entered!');
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -262,7 +226,7 @@ class UploadData extends Component {
 
     this.buildAttributeNameAndTypeAndDescriptionLists();
     this.buildAttributeRangeLists();
-    this.checkValidRanges();
+    // this.checkValidRanges();
     console.log(this.props);
 
     // including the app url
@@ -288,6 +252,7 @@ class UploadData extends Component {
 
     this.setState({ attributeRangeMins: [] });
     this.setState({ attributeRangeMinDict: {} });
+    this.setState({ intermediateRangesEntered: false });
 
     this.setState({ attributeRangeMaxes: [] });
     this.setState({ attributeRangeMaxDict: {} });
@@ -482,7 +447,9 @@ class UploadData extends Component {
         if (Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes
         || this.state.attributeTypeSubmitted < this.state.numAttributes // not enough attribute names or not enough attribute types
         || Object.keys(this.state.attributeDescriptionDict).length < this.state.numAttributes // or not enough attribute descriptions
-        || this.isEmptyDescription()) { // any
+        || this.isEmptyDescription()
+          || this.isemptyAttributeName()
+        ) { // any
           console.log(this.state.attributeDescriptionDict);
           return (
             <div className="dataLists">
@@ -500,7 +467,6 @@ class UploadData extends Component {
                 <h2>Add Your Attributes</h2>
                 {this.state.inputDatatypeFormList}
                 <button type="submit" className="submit" onClick={() => { this.readyForRanges(); }}>Ranges</button>
-                <p><i>If you only have string attributes, you will skip ranges</i></p>
               </div>
             </div>
           );
@@ -526,6 +492,9 @@ class UploadData extends Component {
   }
 
   renderAttributeRanges = () => {
+    // can we simplify?
+    // idea - if everything above is submitted
+
     if (this.state.readyForRanges) { // we are ready to render the ranges
       if (this.state.readyForSubmit && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) { // all ranges have been put in
         if (this.getNumNumberAttributes() < 1) {
@@ -554,11 +523,18 @@ class UploadData extends Component {
               <h4><i>Please submit one of the top four fields to submit</i></h4>
             </div>
           );
-        } else {
+        } else if (this.state.intermediateRangesEntered) {
           return (
             <div>
               {this.state.attributeRangeInputs}
               <button type="button" className="submit" onClick={() => this.checkIfRangesReady()}>Submit Ranges</button>
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              {this.state.attributeRangeInputs}
+              <p><i>Please make sure the min is less than the max in every attribute!</i></p>
             </div>
           );
         }
@@ -598,6 +574,7 @@ class UploadData extends Component {
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
 
   render() {
+    // are we sure we want it this way?
     if (!this.state.readyForRangesButton) {
       if (this.state.appNameSubmitted && this.state.categorySubmitted && this.state.appURLSubmitted) {
         this.setState({ readyForRangesButton: true });
