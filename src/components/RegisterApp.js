@@ -459,46 +459,57 @@ class RegisterApp extends Component {
         }
         this.setState({ addAttributeForms: false });
       }
-      // if attribute input forms have been rendered
-      if (this.state.readyForRangesButton) {
-        if (Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes
-        || this.state.attributeTypeSubmitted < this.state.numAttributes // not enough attribute names or not enough attribute types
-        || Object.keys(this.state.attributeDescriptionDict).length < this.state.numAttributes // or not enough attribute descriptions
-        || this.isEmptyDescription()
-          || this.isemptyAttributeName()
-        ) { // any
-          console.log(this.state.attributeDescriptionDict);
-          return (
-            <div className="dataLists">
-              <div className="typesList">
-                <h2>Add Your Attributes</h2>
-                {this.state.inputDatatypeFormList}
-                <h4><i>Submit nonempty attribute names, types, and descriptions to proceed</i></h4>
+      if (!this.state.readyForRanges) {
+        // if attribute input forms have been rendered
+        if (this.state.readyForRangesButton) {
+          if (Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes
+  || this.state.attributeTypeSubmitted < this.state.numAttributes // not enough attribute names or not enough attribute types
+  || Object.keys(this.state.attributeDescriptionDict).length < this.state.numAttributes // or not enough attribute descriptions
+  || this.isEmptyDescription()
+    || this.isemptyAttributeName()
+          ) { // any
+            console.log(this.state.attributeDescriptionDict);
+            return (
+              <div className="dataLists">
+                <div className="typesList">
+                  <h2>Add Your Attributes</h2>
+                  {this.state.inputDatatypeFormList}
+                  <h4><i>Submit nonempty attribute names, types, and descriptions to proceed</i></h4>
+                </div>
               </div>
-            </div>
-          );
-        } else { // if all names, types, and descriptions are correct
+            );
+          } else { // if all names, types, and descriptions are correct
+            return (
+              <div className="dataLists">
+                <div className="typesList">
+                  <h2>Add Your Attributes</h2>
+                  {this.state.inputDatatypeFormList}
+                  <button type="submit" className="submit" onClick={() => { this.readyForRanges(); }}>Ranges</button>
+                </div>
+              </div>
+            );
+          }
+        } else { // if first four forms aren't even full...
           return (
             <div className="dataLists">
               <div className="typesList">
                 <h2>Add Your Attributes</h2>
                 {this.state.inputDatatypeFormList}
-                <button type="submit" className="submit" onClick={() => { this.readyForRanges(); }}>Ranges</button>
+                <h4><i>Complete all fields to submit this dataset</i></h4>
               </div>
             </div>
           );
         }
-      } else { // if first four forms aren't even full...
-        return (
-          <div className="dataLists">
-            <div className="typesList">
-              <h2>Add Your Attributes</h2>
-              {this.state.inputDatatypeFormList}
-              <h4><i>Complete all fields to submit this dataset</i></h4>
-            </div>
-          </div>
-        );
       }
+
+      return (
+        <div className="dataLists">
+          <div className="typesList">
+            <h2>Add Your Attributes</h2>
+            <h4><i><span>Attributes submitted</span></i></h4>
+          </div>
+        </div>
+      );
     }
   }
 
@@ -518,7 +529,7 @@ class RegisterApp extends Component {
           return (
             <div>
               <h4><i>No number type fields, please submit</i></h4>
-              <Link to="/documentation" style={{ textDecoration: 'none' }}>
+              <Link to="/app_developer_documentation" style={{ textDecoration: 'none' }}>
                 <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
               </Link>
             </div>
@@ -526,8 +537,8 @@ class RegisterApp extends Component {
         }
         return (
           <div>
-            <h4><i>Ranges and all other fields entered correctly: submit this dataset</i></h4>
-            <Link to="/documentation" style={{ textDecoration: 'none' }}>
+            <h4><i><span>Ranges and all other fields entered correctly: submit this dataset</span></i></h4>
+            <Link to="/app_developer_documentation" style={{ textDecoration: 'none' }}>
               <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
             </Link>
           </div>

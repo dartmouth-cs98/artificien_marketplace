@@ -68,7 +68,7 @@ class Navbar extends Component {
                 <NavLink to="/tutorial"> Tutorial </NavLink>
               </li>
               <li>
-                <NavLink to="/app_developer_documentation"> Documentation </NavLink>
+                <NavLink to="/app_developer_documentation"> App Dev Docs </NavLink>
               </li>
               <li>
                 <NavLink to="/profile"> Profile </NavLink>
@@ -115,7 +115,7 @@ class Navbar extends Component {
               <NavLink to="/tutorial"> Tutorial </NavLink>
             </li>
             <li>
-              <NavLink to="/data_scientist_documentation"> Documentation </NavLink>
+              <NavLink to="/data_scientist_documentation"> Data Sci Docs </NavLink>
             </li>
             <li>
               <NavLink to="/profile"> Profile </NavLink>
