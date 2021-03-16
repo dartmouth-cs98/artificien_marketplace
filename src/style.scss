@@ -12,6 +12,21 @@ body, html {
   font-weight: 400;
 }
 
+.alert-danger {
+  position: fixed;
+  top: 0;
+  z-index: 5;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  display: none;
+}
+
+@media (max-width: 1260px) {
+  .alert-danger {
+    display: block;
+  }
+}
+
 h1, h2, h3, h4, h5, h6 {
   margin-top: 30px;
   // font-weight: 500;
@@ -60,7 +75,7 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed; /* Set the navbar to fixed position */
   top: 0; /* Position the navbar at the top of the page */
   width: 100%; /* Full width */
-  z-index: 1000;
+  z-index: 4;
 }
 
 .nav {
@@ -629,7 +644,7 @@ amplify-authenticator{
   height: 0%;
   bottom: 0px;
   border-top: 1px solid rgb(224, 221, 221);
-  z-index: 999;
+  z-index: 3;
 }
 
 #bottom-nav-column{
@@ -690,9 +705,9 @@ amplify-authenticator{
 
 .documentationSidebar {
   width: 18%;
-  position: fixed;
+  // position: fixed;
   float: left;
-  z-index: 1;
+  z-index: 2;
   background: lightgray;
   overflow-x: hidden;
   padding: 8px 0;
@@ -701,7 +716,7 @@ amplify-authenticator{
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     // font-size: 25px;
-    color: #3C096C;
+    color: #580D93;
     display: block;
     text-align: left;
   }
@@ -762,6 +777,16 @@ p code {
   height: 100px;
   width: 100%;
   background-position: center;
+}
+
+#register-app-container h4 {
+  font-size: 16px;
+  color: #E84855;
+  margin-top: 20px;
+
+  span {
+    color: #AF71EB;
+  }
 }
 
 // Landing page template CSS
@@ -2652,7 +2677,7 @@ section {
   font-size: 30px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: #012970;
+  color: #3C096C;
   font-family: "Josefin Sans", sans-serif;
   margin-top: 3px;
 }
@@ -2674,13 +2699,13 @@ section {
 }
 
 .footer .footer-top .social-links a:hover {
-  color: #012970;
+  color: #3C096C;
 }
 
 .footer .footer-top h4 {
   font-size: 16px;
   font-weight: bold;
-  color: #012970;
+  color: #3C096C;
   text-transform: uppercase;
   position: relative;
   padding-bottom: 12px;
@@ -2714,14 +2739,14 @@ section {
 }
 
 .footer .footer-top .footer-links ul a {
-  color: #013289;
+  color: #3C096C;
   transition: 0.3s;
   display: inline-block;
   line-height: 1;
 }
 
 .footer .footer-top .footer-links ul a:hover {
-  color: #4154f1;
+  color: #AF71EB;
 }
 
 .footer .footer-top .footer-contact p {
@@ -2731,14 +2756,14 @@ section {
 .footer .copyright {
   text-align: center;
   padding-top: 30px;
-  color: #012970;
+  color: #3C096C;
 }
 
 .footer .credits {
   padding-top: 10px;
   text-align: center;
   font-size: 13px;
-  color: #012970;
+  color: #3C096C;
 }
 
 .footer-links, .footer-info, .footer-contact {

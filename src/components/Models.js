@@ -174,7 +174,7 @@ class Models extends Component {
   renderCreateModelButton = () => {
     return (
       <div>
-        <h1 align="center">My Models</h1>
+        <h1 align="center">Models</h1>
         <a href="https://jupyter.artificien.com/hub/login" style={{ textDecoration: 'none' }}>
           <button type="button" className="create-model-button">
             Create Model <span>&#43;</span>

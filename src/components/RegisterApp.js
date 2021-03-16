@@ -7,7 +7,7 @@ import { putDataset } from '../database/databaseCalls';
 
 // import { Button } from 'reactstrap';
 
-class UploadData extends Component {
+class RegisterApp extends Component {
   constructor(props) {
     super(props);
 
@@ -303,32 +303,40 @@ class UploadData extends Component {
     if (!this.state.categorySubmitted) {
       return (
         <div>
-          <h2>What category is your app in?</h2>
+          <h2>App Category</h2>
           <div>
             <div>
               <select id="categoryInput" value={this.state.appCategory} onChange={(e) => this.addAppCategory(e)}>
                 <option value="None">None</option>
-                <option value="Health">Health</option>
-                <option value="Location">Location</option>
-                <option value="Consumer">Consumer</option>
+                <option value="Medical/Health">Medical/Health</option>
+                <option value="Navigation/Location">Navigation/Location</option>
+                <option value="Music/Media">Music/Media</option>
+                <option value="News">News</option>
+                <option value="Financial/Shopping">Financial/Shopping</option>
+                <option value="Lifestyle/Social">Lifestyle/Social</option>
+                <option value="Gaming">Gaming</option>
                 <option value="Other">Other</option>
               </select>
             </div>
-            <h4><i>invalid - app must have a category</i></h4>
+            <h4><i>Please select a category</i></h4>
           </div>
         </div>
       );
     } else {
       return (
         <div>
-          <h2>What category is your app in?</h2>
+          <h2>App Category</h2>
           <div>
             <div>
               <select onChange={(e) => this.addAppCategory(e)}>
                 <option value="None">None</option>
-                <option value="Health">Health</option>
-                <option value="Location">Location</option>
-                <option value="Consumer">Consumer</option>
+                <option value="Medical/Health">Medical/Health</option>
+                <option value="Navigation/Location">Navigation/Location</option>
+                <option value="Music/Media">Music/Media</option>
+                <option value="News">News</option>
+                <option value="Financial/Shopping">Financial/Shopping</option>
+                <option value="Lifestyle/Social">Lifestyle/Social</option>
+                <option value="Gaming">Gaming</option>
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -352,17 +360,17 @@ class UploadData extends Component {
     if (!this.state.appNameSubmitted) {
       return (
         <div>
-          <h2>What is your app named?</h2>
+          <h2>App Name</h2>
           <div>
             <input id="appNameInput" type="text" placeholder="name" onChange={(e) => this.addAppName(e)} />
-            <h4><i>invalid - app must have a name</i></h4>
+            <h4><i>Your app must have a unique name</i></h4>
           </div>
         </div>
       );
     } else {
       return (
         <div>
-          <h2>What is your app named?</h2>
+          <h2>App Name</h2>
           <div>
             <input id="appNameInput" type="text" placeholder="name" onChange={(e) => this.addAppName(e)} />
             <h4><i><span>&#10003;</span></i></h4>
@@ -412,8 +420,8 @@ class UploadData extends Component {
     if (!this.state.numAttributes) {
       return (
         <div>
-          <h2>Add Your Attributes</h2>
-          <label htmlFor="attrNum">Number of Attributes:  </label>
+          <h2>Attributes</h2>
+          <label htmlFor="attrNum">Number of Attributes:&nbsp;</label>
           <select id="attrNum" onChange={(e) => this.numAttributesOnChange(e)}>
             <option value="1">0</option>
             <option value="1">1</option>
@@ -422,6 +430,15 @@ class UploadData extends Component {
             <option value="4">4</option>
             <option value="5">5</option>
             <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
           </select>
         </div>
       );
@@ -436,7 +453,7 @@ class UploadData extends Component {
                 <option value="N">Float</option>
               </select>
               <label htmlFor="description">Attribute Description: </label>
-              <textarea id="description" rows="5" cols="33" onChange={(e) => this.addAttributeDescription(e, i)} />
+              <textarea id="description" rows="3" cols="33" onChange={(e) => this.addAttributeDescription(e, i)} />
             </div>,
           );
         }
@@ -456,7 +473,7 @@ class UploadData extends Component {
               <div className="typesList">
                 <h2>Add Your Attributes</h2>
                 {this.state.inputDatatypeFormList}
-                <h3><i>Submit nonempty attribute names, types, and descriptions to proceed</i></h3>
+                <h4><i>Submit nonempty attribute names, types, and descriptions to proceed</i></h4>
               </div>
             </div>
           );
@@ -477,7 +494,7 @@ class UploadData extends Component {
             <div className="typesList">
               <h2>Add Your Attributes</h2>
               {this.state.inputDatatypeFormList}
-              <h3><i>Submit all forms to enter dataset</i></h3>
+              <h4><i>Complete all fields to submit this dataset</i></h4>
             </div>
           </div>
         );
@@ -509,7 +526,7 @@ class UploadData extends Component {
         }
         return (
           <div>
-            <h4><i>Ranges and all other fields entered correctly, please submit dataset</i></h4>
+            <h4><i>Ranges and all other fields entered correctly: submit this dataset</i></h4>
             <Link to="/documentation" style={{ textDecoration: 'none' }}>
               <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
             </Link>
@@ -520,7 +537,7 @@ class UploadData extends Component {
         if (this.state.readyOnce) {
           return (
             <div>
-              <h4><i>Please submit one of the top four fields to submit</i></h4>
+              <h4><i>Please complete all of the required fields to submit</i></h4>
             </div>
           );
         } else if (this.state.intermediateRangesEntered) {
@@ -534,7 +551,7 @@ class UploadData extends Component {
           return (
             <div>
               {this.state.attributeRangeInputs}
-              <p><i>Please make sure the min is less than the max in every attribute!</i></p>
+              <h4><i>Please make sure the min is less than the max in every attribute!</i></h4>
             </div>
           );
         }
@@ -551,17 +568,17 @@ class UploadData extends Component {
     if (!this.state.appURLSubmitted) { // if number of users hasn't been submitted yet, give invalid message, make sure the number is positive!
       return (
         <div>
-          <h2>What is your app URL?</h2>
+          <h2>App Store Link</h2>
           <div>
             <input id="appURLInput" type="text" placeholder="https://apps.apple.com" onChange={(e) => this.addAppURL(e)} />
-            <h4><i>invalid - must submit a url that begins with https://apps.apple.com...</i></h4>
+            <h4><i>Please submit a valid URL beginning with https://apps.apple.com...</i></h4>
           </div>
         </div>
       );
     } else { // number of users submitted, valid
       return (
         <div>
-          <h2>What is your app URL?</h2>
+          <h2>App Store Link</h2>
           <div>
             <input id="appURLInput" type="text" placeholder="https://apps.apple.com" onChange={(e) => this.addAppURL(e)} />
             <h4><i><span>&#10003;</span></i></h4>
@@ -582,12 +599,25 @@ class UploadData extends Component {
     }
     return (
       <>
-        <div>
-          <h1>Upload Your Data</h1>
+        <div id="register-app-container">
+          <h1>Register App</h1>
           <div>
-            {this.renderAppNameInput()}
+            <div className="container">
+              <div className="row">
+                <div className="col-lg-4">
+                  {this.renderAppNameInput()}
+                </div>
+                <div className="col-lg-4">
+                  {this.renderAppURLInput()}
+                </div>
+                <div className="col-lg-4">
+                  {this.renderAppCategory()}
+                </div>
+              </div>
+            </div>
+            {/* {this.renderAppNameInput()}
             {this.renderAppURLInput()}
-            {this.renderAppCategory()}
+            {this.renderAppCategory()} */}
             {this.renderAttributeFields()}
             {this.renderAttributeRanges()}
           </div>
@@ -597,4 +627,4 @@ class UploadData extends Component {
   }
 }
 
-export default UploadData;
+export default RegisterApp;
