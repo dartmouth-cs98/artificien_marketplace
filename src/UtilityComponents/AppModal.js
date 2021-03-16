@@ -69,9 +69,9 @@ class AppModal extends Component {
             <div className="artificien-modal" active />
           </div>
           <div className="app-modal-description">
-            {this.props.dataset.num_devices && <p><strong>Number of users:</strong> {this.props.dataset.num_devices.N}</p>}
-            {this.props.dataset.numPurchases && <p><strong>Number of purchases:</strong> {this.props.dataset.numPurchases.N}</p>}
-            {this.props.dataset.category && <p><strong>Category:</strong> {this.props.dataset.category.S}</p>}
+            {this.props.dataset.numPurchases && <p><strong>Number of purchases: </strong> {this.props.dataset.numPurchases.N}</p>}
+            {this.props.dataset.category && <p><strong>Category: </strong> {this.props.dataset.category.S}</p>}
+            {(this.props.dataset.properlySetUp && this.props.dataset.properlySetUp.BOOL) ? <p><strong>Integrated</strong></p> : <p><strong>Not Integrated</strong></p>}
           </div>
           <div className="app-modal-attributes">
             {this.props.dataset.attributeTypes

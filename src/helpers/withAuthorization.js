@@ -10,7 +10,8 @@ export default function withAuthorization(ComponentToBeRendered, validRoles) { /
     componentDidMount() {
       try {
         if (!(validRoles.includes(Number.parseInt(this.props.role, 10)))) {
-          this.props.history.push('/');
+          this.props.history.push('/'); // this isn't allowed
+          console.log('PUSH TO PROFILE A');
           this.props.openModal(true);
         } else {
           console.log('allowed');
@@ -22,7 +23,8 @@ export default function withAuthorization(ComponentToBeRendered, validRoles) { /
 
     componentWillUpdate(nextProps) {
       if (!(validRoles.includes(Number.parseInt(nextProps.role, 10)))) {
-        this.props.history.push('/');
+        this.props.history.push('/profile');
+        console.log('PUSH TO PROFILE');
         this.props.openModal(true);
       } else {
         console.log('still allowed');

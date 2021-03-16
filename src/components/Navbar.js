@@ -4,8 +4,9 @@ import { NavLink, withRouter } from 'react-router-dom';
 import '../style.scss';
 import { Auth } from 'aws-amplify';
 import { connect } from 'react-redux';
-import { getUser } from '../database/databaseCalls';
+// import { getUser } from '../database/databaseCalls';
 import { addRole } from '../store/reducers/role-reducer';
+import { openModal } from '../store/reducers/modal-reducer';
 import RoleButton from './RoleButton';
 
 /*
@@ -23,19 +24,9 @@ class Navbar extends Component {
   componentDidMount() {
     Auth.currentSession()
       .then((data) => {
-        const name = data.accessToken.payload.username;
-        const callback = (successData, error) => { // requires current user to be in database
-          if (error) {
-            console.log(error);
-          } else {
-            console.log('');
-            if (this.props.role === 2 && successData.Items.length > 0) {
-              this.props.addRole(successData.Items[0].role.S); // can't use ! here, 0 is falsey, add to initial state to redux store
-              console.log('adding role');
-            }
-          }
-        };
-        getUser(callback, name);
+        console.log('adding role');
+        this.props.addRole(1);
+        this.props.openModal(false);
       }).catch(() => {
         console.log('caught navbar');
       });
@@ -79,7 +70,7 @@ class Navbar extends Component {
             </ul>
             <ul className="nav-role-button-ul">
               <li className="role-button">
-                {this.props.role !== 2 && <RoleButton />}
+                {this.props.role !== 2 && <RoleButton start={this.props.role} />}
               </li>
               <li className="signout-button">
                 <button
@@ -129,7 +120,7 @@ class Navbar extends Component {
           </ul>
           <ul className="nav-role-button-ul">
             <li className="role-button">
-              {this.props.role !== 2 && <RoleButton />}
+              {this.props.role !== 2 && <RoleButton start={this.props.role} />}
             </li>
             <li className="signout-button">
               <button
@@ -169,7 +160,7 @@ class Navbar extends Component {
           </ul>
           <ul className="nav-role-button-ul">
             <li className="role-button">
-              {this.props.role !== 2 && <RoleButton />}
+              {this.props.role !== 2 && <RoleButton start={this.props.role} />}
             </li>
           </ul>
         </nav>
@@ -203,4 +194,4 @@ const mapStateToProps = (state) => {
 };
 
 // export default withRouter(withAuthenticator(Navbar)); // might be some sort of login flow thing here
-export default withRouter(connect(mapStateToProps, { addRole })(Navbar)); // might be some sort of login flow thing here
+export default withRouter(connect(mapStateToProps, { addRole, openModal })(Navbar)); // might be some sort of login flow thing here

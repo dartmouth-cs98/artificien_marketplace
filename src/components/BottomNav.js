@@ -89,28 +89,6 @@ class BottomNav extends Component {
           </div>
         </div>
       </footer>
-    // <div className="bottom-nav-container">
-    //   <div id="bottom-nav-column">Company
-    //     <p><NavLink ClassName="active" to="/about_us"> About Us </NavLink></p>
-    //     <p><NavLink to="/careers"> Careers </NavLink></p>
-    //     <p><NavLink to="/press"> Press </NavLink></p>
-    //   </div>
-    //   <div id="bottom-nav-column">Products
-    //     <p><NavLink ClassName="active" to="/marketplace"> Marketplace </NavLink></p>
-    //     <p><NavLink to="/models"> My Models </NavLink></p>
-    //     <p><NavLink to="/upload_data"> Data Upload </NavLink></p>
-    //     <p><NavLink to="/how_it_works"> How It Works </NavLink></p>
-    //   </div>
-    //   <div id="bottom-nav-column">Help
-    //     <p><NavLink to="/documentation"> Documentation </NavLink></p>
-    //     <p><a href="https://artificien.zendesk.com/hc/en-us">Support Desk</a></p>
-    //   </div>
-    //   <div id="bottom-nav-column">Contact
-    //     <p />
-    //     <p> <a href="https://www.linkedin.com/in/tobias-lange/" className="fa fa-linkedin">li</a> <br /></p>
-    //     <p> <a href="https://www.facebook.com/tobias.lange.5494/" className="fa fa-facebook">f</a></p>
-    //   </div>
-    // </div>
     );
   }
 }

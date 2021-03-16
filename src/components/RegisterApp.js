@@ -181,8 +181,6 @@ class RegisterApp extends Component {
           console.log('in the beast');
           const supposedMin = this.state.attributeRangeMinDict[i];
           const supposedMax = this.state.attributeRangeMaxDict[i];
-          //  console.log(Number.parseInt(supposedMin.S, 10));
-          // console.log(Number.parseInt(supposedMax.S, 10));
           if ((Number.parseInt(supposedMin.S, 10) > Number.parseInt(supposedMax.S, 10)) || (Number.isNaN(Number.parseInt(supposedMin.S, 10))) || (Number.isNaN(Number.parseInt(supposedMax.S, 10)))) {
             console.log('oooo no');
             return false;

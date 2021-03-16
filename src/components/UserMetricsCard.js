@@ -48,26 +48,17 @@ class UserMetricsCard extends Component {
           <Typography variant="h5" component="h2">
             {this.props.title}
           </Typography>
-          <br />
-          {String(this.props.title) !== 'Average Training Time'
-          && (
-          <Typography className={this.state.classes.pos} color="textSecondary">
+          <Typography variant="h5" component="h2" color="textSecondary">
             {this.props.body}
           </Typography>
-          )}
-          {String(this.props.title) === 'Average Training Time'
-          && (
-            <Typography className={this.state.classes.pos} color="textSecondary">
-              {this.props.body[0]} hours and {this.props.body[1]} minutes
-            </Typography>
-          )}
+          <br />
         </CardContent>
         <CardActions>
           <NavLink to="/models">
             {(this.props.title === 'Number of Models Created') && <Button size="small">See My Models</Button>}
           </NavLink>
-          <NavLink to="/upload_data">
-            {(this.props.title === 'Number of Datasets Running') && <Button size="small">Upload a Dataset</Button>}
+          <NavLink to="/register_app">
+            {(this.props.title === 'Number of Datasets Submitted') && <Button size="small">Upload a Dataset</Button>}
           </NavLink>
         </CardActions>
       </Card>
