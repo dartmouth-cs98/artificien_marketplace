@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import '../style.scss';
 import { Auth } from 'aws-amplify';
+import { connect } from 'react-redux';
 import {
   getUser,
   queryDatasetsMount,
@@ -10,8 +11,9 @@ import {
   scanDatasets,
 } from '../database/databaseCalls';
 import DataLibraryCard from './DataLibraryCard';
-import DatasetSideNav from './DatasetSideNav';
+// import DatasetSideNav from './DatasetSideNav';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
+import DatasetModal from '../UtilityComponents/DatasetModal';
 
 /*
 Component that renders library of all available datasets to shoppers
@@ -31,18 +33,12 @@ class Marketplace extends Component {
       allDatasets: null,
       categoryIsChosen: false,
       categoriesNotSet: true,
-      style: {
-        width: 0,
-      },
-      clickedDataset: null,
-      toDisplayDataset: null,
       currentUser: null,
       currentUserDatasetsPurchased: [],
       currentSearchTerm: null,
       searchTermInput: false,
+      clickedDataset: null,
     };
-    this.openNav = this.openNav.bind(this);
-    this.closeNav = this.closeNav.bind(this);
   }
 
   componentDidMount() {
@@ -68,9 +64,10 @@ class Marketplace extends Component {
           } else if (success.Items[0].datasets_purchased) {
             const newList = [];
             for (const datasetName of success.Items[0].datasets_purchased.L) {
-              console.log(datasetName.S);
               newList.push(datasetName.S);
             }
+            console.log('You have these');
+            console.log(newList);
             this.setState({ currentUserDatasetsPurchased: newList });
           }
         };
@@ -80,6 +77,20 @@ class Marketplace extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('click', this.closeNav);
+  }
+
+  checkIfAlreadyPurchased = (dataset) => {
+    console.log('checking for purchased: ');
+    console.log(dataset);
+    if (dataset && this.state.currentUserDatasetsPurchased) {
+      for (const purchased of this.state.currentUserDatasetsPurchased) {
+        if (String(purchased) === String(dataset.dataset_id.S)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return false;
   }
 
   categoryOnClickFunction = (category) => {
@@ -103,12 +114,9 @@ class Marketplace extends Component {
     const renderedDatasets = this.state.allDatasets.map((dataset) => { // make a card for all datasets
       return (
         <DataLibraryCard
-          key={Math.random()}
-          onClick={this.openNav}
-          app={dataset.app.S}
-          num_devices={dataset.num_devices.N}
-          category={dataset.category.S}
-          dataset_id={dataset.dataset_id.S}
+          onClick={() => this.setState({ clickedDataset: dataset })}
+          dataset={dataset}
+          currentUser={this.state.currentUser}
         />
       );
     });
@@ -121,25 +129,13 @@ class Marketplace extends Component {
     return renderedDatasetTable;
   };
 
-  getDisplayDataset = () => {
-    if (this.state.clickedDataset) {
-      let toDisplayTemp = null;
-      for (let i = 0; i < this.state.allDatasets.length; i += 1) {
-        if (
-          this.state.allDatasets[i].dataset_id.S === this.state.clickedDataset // iterating over all datasets, we've found the currently-clicked-on dataset
-        ) {
-          toDisplayTemp = this.state.allDatasets[i];
-          this.setState({ toDisplayDataset: toDisplayTemp });
-          this.setState({ clickedDataset: null });
-        }
-      }
-    }
-  };
-
   checkIfAlreadyPurchased = (dataset) => {
+    console.log('checking dataset');
+    console.log(dataset);
     if (dataset && this.state.currentUserDatasetsPurchased) {
       for (const purchased of this.state.currentUserDatasetsPurchased) {
         if (String(purchased) === String(dataset.dataset_id.S)) {
+          console.log('got it');
           return true;
         }
       }
@@ -164,35 +160,18 @@ class Marketplace extends Component {
     }
   }
 
-  // side nav
-  openNav(datasetId) {
-    this.setState({ style: { width: 350 } });
-    this.setState({ clickedDataset: datasetId });
-  }
-
-  closeNav() {
-    document.removeEventListener('click', this.closeNav);
-    const style = { width: 0 };
-    this.setState({ style });
-  }
-
   renderDatasetsInCategory = () => {
     if (!this.state.inCategory) {
       return <LoadingScreen />;
     }
     // make cards for datasets in category by sort
-    // console.log(this.state.inCategory.Items);
-    const renderedDatasets = this.state.inCategory.Items.map((dataset) => {
-      console.log('hello');
+    const approvedDatasets = this.state.inCategory.Items.filter((dataset) => dataset.properlySetUp && dataset.properlySetUp.BOOL === true);
+    const renderedDatasets = approvedDatasets.map((dataset) => {
       if (dataset.category.S === this.state.sortedCategory) {
         return (
           <DataLibraryCard
-            key={Math.random()}
-            onClick={this.openNav}
-            app={dataset.app.S}
-            num_devices={dataset.num_devices.N}
-            category={dataset.category.S}
-            dataset_id={dataset.dataset_id.S}
+            dataset={dataset}
+            currentUser={this.state.currentUser}
           />
         );
       }
@@ -216,16 +195,14 @@ class Marketplace extends Component {
     }
 
     // make cards for datasets out of category by sort
-    const renderedDatasets = this.state.outCategory.map((dataset) => {
+    const approvedDatasets = this.state.outCategory.Items.filter((dataset) => dataset.properlySetUp && dataset.properlySetUp.BOOL === true);
+    const renderedDatasets = approvedDatasets.map((dataset) => {
       if (dataset.category.S !== this.state.sortedCategory) {
         return (
           <DataLibraryCard
-            key={Math.random()}
-            onClick={this.openNav}
-            app={dataset.app.S}
-            num_devices={dataset.num_devices.N}
-            category={dataset.category.S}
-            dataset_id={dataset.dataset_id.S}
+            onClick={() => this.setState({ clickedDataset: dataset })}
+            dataset={dataset}
+            currentUser={this.state.currentUser}
           />
         );
       }
@@ -269,7 +246,6 @@ class Marketplace extends Component {
     return (
       <div>
         <div>{this.renderDatasetsInCategory()}</div>
-        {/* <div>{this.renderDatasetsOutOfCategory()}</div> */}
       </div>
     );
   };
@@ -286,11 +262,9 @@ class Marketplace extends Component {
       if (dataset.app.S.toLowerCase().includes(searchTerm.toLowerCase())) {
         finalDatasets.push(
           <DataLibraryCard
-            onClick={this.openNav}
-            app={dataset.app.S}
-            num_devices={dataset.num_devices.N}
-            category={dataset.category.S}
-            dataset_id={dataset.dataset_id.S}
+            onClick={() => this.setState({ clickedDataset: dataset })}
+            dataset={dataset}
+            currentUser={this.state.currentUser}
           />,
         );
       }
@@ -308,7 +282,6 @@ class Marketplace extends Component {
 
   // get all unique categories for all datasets available
   renderUniqueCategories = () => {
-    console.log(this.state.allDatasets);
     if (!this.state.allDatasets || this.state.allDatasets.length === 0) {
       return 'No datasets found';
     }
@@ -341,9 +314,8 @@ class Marketplace extends Component {
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
 
   render() {
-    this.getDisplayDataset();
-    const alreadyPurchased = this.checkIfAlreadyPurchased(this.state.toDisplayDataset);
-    // if we have a category, render in-category and out-of-category datasets separately.
+    const alreadyPurchased = this.checkIfAlreadyPurchased(this.state.clickedDataset);
+
     return (
       <>
         <div className="body">
@@ -358,19 +330,18 @@ class Marketplace extends Component {
                 : this.mountDisplayDatasets()}
               </div>
             )}
-          <div>
-            <DatasetSideNav
-              content={this.state.toDisplayDataset}
-              onClick={this.closeNav}
-              style={this.state.style}
-              alreadyPurchased={alreadyPurchased}
-              currentUser={this.state.currentUser}
-            />
-          </div>
+          <DatasetModal open={this.props.open} dataset={this.state.clickedDataset} currentUser={this.state.currentUser} alreadyPurchased={alreadyPurchased} />
         </div>
       </>
     );
   }
 }
 
-export default Marketplace;
+const mapStateToProps = (state) => {
+  return {
+    role: state.roleReducer.role,
+    open: state.datasetReducer.open,
+  };
+};
+
+export default connect(mapStateToProps)(Marketplace);

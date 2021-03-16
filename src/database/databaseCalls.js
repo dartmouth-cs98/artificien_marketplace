@@ -417,7 +417,7 @@ export function queryDatasetsOwner(callback, PK) {
 export function queryDatasetsCategory(callback, category) {
   const queryParams = { // works just fine
     // AttributesToGet: ['model_id', 'owner'],
-    IndexName: 'category-num_devices-index',
+    IndexName: 'category-app-index',
     ScanIndexForward: false,
     ExpressionAttributeValues: { ':partitionKeyVal': { S: category } },
     KeyConditionExpression: 'category = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
@@ -437,7 +437,7 @@ export function queryDatasetsCategory(callback, category) {
 export function queryDatasetsMount(callback) {
   const queryParams = { // works just fine
     // AttributesToGet: ['model_id', 'owner'],
-    IndexName: 'placeholder-num_devices-index',
+    IndexName: 'placeholder-app',
     ScanIndexForward: false,
     ExpressionAttributeValues: { ':partitionKeyVal': { S: 'placeholder' } },
     KeyConditionExpression: 'placeholder = :partitionKeyVal',

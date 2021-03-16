@@ -103,14 +103,15 @@ class Profile extends Component {
       if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'userModels') {
         console.log('models');
         metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models Created" body={this.state.clientMetricsDict.userModels.Items.length} username={this.state.userData.username.S} />);
-      } else if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'numDevicesReached') {
-        console.log('numDevices');
-        metricCards.push(<UserMetricsCard id="user-metric" title="Number of Devices Reached" body={this.state.clientMetricsDict.numDevicesReached} username={this.state.userData.username.S} />);
-      } else if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'averageTrainingTime') {
-        console.log('training');
-        metricCards.push(<UserMetricsCard id="user-metric" title="Average Training Time" body={this.state.clientMetricsDict.averageTrainingTime} username={this.state.userData.username.S} />);
-      } else {
-        console.log(Object.keys(this.state.clientMetricsDict)[i]);
+      // } else if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'numDevicesReached') {
+      //   console.log('numDevices');
+      //   metricCards.push(<UserMetricsCard id="user-metric" title="Number of Devices Reached" body={this.state.clientMetricsDict.numDevicesReached} username={this.state.userData.username.S} />);
+      // } else if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'averageTrainingTime') {
+      //   console.log('training');
+      //   metricCards.push(<UserMetricsCard id="user-metric" title="Average Training Time" body={this.state.clientMetricsDict.averageTrainingTime} username={this.state.userData.username.S} />);
+      // } else {
+      //   console.log(Object.keys(this.state.clientMetricsDict)[i]);
+      // }
       }
     }
     return metricCards;

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import update from 'react-addons-update'; // ES6
 import { Link } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { putDataset } from '../database/databaseCalls';
+import { putDataset, getDataset } from '../database/databaseCalls';
 
 // import { Button } from 'reactstrap';
 
@@ -13,6 +13,7 @@ class RegisterApp extends Component {
 
     this.state = {
       appName: null,
+      nameIsUnique: false,
       appCategory: null,
       numAttributes: null,
       appURL: null,
@@ -348,12 +349,29 @@ class RegisterApp extends Component {
   }
 
   addAppName = (event) => {
+    this.setState({ nameIsUnique: false });
     if (!(event.target.value === '')) {
       this.setState({ appName: event.target.value });
       this.setState({ appNameSubmitted: true });
     } else {
       this.setState({ appNameSubmitted: false });
     }
+  }
+
+  checkNameUnique = (name) => {
+    const callback = (success, error) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(success);
+        if (success.Item) {
+          this.setState({ nameIsUnique: false });
+        } else {
+          this.setState({ nameIsUnique: true });
+        }
+      }
+    };
+    getDataset(callback, name);
   }
 
   renderAppNameInput = () => {
@@ -373,7 +391,8 @@ class RegisterApp extends Component {
           <h2>App Name</h2>
           <div>
             <input id="appNameInput" type="text" placeholder="name" onChange={(e) => this.addAppName(e)} />
-            <h4><i><span>&#10003;</span></i></h4>
+            <button type="button" onClick={() => this.checkNameUnique(this.state.appName)}>Confirm</button>
+            {this.state.nameIsUnique ? <h4><i><span>&#10003;</span></i></h4> : <h4><i><span>Please use a unique app name</span></i></h4>}
           </div>
         </div>
       );
@@ -465,7 +484,8 @@ class RegisterApp extends Component {
         || this.state.attributeTypeSubmitted < this.state.numAttributes // not enough attribute names or not enough attribute types
         || Object.keys(this.state.attributeDescriptionDict).length < this.state.numAttributes // or not enough attribute descriptions
         || this.isEmptyDescription()
-          || this.isemptyAttributeName()
+        || this.isemptyAttributeName()
+        || !this.state.nameIsUnique
         ) { // any
           console.log(this.state.attributeDescriptionDict);
           return (
@@ -503,7 +523,7 @@ class RegisterApp extends Component {
   }
 
   checkForSubmit = () => {
-    if (this.state.finalRangesEntered && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
+    if (this.state.finalRangesEntered && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted && this.nameIsUnique) {
       this.readyForSubmit();
     }
   }
@@ -513,7 +533,7 @@ class RegisterApp extends Component {
     // idea - if everything above is submitted
 
     if (this.state.readyForRanges) { // we are ready to render the ranges
-      if (this.state.readyForSubmit && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) { // all ranges have been put in
+      if (this.state.readyForSubmit && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted && this.state.nameIsUnique) { // all ranges have been put in
         if (this.getNumNumberAttributes() < 1) {
           return (
             <div>
@@ -540,7 +560,7 @@ class RegisterApp extends Component {
               <h4><i>Please complete all of the required fields to submit</i></h4>
             </div>
           );
-        } else if (this.state.intermediateRangesEntered) {
+        } else if (this.state.nameIsUnique && this.state.intermediateRangesEntered) {
           return (
             <div>
               {this.state.attributeRangeInputs}
