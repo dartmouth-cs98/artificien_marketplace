@@ -350,6 +350,7 @@ export async function putDataset(callback, app, category, appURL, attributes, at
       numPurchases: { N: '0' },
       owner_username: { S: owner },
       properlySetUp: { BOOL: false },
+      hasNode: { BOOL: false },
     },
     TableName: 'dataset_table',
     ReturnConsumedCapacity: 'TOTAL',
