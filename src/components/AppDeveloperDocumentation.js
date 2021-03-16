@@ -125,7 +125,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
             <p>
               This documentation outlines how to integrate your existing iOS app with Artificien's on-device training.
               Before you do this, please fill out <NavLink to="/register_app">the form here</NavLink> to register your
-              app and describe its data. You can also read our <NavLink to="tutorial">Tutorial</NavLink> page
+              app and describe its data. You can also read our <NavLink to="/tutorial">Tutorial</NavLink> page
               to understand how your app fits into the Artificien ecosystem.
             </p>
             <p>
