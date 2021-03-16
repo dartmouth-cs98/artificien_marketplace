@@ -21,7 +21,7 @@ import AppModal from '../UtilityComponents/AppModal';
 const artificienTheme = createMuiTheme({
   typography: {
     fontFamily: [
-      'Avenir',
+      'Josefin Sans',
     ].join(','),
   },
 });
@@ -153,7 +153,7 @@ class ProfileAccordion extends Component {
       isExpanded ? this.setState({ expanded: panel }) : this.setState({ expanded: false }); // new state manager//
     };
     return (
-      <div className={classes.root} style={{ margin: '10%' }}>
+      <div className={classes.root} style={{ margin: '0 10% 0 10%' }}>
         {/* Account information */}
         <Accordion expanded={this.state.expanded === 'panel1'} onChange={handleChange('panel1')}>
           <AccordionSummary
@@ -170,7 +170,7 @@ class ProfileAccordion extends Component {
                 <Typography style={{ 'font-weight': 'bold', 'padding-left': '20px', 'text-align': 'left' }}>
                   {this.props.content.date_joined && <Typography>Date Joined: {this.props.content.date_joined.S}</Typography>}
                   {this.props.content.username && <Typography>Username: {this.props.content.username.S}</Typography>}
-                  {this.props.content.user_id && <Typography>User ID: {this.props.content.user_id.S}</Typography>}
+                  {this.props.content.user_id && <Typography>Email: {this.props.content.user_id.S}</Typography>}
                 </Typography>
               ) : <p>You dont have any personal information yet!</p>}
           </AccordionDetails>
@@ -250,7 +250,7 @@ class ProfileAccordion extends Component {
               'font-weight': 500,
             }}
             >
-              <strong>{this.state.currentAPIkey}</strong>
+              <strong id="apiKey">{this.state.currentAPIkey}</strong>
             </div>
           </AccordionDetails>
         </Accordion>

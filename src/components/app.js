@@ -10,7 +10,7 @@ import {
 
 // import { withAuthenticator } from '@aws-amplify/ui-react';
 
-import BottomNav from './BottomNav';
+// import BottomNav from './BottomNav';
 import Marketplace from './Marketplace';
 import Models from './Models';
 import UploadData from './UploadData';
@@ -27,13 +27,14 @@ import Careers from './Careers';
 import Press from './Press';
 import HowItWorks from './HowItWorks';
 import AuthPage from './AuthPage';
+import BottomNav from './BottomNav';
 
 // CHANGE BACK: models, upload data, create model, profile, tutorials
 function App(props) {
   return (
     <>
       <Router>
-        <Navbar style={{ 'font-family': 'Avenir' }} />
+        <Navbar />
         <Switch>
           <Route exact path="/" component={withAuthorization(Welcome, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
           <Route exact path="/marketplace" component={withAuthorization(Marketplace, [Roles.CLIENT, Roles.GUEST])} />

@@ -79,6 +79,7 @@ class Navbar extends Component {
                 type="button"
                 onClick={() => {
                   Auth.signOut();
+                  this.props.history.push('/');
                   window.location.reload(false);
                 }}
                 variant="outlined"
