@@ -49,6 +49,7 @@ class DatasetSideNav extends Component {
   }
 
   updateDatasetsPurchased = (newDatasetsList, userID, datasetID, oldNumPurchases) => {
+    console.log(this.props.datasetID);
     const newNumPurchases = String(Number.parseInt(oldNumPurchases, 10) + 1);
     const upParamsUser = {
       Key: {

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import update from 'react-addons-update'; // ES6
 import { Link } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { putDataset } from '../database/databaseCalls';
+import { putDataset, getUser, updateItem } from '../database/databaseCalls';
 
 // import { Button } from 'reactstrap';
 
@@ -55,6 +55,77 @@ class UploadData extends Component {
   // sets the number of attributes
   numAttributesOnChange = (event) => {
     this.setState({ numAttributes: event.target.value });
+  }
+
+  // bringing over code
+  purchaseDataset = async (datasetID, username, oldNumPurchases) => {
+    this.setState({ alreadyPurchased: true });
+    this.setState((state) => {
+      state.recentlyPurchased.push(datasetID);
+      return {
+        ...state,
+      };
+    });
+    const callback = (data, error) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(data);
+        this.setState({ alreadyPurchased: true });
+        if (data.Items[0].datasets_purchased) { // if list exists, append to list
+          const datasetsPurchased = data.Items[0].datasets_purchased.L;
+          const datasetsPurchasedNew = [...datasetsPurchased];
+          datasetsPurchasedNew.push({ S: datasetID });
+          this.updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S, datasetID, oldNumPurchases);
+        } else { // if field doesn't exist (user hasn't purchased yet?), create a new list and add
+          const newDatasetsPurchasedList = [{ S: datasetID }];
+          this.updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S, datasetID, oldNumPurchases);
+          this.props.alreadyPurchased = true;
+          console.log(this.props.content.alreadyPurchased);
+        }
+      }
+    };
+    getUser(callback, username);
+  }
+
+  updateDatasetsPurchased = (newDatasetsList, userID, datasetID, oldNumPurchases) => {
+    const newNumPurchases = String(Number.parseInt(oldNumPurchases, 10) + 1);
+    const upParamsUser = {
+      Key: {
+        user_id: {
+          S: userID,
+        },
+      },
+      AttributeUpdates: {
+        datasets_purchased: {
+          Action: 'PUT',
+          Value: {
+            L: newDatasetsList,
+          },
+        },
+      },
+      ReturnValues: 'ALL_NEW',
+      TableName: 'user_table',
+    };
+    const upParamsDataset = {
+      Key: {
+        dataset_id: {
+          S: datasetID,
+        },
+      },
+      AttributeUpdates: {
+        numPurchases: {
+          Action: 'PUT',
+          Value: {
+            N: newNumPurchases,
+          },
+        },
+      },
+      ReturnValues: 'ALL_NEW',
+      TableName: 'dataset_table',
+    };
+    updateItem(upParamsUser);
+    updateItem(upParamsDataset);
   }
 
   // add the attribute name, make sure it only enters once (with the repeat stuff)
@@ -192,6 +263,7 @@ class UploadData extends Component {
     this.buildAttributeNameAndTypeAndDescriptionLists();
     this.buildAttributeRangeLists();
     this.checkValidRanges();
+    console.log(this.props);
 
     // including the app url
     putDataset(callback, this.state.appName,
@@ -200,6 +272,7 @@ class UploadData extends Component {
       this.state.attributeRangeMins, this.state.attributeRangeMaxes, this.state.attributeDescriptionList,
       this.state.currentUser);
 
+    this.purchaseDataset(this.state.appName, this.props.currentUser, 0);
     document.getElementById('appNameInput').value = '';
     document.getElementById('appURLInput').value = '';
 
@@ -393,10 +466,8 @@ class UploadData extends Component {
             <div className="attribute">
               <input type="text" placeholder="Attribute Name" onChange={(e) => this.addAttributeName(e, i)} />
               <select style={{ margin: '0px 50px' }} onChange={(e) => this.addAttributeType(e, i)}>
-                <option value="O">None</option>
-                <option value="S">String</option>
-                <option value="N">Number</option>
-                <option value="B">Binary</option>
+                <option value="O">Select</option>
+                <option value="N">Float</option>
               </select>
               <label htmlFor="description">Attribute Description: </label>
               <textarea id="description" rows="5" cols="33" onChange={(e) => this.addAttributeDescription(e, i)} />
