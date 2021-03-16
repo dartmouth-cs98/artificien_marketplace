@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import { Auth } from 'aws-amplify';
+import { withRouter } from 'react-router-dom';
 import AntSwitch from './AntSwitch';
 import { addRole } from '../store/reducers/role-reducer';
 import {
@@ -68,4 +69,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { addRole })(RoleButton);
+export default withRouter(connect(mapStateToProps, { addRole })(RoleButton));

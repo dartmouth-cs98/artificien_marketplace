@@ -60,8 +60,10 @@ class ProfileAccordion extends Component {
         console.log(error);
       } else {
         console.log(successData);
-        const key = successData.Items[0].api_key.S;
-        this.setState({ currentAPIkey: key });
+        if (successData.Items[0].api_key) {
+          const key = successData.Items[0].api_key.S;
+          this.setState({ currentAPIkey: key });
+        }
       }
     };
     getUser(callback, name);
@@ -172,7 +174,7 @@ class ProfileAccordion extends Component {
                   {this.props.content.username && <Typography>Username: {this.props.content.username.S}</Typography>}
                   {this.props.content.user_id && <Typography>Email: {this.props.content.user_id.S}</Typography>}
                 </Typography>
-              ) : <p>You dont have any personal information yet!</p>}
+              ) : <Typography>You dont have any personal information yet!</Typography>}
           </AccordionDetails>
         </Accordion>
         {/* Payment information */}
@@ -193,7 +195,7 @@ class ProfileAccordion extends Component {
                   {this.props.content.bank_info && this.props.content.bank_info.bank_number && <Typography>User ID: {this.props.content.bank_info.bank_number.S}</Typography>}
                 </Typography>
               )
-              : <p>You dont have any payment information yet!</p>}
+              : <Typography>You dont have any payment information yet!</Typography>}
           </AccordionDetails>
         </Accordion>
         <Accordion expanded={this.state.expanded === 'panel3'} onChange={handleChange('panel3')}>

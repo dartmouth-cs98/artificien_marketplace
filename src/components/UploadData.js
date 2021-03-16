@@ -7,7 +7,7 @@ import { putDataset, getDataset } from '../database/databaseCalls';
 
 // import { Button } from 'reactstrap';
 
-class RegisterApp extends Component {
+class UploadData extends Component {
   constructor(props) {
     super(props);
 
@@ -25,7 +25,6 @@ class RegisterApp extends Component {
       readyForRanges: false,
       addAttributeForms: true,
       readyForSubmit: false,
-      intermediateRangesEntered: false,
       finalRangesEntered: false,
       readyOnce: false,
 
@@ -72,14 +71,6 @@ class RegisterApp extends Component {
     }
   }
 
-  isemptyAttributeName = () => {
-    console.log(this.state.attributeNameDict);
-    for (let i = 0; i < Object.keys(this.state.attributeNameDict).length; i += 1) {
-      if (this.state.attributeNameDict[i].S === '') return true;
-    }
-    return false;
-  }
-
   addAttributeDescription = (event, i) => {
     this.setState((state) => {
       // eslint-disable-next-line no-param-reassign
@@ -102,12 +93,6 @@ class RegisterApp extends Component {
   addAttributeRangeMin = (event, i) => {
     // this.state.attributeRangeMins.push({ S: event.target.value });
     this.state.attributeRangeMinDict[i] = { S: event.target.value };
-    console.log(this.state.attributeRangeMinDict);
-    console.log('min');
-    const output = this.checkValidRanges();
-    this.setState({ intermediateRangesEntered: output });
-    console.log(event.target.value);
-    console.log(this.state.intermediateRangesEntered);
   }
 
   // set the range maximum to the value (stringify)
@@ -115,11 +100,6 @@ class RegisterApp extends Component {
     // this.state.attributeRangeMaxes.push({ S: event.target.value });
     this.state.attributeRangeMaxDict[i] = { S: event.target.value };
     this.setState({ addAttributeForms: false });
-    console.log('max');
-    const output = this.checkValidRanges();
-    this.setState({ intermediateRangesEntered: output });
-    console.log(event.target.value);
-    console.log(this.state.intermediateRangesEntered);
   }
 
   // make sure that the attribute type is NOT none!
@@ -171,31 +151,16 @@ class RegisterApp extends Component {
   // make sure max > min!
   checkValidRanges = () => {
     const numNumberAttributes = this.getNumNumberAttributes();
-    console.log('yes');
-
-    // this goes through, if max > min OR one of them is NaN (i.e. empty, not a number), return false, this makes sure you cannot submit ranges
     if (numNumberAttributes > 0) {
       for (let i = 0; i < numNumberAttributes; i += 1) {
-        console.log('iterating');
-        if (this.state.attributeRangeMinDict[i] && this.state.attributeRangeMaxDict[i]) {
-          console.log('in the beast');
-          const supposedMin = this.state.attributeRangeMinDict[i];
-          const supposedMax = this.state.attributeRangeMaxDict[i];
-          //  console.log(Number.parseInt(supposedMin.S, 10));
-          // console.log(Number.parseInt(supposedMax.S, 10));
-          if ((Number.parseInt(supposedMin.S, 10) > Number.parseInt(supposedMax.S, 10)) || (Number.isNaN(Number.parseInt(supposedMin.S, 10))) || (Number.isNaN(Number.parseInt(supposedMax.S, 10)))) {
-            console.log('oooo no');
-            return false;
-          }
-        } else {
-          console.log('not good enough');
-          return false;
+        const supposedMin = this.state.attributeRangeMins[i];
+        const supposedMax = this.state.attributeRangeMaxes[i];
+        if (Number.parseInt(supposedMin.S, 10) > Number.parseInt(supposedMax.S, 10)) {
+          this.state.attributeRangeMins[i] = supposedMax;
+          this.state.attributeRangeMaxes[i] = supposedMin;
         }
+        if (supposedMin === supposedMax) this.state.attributeRangeMins[i] = String(Number.parseInt(supposedMin, 10) - 0.1);
       }
-      console.log('ranges entered!');
-      return true;
-    } else {
-      return false;
     }
   }
 
@@ -227,8 +192,7 @@ class RegisterApp extends Component {
 
     this.buildAttributeNameAndTypeAndDescriptionLists();
     this.buildAttributeRangeLists();
-    // this.checkValidRanges();
-    console.log(this.props);
+    this.checkValidRanges();
 
     // including the app url
     putDataset(callback, this.state.appName,
@@ -237,8 +201,6 @@ class RegisterApp extends Component {
       this.state.attributeRangeMins, this.state.attributeRangeMaxes, this.state.attributeDescriptionList,
       this.state.currentUser);
 
-    // const test = 0;
-    // this.purchaseDataset(this.state.appName, this.props.currentUser, test);
     document.getElementById('appNameInput').value = '';
     document.getElementById('appURLInput').value = '';
 
@@ -253,7 +215,6 @@ class RegisterApp extends Component {
 
     this.setState({ attributeRangeMins: [] });
     this.setState({ attributeRangeMinDict: {} });
-    this.setState({ intermediateRangesEntered: false });
 
     this.setState({ attributeRangeMaxes: [] });
     this.setState({ attributeRangeMaxDict: {} });
@@ -304,40 +265,32 @@ class RegisterApp extends Component {
     if (!this.state.categorySubmitted) {
       return (
         <div>
-          <h2>App Category</h2>
+          <h2>What category is your app in?</h2>
           <div>
             <div>
               <select id="categoryInput" value={this.state.appCategory} onChange={(e) => this.addAppCategory(e)}>
                 <option value="None">None</option>
-                <option value="Medical/Health">Medical/Health</option>
-                <option value="Navigation/Location">Navigation/Location</option>
-                <option value="Music/Media">Music/Media</option>
-                <option value="News">News</option>
-                <option value="Financial/Shopping">Financial/Shopping</option>
-                <option value="Lifestyle/Social">Lifestyle/Social</option>
-                <option value="Gaming">Gaming</option>
+                <option value="Health">Health</option>
+                <option value="Location">Location</option>
+                <option value="Consumer">Consumer</option>
                 <option value="Other">Other</option>
               </select>
             </div>
-            <h4><i>Please select a category</i></h4>
+            <h4><i>invalid - app must have a category</i></h4>
           </div>
         </div>
       );
     } else {
       return (
         <div>
-          <h2>App Category</h2>
+          <h2>What category is your app in?</h2>
           <div>
             <div>
               <select onChange={(e) => this.addAppCategory(e)}>
                 <option value="None">None</option>
-                <option value="Medical/Health">Medical/Health</option>
-                <option value="Navigation/Location">Navigation/Location</option>
-                <option value="Music/Media">Music/Media</option>
-                <option value="News">News</option>
-                <option value="Financial/Shopping">Financial/Shopping</option>
-                <option value="Lifestyle/Social">Lifestyle/Social</option>
-                <option value="Gaming">Gaming</option>
+                <option value="Health">Health</option>
+                <option value="Location">Location</option>
+                <option value="Consumer">Consumer</option>
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -378,21 +331,21 @@ class RegisterApp extends Component {
     if (!this.state.appNameSubmitted) {
       return (
         <div>
-          <h2>App Name</h2>
+          <h2>What is your app named?</h2>
           <div>
             <input id="appNameInput" type="text" placeholder="name" onChange={(e) => this.addAppName(e)} />
-            <h4><i>Your app must have a unique name</i></h4>
+            <h4><i>invalid - app must have a name</i></h4>
           </div>
         </div>
       );
     } else {
       return (
         <div>
-          <h2>App Name</h2>
+          <h2>What is your app named?</h2>
           <div>
             <input id="appNameInput" type="text" placeholder="name" onChange={(e) => this.addAppName(e)} />
             <button type="button" onClick={() => this.checkNameUnique(this.state.appName)}>Confirm</button>
-            {this.state.nameIsUnique ? <h4><i><span>&#10003;</span></i></h4> : <h4><i>Please use a unique app name</i></h4>}
+            {this.state.nameIsUnique ? <h4><i><span>&#10003;</span></i></h4> : <h4><i><span>Please use a unique app name</span></i></h4>}
           </div>
         </div>
       );
@@ -400,9 +353,8 @@ class RegisterApp extends Component {
   }
 
   readyForSubmit = () => {
-    console.log('ready for submit');
     if (this.state.finalRangesEntered && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
-      console.log('all good here');
+      console.log('ready for submit');
       this.setState({ readyForSubmit: true });
       this.setState({ readyOnce: true });
     } else {
@@ -412,9 +364,10 @@ class RegisterApp extends Component {
 
   // checks if the ranges have been input correctly
   checkIfRangesReady = () => {
+    console.log('NOOOOOOOOOOO');
     if ((Object.keys(this.state.attributeRangeMaxDict).length === this.state.attributeRangeInputs.length && !this.state.readyForSubmit) // all our number attributes have ranges
-    || ((Object.keys(this.state.attributeTypeDict).length === Number.parseInt(this.state.numAttributes, 10)
-    && Object.keys(this.state.attributeNameDict).length === Number.parseInt(this.state.numAttributes, 10)) && this.getNumNumberAttributes() < 1)) {
+    || ((Object.keys(this.state.attributeTypeDict).length === Number.parseInt(this.state.numAttributes, 10) // as many types as attributes
+    && Object.keys(this.state.attributeNameDict).length === Number.parseInt(this.state.numAttributes, 10)) && this.getNumNumberAttributes() < 1)) { // as many names
       this.setState({ finalRangesEntered: true });
     }
   }
@@ -441,8 +394,8 @@ class RegisterApp extends Component {
     if (!this.state.numAttributes) {
       return (
         <div>
-          <h2>Attributes</h2>
-          <label htmlFor="attrNum">Number of Attributes:&nbsp;</label>
+          <h2>Add Your Attributes</h2>
+          <label htmlFor="attrNum">Number of Attributes:  </label>
           <select id="attrNum" onChange={(e) => this.numAttributesOnChange(e)}>
             <option value="1">0</option>
             <option value="1">1</option>
@@ -451,15 +404,6 @@ class RegisterApp extends Component {
             <option value="4">4</option>
             <option value="5">5</option>
             <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
           </select>
         </div>
       );
@@ -470,87 +414,75 @@ class RegisterApp extends Component {
             <div className="attribute">
               <input type="text" placeholder="Attribute Name" onChange={(e) => this.addAttributeName(e, i)} />
               <select style={{ margin: '0px 50px' }} onChange={(e) => this.addAttributeType(e, i)}>
-                <option value="O">Select</option>
-                <option value="N">Float</option>
+                <option value="O">None</option>
+                <option value="S">String</option>
+                <option value="N">Number</option>
+                <option value="B">Binary</option>
               </select>
               <label htmlFor="description">Attribute Description: </label>
-              <textarea id="description" rows="3" cols="33" onChange={(e) => this.addAttributeDescription(e, i)} />
+              <textarea id="description" rows="5" cols="33" onChange={(e) => this.addAttributeDescription(e, i)} />
             </div>,
           );
         }
         this.setState({ addAttributeForms: false });
       }
-      if (!this.state.readyForRanges) {
-        // if attribute input forms have been rendered
-        if (this.state.readyForRangesButton) {
-          if (Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes
-          || this.state.attributeTypeSubmitted < this.state.numAttributes // not enough attribute names or not enough attribute types
-          || Object.keys(this.state.attributeDescriptionDict).length < this.state.numAttributes // or not enough attribute descriptions
-          || this.isEmptyDescription()
-          || this.isemptyAttributeName()
-          ) { // any
-            console.log(this.state.attributeDescriptionDict);
-            return (
-              <div className="dataLists">
-                <div className="typesList">
-                  <h2>Add Your Attributes</h2>
-                  {this.state.inputDatatypeFormList}
-                  <h4><i>Submit nonempty attribute names, types, and descriptions to proceed</i></h4>
-                </div>
-              </div>
-            );
-          } else { // if all names, types, and descriptions are correct
-            return (
-              <div className="dataLists">
-                <div className="typesList">
-                  <h2>Add Your Attributes</h2>
-                  {this.state.inputDatatypeFormList}
-                  <button type="submit" className="submit" onClick={() => { this.readyForRanges(); }}>Ranges</button>
-                </div>
-              </div>
-            );
-          }
-        } else { // if first four forms aren't even full...
+      // if attribute input forms have been rendered
+      if (this.state.readyForRangesButton) {
+        if (Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes
+        || this.state.attributeTypeSubmitted < this.state.numAttributes // not enough attribute names or not enough attribute types
+        || Object.keys(this.state.attributeDescriptionDict).length < this.state.numAttributes // or not enough attribute descriptions
+        || this.isEmptyDescription()
+        || !this.state.nameIsUnique) { // any
+          console.log(this.state.attributeDescriptionDict);
           return (
             <div className="dataLists">
               <div className="typesList">
                 <h2>Add Your Attributes</h2>
                 {this.state.inputDatatypeFormList}
-                <h4><i>Complete all fields to submit this dataset</i></h4>
+                <h3><i>Submit nonempty attribute names, types, and descriptions to proceed</i></h3>
+              </div>
+            </div>
+          );
+        } else { // if all names, types, and descriptions are correct
+          return (
+            <div className="dataLists">
+              <div className="typesList">
+                <h2>Add Your Attributes</h2>
+                {this.state.inputDatatypeFormList}
+                <button type="submit" className="submit" onClick={() => this.readyForRanges()}>Ranges</button>
               </div>
             </div>
           );
         }
-      }
-
-      return (
-        <div className="dataLists">
-          <div className="typesList">
-            <h2>Add Your Attributes</h2>
-            <h4><i><span>Attributes submitted</span></i></h4>
+      } else { // if first four forms aren't even full...
+        return (
+          <div className="dataLists">
+            <div className="typesList">
+              <h2>Add Your Attributes</h2>
+              {this.state.inputDatatypeFormList}
+              <h3><i>Submit all forms to enter dataset</i></h3>
+            </div>
           </div>
-        </div>
-      );
+        );
+      }
     }
   }
 
   checkForSubmit = () => {
-    if (this.state.finalRangesEntered && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted && this.state.nameIsUnique) {
+    if (this.state.finalRangesEntered && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted && this.nameIsUnique) {
+      console.log('check for submit');
       this.readyForSubmit();
     }
   }
 
   renderAttributeRanges = () => {
-    // can we simplify?
-    // idea - if everything above is submitted
-
     if (this.state.readyForRanges) { // we are ready to render the ranges
       if (this.state.readyForSubmit && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted && this.state.nameIsUnique) { // all ranges have been put in
         if (this.getNumNumberAttributes() < 1) {
           return (
             <div>
               <h4><i>No number type fields, please submit</i></h4>
-              <Link to="/app_developer_documentation" style={{ textDecoration: 'none' }}>
+              <Link to="/documentation" style={{ textDecoration: 'none' }}>
                 <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
               </Link>
             </div>
@@ -558,8 +490,8 @@ class RegisterApp extends Component {
         }
         return (
           <div>
-            <h4><i><span>Ranges and all other fields entered correctly: submit this dataset</span></i></h4>
-            <Link to="/app_developer_documentation" style={{ textDecoration: 'none' }}>
+            <h4><i>Ranges and all other fields entered correctly, please submit dataset</i></h4>
+            <Link to="/documentation" style={{ textDecoration: 'none' }}>
               <button type="submit" className="submit" onClick={() => { this.submitAttributes(); }}>Submit</button>
             </Link>
           </div>
@@ -569,10 +501,11 @@ class RegisterApp extends Component {
         if (this.state.readyOnce) {
           return (
             <div>
-              <h4><i>Please complete all of the required fields to submit</i></h4>
+              <h4><i>Please submit one of the top four fields to submit</i></h4>
             </div>
           );
-        } else if (this.state.nameIsUnique && this.state.intermediateRangesEntered) {
+        } else if (this.state.nameIsUnique) {
+          console.log('submit ranges plee');
           return (
             <div>
               {this.state.attributeRangeInputs}
@@ -580,17 +513,10 @@ class RegisterApp extends Component {
             </div>
           );
         } else {
-          return (
-            <div>
-              {this.state.attributeRangeInputs}
-              <h4><i>Please make sure the min is less than the max in every attribute!</i></h4>
-            </div>
-          );
+          return null;
         }
       }
     } else {
-      console.log('no beans');
-      console.log(this.state.nameIsUnique);
       return (
         null
       );
@@ -602,17 +528,17 @@ class RegisterApp extends Component {
     if (!this.state.appURLSubmitted) { // if number of users hasn't been submitted yet, give invalid message, make sure the number is positive!
       return (
         <div>
-          <h2>App Store Link</h2>
+          <h2>What is your app URL?</h2>
           <div>
             <input id="appURLInput" type="text" placeholder="https://apps.apple.com" onChange={(e) => this.addAppURL(e)} />
-            <h4><i>Please submit a valid URL beginning with https://apps.apple.com...</i></h4>
+            <h4><i>invalid - must submit a url that begins with https://apps.apple.com...</i></h4>
           </div>
         </div>
       );
     } else { // number of users submitted, valid
       return (
         <div>
-          <h2>App Store Link</h2>
+          <h2>What is your app URL?</h2>
           <div>
             <input id="appURLInput" type="text" placeholder="https://apps.apple.com" onChange={(e) => this.addAppURL(e)} />
             <h4><i><span>&#10003;</span></i></h4>
@@ -625,7 +551,6 @@ class RegisterApp extends Component {
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
 
   render() {
-    // are we sure we want it this way?
     if (!this.state.readyForRangesButton) {
       if (this.state.appNameSubmitted && this.state.categorySubmitted && this.state.appURLSubmitted) {
         this.setState({ readyForRangesButton: true });
@@ -633,25 +558,12 @@ class RegisterApp extends Component {
     }
     return (
       <>
-        <div id="register-app-container">
-          <h1>Register App</h1>
+        <div>
+          <h1>Upload Your Data</h1>
           <div>
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-4">
-                  {this.renderAppNameInput()}
-                </div>
-                <div className="col-lg-4">
-                  {this.renderAppURLInput()}
-                </div>
-                <div className="col-lg-4">
-                  {this.renderAppCategory()}
-                </div>
-              </div>
-            </div>
-            {/* {this.renderAppNameInput()}
+            {this.renderAppNameInput()}
             {this.renderAppURLInput()}
-            {this.renderAppCategory()} */}
+            {this.renderAppCategory()}
             {this.renderAttributeFields()}
             {this.renderAttributeRanges()}
           </div>
@@ -661,4 +573,4 @@ class RegisterApp extends Component {
   }
 }
 
-export default RegisterApp;
+export default UploadData;

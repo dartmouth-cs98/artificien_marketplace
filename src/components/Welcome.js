@@ -144,7 +144,7 @@ class Welcome extends Component {
                   public application data without compromising user privacy.
                 </h2>
                 <div data-aos="fade-up" data-aos-delay="600">
-                  <button type="button" className="submit" onClick={() => this.props.history.push('/auth')}>Sign In</button>
+                  {Number.parseInt(this.props.role, 10) === 2 && <button type="button" className="submit" onClick={() => this.props.history.push('/auth')}>Sign In</button>}
                   {/* {this.props.role === 2 && this.renderAuth()} */}
                 </div>
               </div>
