@@ -13,33 +13,34 @@ class ModelDetailsCard extends Component {
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
-    if (parseInt(this.props.percent_complete, 10) === 100) { // completed
+    if (parseInt(this.props.percent_complete, 10) !== 100) { // in progress
       return (
         // onclick, function will initiate recall of model from PyGrid node
         <div className="model-card">
-          <div className="models-completed-headers">
-            <p id="model-p">{this.props.model_id} </p>
-            <p id="model-p">{this.props.date_submitted}</p>
-            <p id="model-p">{this.props.dataset}</p>
-            {parseInt(this.props.percent_complete, 10) === 100 ? <p id="model-p">Success</p> : <p id="model-p">Error</p>}
+          <div className="models-inprogress-card-content">
+            <p id="model-p-progress">{this.props.model_id} </p>
+            <p id="model-p-progress">{this.props.date_submitted}</p>
+            <p id="model-p-progress">{this.props.dataset}</p>
+            <p id="model-p-progress">{this.props.percent_complete}%</p>
+            {/* <p id="model-p-progress">{this.props.accuracy}%</p> */}
+            <p id="model-p-progress">{String(this.props.loss).slice(0, 8)}</p>
+          </div>
+          <button type="button" className="model-card-success-button" tabIndex={0} onClick={() => this.props.onClick(this.props.model_id)}>View Model &rarr;</button>
+        </div>
+      );
+    } else {
+      return (
+        <div className="model-card">
+          <div className="models-completed-card-content">
+            <p id="model-p-complete">{this.props.model_id} </p>
+            <p id="model-p-complete">{this.props.date_submitted}</p>
+            <p id="model-p-complete">{this.props.dataset}</p>
+            <p id="model-p-complete">Success</p>
           </div>
           {parseInt(this.props.percent_complete, 10) === 100
             ? (
               <button type="button" className="model-card-success-button" tabIndex={0} onClick={() => this.props.onClick(this.props.model_id)}>View Model &rarr;</button>)
             : (<button type="button" className="model-card-failure-button" tabIndex={0} onClick={() => this.props.onClick(this.props.model_id)}>View Error &rarr;</button>)}
-        </div>
-      );
-    } else {
-      return (
-        // onclick, function will initiate recall of model from PyGrid node
-        <div className="model-card">
-          <div className="models-completed-headers">
-            <p id="model-p">{this.props.model_id} </p>
-            <p id="model-p">{this.props.date_submitted}</p>
-            <p id="model-p">{this.props.dataset}</p>
-            <p id="model-p">{this.props.percent_complete}%</p>
-          </div>
-          <button type="button" className="model-card-success-button" tabIndex={0} onClick={() => this.props.onClick(this.props.model_id)}>View Model &rarr;</button>
         </div>
       );
     }

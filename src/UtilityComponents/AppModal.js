@@ -12,23 +12,29 @@ class AppModal extends Component {
     };
   }
 
-  attributeList = (atrList, atrTypes) => {
-    // const attributeList = atrList.map((attribute) => {
-    //   return <p>{attribute.S}</p>;
-    // //   } else if (attribute.N) {
-    // //     return <p>{attribute.N} Number</p>;
-    // //   } else if (attribute.B) {
-    // //     return <p>{attribute.B} Binary</p>;
-    // //   } else {
-    // //     return <p>None/??</p>;
-    // //   }
-    // });
+  attributeList = (atrList, atrTypes, atrDescriptions) => {
     const attributeList = [];
     for (let i = 0; i < atrTypes.length; i += 1) {
       const attrName = atrList[i].S;
       const attrType = atrTypes[i].S;
-      if (attrType === 'S') attributeList.push(<p style={{ 'background-color': 'green', 'border-radius': '12px' }}>{attrName}       String</p>);
-      else if (attrType === 'N') attributeList.push(<p style={{ 'background-color': 'rgb(158, 236, 247)', 'border-radius': '12px' }}>{attrName}        Number</p>);
+      const attrDes = atrDescriptions[i].S;
+      if (attrType === 'S') {
+        attributeList.push(
+          <div style={{ display: 'flex', 'justify-content': 'space-evenly' }}>
+            <p style={{ width: '15%' }}><strong>{attrName}</strong></p>
+            <p style={{ width: '15%' }}>String</p>
+            <p style={{ width: '40%' }}>{attrDes}</p>
+          </div>,
+        );
+      } else if (attrType === 'N') {
+        attributeList.push(
+          <div style={{ display: 'flex', 'justify-content': 'space-evenly' }}>
+            <p><strong>{attrName}</strong></p>
+            <p>Number</p>
+            <p>{attrDes}</p>
+          </div>,
+        );
+      }
     }
     return attributeList;
   }
@@ -37,9 +43,6 @@ class AppModal extends Component {
     let op;
     if (this.props.open === undefined) op = false;
     else op = this.props.open;
-
-    console.log('in modal');
-    console.log(this.props.dataset);
 
     const handleClose = () => {
       this.props.openAppModal(false);
@@ -52,6 +55,7 @@ class AppModal extends Component {
       border: '10px solid rgb(105, 000, 100)',
       'border-radius': '10px',
       position: 'absolute',
+      'overflow-y': 'auto',
     };
 
     const body = (
@@ -65,10 +69,13 @@ class AppModal extends Component {
             <div className="artificien-modal" active />
           </div>
           <div className="app-modal-description">
-            {this.props.dataset.num_devices && <p>Number of users: {this.props.dataset.num_devices.N}</p>}
-            {this.props.dataset.numPurchases && <p>Number of purchases: {this.props.dataset.numPurchases.N}</p>}
-            {this.props.dataset.category && <p>Category: {this.props.dataset.category.S}</p>}
-            {this.props.dataset.attributeTypes && <p>Attributes: {this.attributeList(this.props.dataset.attributes.L, this.props.dataset.attributeTypes.L)}</p>}
+            {this.props.dataset.num_devices && <p><strong>Number of users:</strong> {this.props.dataset.num_devices.N}</p>}
+            {this.props.dataset.numPurchases && <p><strong>Number of purchases:</strong> {this.props.dataset.numPurchases.N}</p>}
+            {this.props.dataset.category && <p><strong>Category:</strong> {this.props.dataset.category.S}</p>}
+          </div>
+          <div className="app-modal-attributes">
+            {this.props.dataset.attributeTypes
+            && <><br /> <p><strong>Attributes:</strong> {this.attributeList(this.props.dataset.attributes.L, this.props.dataset.attributeTypes.L, this.props.dataset.attributeDescriptions.L)}</p></>}
           </div>
         </>
         )}
