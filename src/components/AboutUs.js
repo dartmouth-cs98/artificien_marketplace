@@ -7,7 +7,8 @@ import Quill from '../img/AQ_Headshot.jpg';
 import Shreyas from '../img/SA_Headshot.jpg';
 
 /*
-Simple component that links to user-specific jupyterhub instance
+Simple component that is an about us
+UPDATE - WE HAVE DECIDED NOT TO DEPLOY / SHARE THIS.
 */
 
 class AboutUs extends Component {

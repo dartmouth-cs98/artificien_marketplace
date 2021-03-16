@@ -25,7 +25,7 @@ class RegisterApp extends Component {
       readyForRanges: false,
       addAttributeForms: true,
       readyForSubmit: false,
-      intermediateRangesEntered: false,
+      intermediateRangesEntered: false, // concept that if the ranges are valid, we can show the submit ranges button. otherwise we do not show it
       finalRangesEntered: false,
       readyOnce: false,
 
@@ -72,6 +72,7 @@ class RegisterApp extends Component {
     }
   }
 
+  // ensure the attribute name does not become empty, or at least we know when it does so the dataset cannot be submmited
   isemptyAttributeName = () => {
     console.log(this.state.attributeNameDict);
     for (let i = 0; i < Object.keys(this.state.attributeNameDict).length; i += 1) {
@@ -80,6 +81,7 @@ class RegisterApp extends Component {
     return false;
   }
 
+  // add a description
   addAttributeDescription = (event, i) => {
     this.setState((state) => {
       // eslint-disable-next-line no-param-reassign
@@ -90,6 +92,7 @@ class RegisterApp extends Component {
     });
   }
 
+  // same thing as ensuring attribute name not empty - if the user fills out the form, then makes it blank again, we need to make sure they cannot submit it!
   isEmptyDescription = () => {
     console.log(this.state.attributeDescriptionDict);
     for (let i = 0; i < Object.keys(this.state.attributeDescriptionDict).length; i += 1) {
@@ -102,28 +105,32 @@ class RegisterApp extends Component {
   addAttributeRangeMin = (event, i) => {
     // this.state.attributeRangeMins.push({ S: event.target.value });
     this.state.attributeRangeMinDict[i] = { S: event.target.value };
-    console.log(this.state.attributeRangeMinDict);
-    console.log('min');
+    // console.log(this.state.attributeRangeMinDict);
+    // console.log('min');
+    // whenever you are changing the min, check if the range is valid
     const output = this.checkValidRanges();
-    this.setState({ intermediateRangesEntered: output });
+    this.setState({ intermediateRangesEntered: output }); // if we have values for min & max and they're genuine, allow the submit ranges button to be shown
     console.log(event.target.value);
-    console.log(this.state.intermediateRangesEntered);
+    // console.log(this.state.intermediateRangesEntered);
   }
 
-  // set the range maximum to the value (stringify)
+  // set the range maximum to the value (stringify); same concept as above
+  // what is done here is it calls checkvalidranges which makes sure that min/max exist for every attribute
+  // if this is the case, then we show the user the submit ranges button - it goes away if the ranges become no longer valid
   addAttributeRangeMax = (event, i) => {
     // this.state.attributeRangeMaxes.push({ S: event.target.value });
     this.state.attributeRangeMaxDict[i] = { S: event.target.value };
     this.setState({ addAttributeForms: false });
-    console.log('max');
+    // console.log('max');
     const output = this.checkValidRanges();
     this.setState({ intermediateRangesEntered: output });
     console.log(event.target.value);
-    console.log(this.state.intermediateRangesEntered);
+    // console.log(this.state.intermediateRangesEntered);
   }
 
   // make sure that the attribute type is NOT none!
   // if you are changing to a type AND it is either from none OR it is none of the existing types (i.e. it hasn't been made yet!)
+  // high level - makes sure you have inputted a legit type for each attribute, really it makes sure that you cannot change it back to 'select' and still submit
   addAttributeType = (event, i) => {
     if (!(event.target.value === '')) {
       // if you are changing the value back to none!
@@ -159,7 +166,7 @@ class RegisterApp extends Component {
     }
   }
 
-  // count number of attributes
+  // count number of attributes with number; this allows us to figure out how many range min/max rows we need to show!
   getNumNumberAttributes = () => {
     let numNumAttributes = 0;
     for (const key in this.state.attributeTypeDict) {
@@ -169,6 +176,7 @@ class RegisterApp extends Component {
   }
 
   // make sure max > min!
+  // returns if we have valid ranges or not, which determines whether the submit ranges button is shown
   checkValidRanges = () => {
     const numNumberAttributes = this.getNumNumberAttributes();
     console.log('yes');
@@ -181,6 +189,7 @@ class RegisterApp extends Component {
           console.log('in the beast');
           const supposedMin = this.state.attributeRangeMinDict[i];
           const supposedMax = this.state.attributeRangeMaxDict[i];
+          // this ensures min < max, and that both exist (NaN is what happens if the user changes the form box back to blank, which is NOT allowed!)
           if ((Number.parseInt(supposedMin.S, 10) > Number.parseInt(supposedMax.S, 10)) || (Number.isNaN(Number.parseInt(supposedMin.S, 10))) || (Number.isNaN(Number.parseInt(supposedMax.S, 10)))) {
             console.log('oooo no');
             return false;
@@ -197,7 +206,7 @@ class RegisterApp extends Component {
     }
   }
 
-  // get attribute name + type!
+  // get attribute name + type! in a simpler data structure
   buildAttributeNameAndTypeAndDescriptionLists = () => {
     for (let i = 0; i < Object.keys(this.state.attributeNameDict).length; i += 1) {
       this.state.attributeNameList.push(this.state.attributeNameDict[i]);
@@ -206,7 +215,7 @@ class RegisterApp extends Component {
     }
   }
 
-  // get range list
+  // get range list in a simpler datastructure
   buildAttributeRangeLists = () => {
     for (let i = 0; i < Object.keys(this.state.attributeRangeMinDict).length; i += 1) {
       this.state.attributeRangeMins.push(this.state.attributeRangeMinDict[i]);
@@ -214,6 +223,7 @@ class RegisterApp extends Component {
     }
   }
 
+  // when we have everything correctly inputted by the user, this puts the dataset into the DB, and resets all variables
   submitAttributes = async () => {
     const callback = (data, error) => {
       if (error) {
@@ -235,8 +245,6 @@ class RegisterApp extends Component {
       this.state.attributeRangeMins, this.state.attributeRangeMaxes, this.state.attributeDescriptionList,
       this.state.currentUser);
 
-    // const test = 0;
-    // this.purchaseDataset(this.state.appName, this.props.currentUser, test);
     document.getElementById('appNameInput').value = '';
     document.getElementById('appURLInput').value = '';
 
@@ -300,6 +308,7 @@ class RegisterApp extends Component {
     }
   }
 
+  // taking in all categories shown in app store, will show a check if you have submitted it, otherwise, says to select a category
   renderAppCategory = () => {
     if (!this.state.categorySubmitted) {
       return (
@@ -348,6 +357,7 @@ class RegisterApp extends Component {
     }
   }
 
+  // adding the app name - will not allow you to have a blank app name!
   addAppName = (event) => {
     this.setState({ nameIsUnique: false });
     if (!(event.target.value === '')) {
@@ -358,6 +368,7 @@ class RegisterApp extends Component {
     }
   }
 
+  // make sure there are not two apps with the same name, will cause lots of problems if there are
   checkNameUnique = (name) => {
     const callback = (success, error) => {
       if (error) {
@@ -399,6 +410,11 @@ class RegisterApp extends Component {
     }
   }
 
+  // the end all be all! makes sure the ranges are entered & submitted, and that the top 3 things are inputted too
+  // don't worry about the intermediate attribute forms submitted because you cannot get to ranges unless that has happened
+  // readyOnce is a way to handle if at one point everything was ready - super edge case of if user changes the app name or URL after submitting ranges,
+  //  need to make sure that they are not allowed to submit
+  // and we do not want to take in ranges again so this just changes the error button to "please fix top 3 category"
   readyForSubmit = () => {
     console.log('ready for submit');
     if (this.state.finalRangesEntered && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted) {
@@ -410,7 +426,7 @@ class RegisterApp extends Component {
     }
   }
 
-  // checks if the ranges have been input correctly
+  // checks if the ranges have been input correctly, triggered by clicking submit ranges - we know that they will be if you can submit
   checkIfRangesReady = () => {
     if ((Object.keys(this.state.attributeRangeMaxDict).length === this.state.attributeRangeInputs.length && !this.state.readyForSubmit) // all our number attributes have ranges
     || ((Object.keys(this.state.attributeTypeDict).length === Number.parseInt(this.state.numAttributes, 10)
@@ -419,7 +435,7 @@ class RegisterApp extends Component {
     }
   }
 
-  // renders the range inputs
+  // renders the range inputs, figures out how many rows you need based on the umber of 'N'
   readyForRanges = () => {
     this.setState({ readyForRanges: true });
     for (let i = 0; i < Object.keys(this.state.attributeTypeDict).length; i += 1) {
@@ -437,6 +453,7 @@ class RegisterApp extends Component {
     }
   }
 
+  // changed n to float, but keeping it as 'n' for simplicity given the other locations N appears
   renderAttributeFields = () => {
     if (!this.state.numAttributes) {
       return (
@@ -480,14 +497,15 @@ class RegisterApp extends Component {
         }
         this.setState({ addAttributeForms: false });
       }
+      // some complex logic to figure out if we ask for the attribute types and how we ask
       if (!this.state.readyForRanges) {
         // if attribute input forms have been rendered
         if (this.state.readyForRangesButton) {
           if (Object.keys(this.state.attributeNameDict).length < this.state.numAttributes || Object.keys(this.state.attributeTypeDict).length < this.state.numAttributes
           || this.state.attributeTypeSubmitted < this.state.numAttributes // not enough attribute names or not enough attribute types
           || Object.keys(this.state.attributeDescriptionDict).length < this.state.numAttributes // or not enough attribute descriptions
-          || this.isEmptyDescription()
-          || this.isemptyAttributeName()
+          || this.isEmptyDescription() // a description is empty
+          || this.isemptyAttributeName() // an attribute name is empty
           ) { // any
             console.log(this.state.attributeDescriptionDict);
             return (
@@ -534,6 +552,7 @@ class RegisterApp extends Component {
     }
   }
 
+  // makes sure these 5 critical thigns are allowed, then sets it to be ready for submit
   checkForSubmit = () => {
     if (this.state.finalRangesEntered && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted && this.state.nameIsUnique) {
       this.readyForSubmit();
@@ -541,9 +560,6 @@ class RegisterApp extends Component {
   }
 
   renderAttributeRanges = () => {
-    // can we simplify?
-    // idea - if everything above is submitted
-
     if (this.state.readyForRanges) { // we are ready to render the ranges
       if (this.state.readyForSubmit && this.state.appURLSubmitted && this.state.appNameSubmitted && this.state.categorySubmitted && this.state.nameIsUnique) { // all ranges have been put in
         if (this.getNumNumberAttributes() < 1) {
@@ -566,12 +582,13 @@ class RegisterApp extends Component {
         );
       } else {
         this.checkForSubmit();
-        if (this.state.readyOnce) {
+        if (this.state.readyOnce) { // if it at one point was ready, means they messed up one of the top data inputs
           return (
             <div>
               <h4><i>Please complete all of the required fields to submit</i></h4>
             </div>
           );
+          // if we have a unique name and the intermediate ranges entered (meaning they are valid ranges), then we can allow them to submit range
         } else if (this.state.nameIsUnique && this.state.intermediateRangesEntered) {
           return (
             <div>
@@ -579,6 +596,7 @@ class RegisterApp extends Component {
               <button type="button" className="submit" onClick={() => this.checkIfRangesReady()}>Submit Ranges</button>
             </div>
           );
+          // if intermediate ranges are NOT entered (i.e. the ranges are not valid)
         } else {
           return (
             <div>
@@ -625,7 +643,7 @@ class RegisterApp extends Component {
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
 
   render() {
-    // are we sure we want it this way?
+    // get us ready for the ranges button
     if (!this.state.readyForRangesButton) {
       if (this.state.appNameSubmitted && this.state.categorySubmitted && this.state.appURLSubmitted) {
         this.setState({ readyForRangesButton: true });

@@ -30,7 +30,7 @@ class AppModal extends Component {
         attributeList.push(
           <div style={{ display: 'flex', 'justify-content': 'space-evenly' }}>
             <p><strong>{attrName}</strong></p>
-            <p>Number</p>
+            <p>Float</p>
             <p>{attrDes}</p>
           </div>,
         );

@@ -97,6 +97,7 @@ class Profile extends Component {
 
   renderClientMetricsCards = () => { // loops over client clientMetricsDict
     const metricCards = [];
+    // console.log(this.state.userData.datasets_purchased.L.length);
     if (!this.state.clientMetricsDict.userModels) return null;
 
     for (let i = 0; i < Object.keys(this.state.clientMetricsDict).length; i += 1) {
@@ -104,6 +105,7 @@ class Profile extends Component {
         metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models Created" body={this.state.clientMetricsDict.userModels.Items.length} username={this.state.userData.username.S} />);
       }
     }
+    metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Purchased" body={this.state.userData.datasets_purchased.L.length} username={this.state.userData.username.S} />);
     return metricCards;
   }
 

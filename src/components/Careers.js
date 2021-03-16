@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../style.scss';
 
 /*
-Simple component that links to user-specific jupyterhub instance
+UPDATE - decided not to share this yet, we don't have anything to show here lol
 */
 
 class Careers extends Component {
