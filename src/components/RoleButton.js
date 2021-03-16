@@ -43,6 +43,7 @@ class RoleButton extends Component {
     } else { // Client
       this.props.addRole(0);
     }
+    this.props.history.push('/profile');
   };
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //

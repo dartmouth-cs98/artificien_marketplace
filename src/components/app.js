@@ -33,7 +33,7 @@ function App(props) {
   return (
     <>
       <Router>
-        <Navbar style={{ 'font-family': 'Avenir' }} />
+        <Navbar />
         <Switch>
           <Route exact path="/" component={withAuthorization(Welcome, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
           <Route exact path="/marketplace" component={withAuthorization(Marketplace, [Roles.CLIENT, Roles.GUEST])} />
