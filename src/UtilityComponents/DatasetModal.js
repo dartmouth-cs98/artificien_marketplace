@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Modal from '@material-ui/core/Modal';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getUser, updateItem } from '../database/databaseCalls';
 import { openDatasetModal } from '../store/reducers/dataset-reducer';
@@ -88,7 +89,14 @@ class DatasetModal extends Component {
 
   // make a seperate render for the purchase button!
   renderPurchased = () => {
-    if (this.props.alreadyPurchased || this.state.alreadyPurchased || (this.state.recentlyPurchased.includes(this.props.dataset.dataset_id.S))) {
+    if (this.state.recentlyPurchased.includes(this.props.dataset.dataset_id.S)) {
+      return (
+        <div className="dataset_existing">Congratulations!
+          Visit <Link onClick={() => this.props.openDatasetModal(false)} className="dataset_navlink" to="/models"><strong><u>models</u></strong></Link> to upload a model to train on this data.
+          <br />
+        </div>
+      );
+    } else if (this.props.alreadyPurchased || this.state.alreadyPurchased) {
       return (
         <div style={{ color: 'black', 'margin-bottom': '10px' }}>You already own access to this dataset!</div>
       );
@@ -135,21 +143,6 @@ class DatasetModal extends Component {
     let op;
     if (this.props.open === undefined) op = false;
     else op = this.props.open;
-
-    // const getUserCallback = (success, error) => {
-    //   if (error) {
-    //     console.log(error);
-    //   } else if (success.Items[0].datasets_purchased) {
-    //     this.setState({ haveNotQueried: true });
-    //     console.log(success);
-    //     const newList = [];
-    //     for (let i = 0; i < success.Items[0].datasets_purchased.L.length; i += 1) {
-    //       newList.push(success.Items[0].datasets_purchased.L[i].S);
-    //     }
-    //     if (newList.includes(this.props.dataset.dataset_id.S)) this.setState({ alreadyPurchased: true });
-    //   }
-    // };
-    // if (this.props.currentUser && this.state.haveNotQueried) getUser(getUserCallback, this.props.currentUser);
 
     const handleClose = () => {
       this.props.openDatasetModal(false);

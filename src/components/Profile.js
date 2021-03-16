@@ -114,8 +114,8 @@ class Profile extends Component {
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Submitted" body={0} username={this.state.userData.username.S} />);
     } else {
       let integrated = 0;
-      for (let i = 0; i < this.state.clientMetricsDict.userModels.Items.length; i += 1) {
-        if (this.state.clientMetricsDict.userModels.Items[i].properlySetUp && this.state.clientMetricsDict.userModels.Items[i].properlySetUp.BOOL) integrated += 1;
+      for (let i = 0; i < this.state.devMetricsDict.userDatasets.Items.length; i += 1) {
+        if (this.state.devMetricsDict.userDatasets.Items[i].properlySetUp && this.state.devMetricsDict.userDatasets.Items[i].properlySetUp.BOOL) integrated += 1;
       }
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Submitted" body={this.state.devMetricsDict.userDatasets.Items.length} username={this.state.userData.username.S} />);
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Integrated" body={integrated} username={this.state.userData.username.S} />);

@@ -468,3 +468,67 @@ export function updateItem(upParams) {
     }
   });
 }
+
+// -------------------- Purchase Dataset ----------------
+
+export function updateDatasetsPurchased(newDatasetsList, userID, datasetID, oldNumPurchases) {
+  const newNumPurchases = String(Number.parseInt(oldNumPurchases, 10) + 1);
+  const upParamsUser = {
+    Key: {
+      user_id: {
+        S: userID,
+      },
+    },
+    AttributeUpdates: {
+      datasets_purchased: {
+        Action: 'PUT',
+        Value: {
+          L: newDatasetsList,
+        },
+      },
+    },
+    ReturnValues: 'ALL_NEW',
+    TableName: 'user_table',
+  };
+  const upParamsDataset = {
+    Key: {
+      dataset_id: {
+        S: datasetID,
+      },
+    },
+    AttributeUpdates: {
+      numPurchases: {
+        Action: 'PUT',
+        Value: {
+          N: newNumPurchases,
+        },
+      },
+    },
+    ReturnValues: 'ALL_NEW',
+    TableName: 'dataset_table',
+  };
+  updateItem(upParamsUser);
+  updateItem(upParamsDataset);
+}
+
+export async function purchaseDataset(datasetID, username, oldNumPurchases) {
+  const callback = (data, error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data);
+      if (data.Items[0].datasets_purchased) { // if list exists, append to list
+        const datasetsPurchased = data.Items[0].datasets_purchased.L;
+        const datasetsPurchasedNew = [...datasetsPurchased];
+        datasetsPurchasedNew.push({ S: datasetID });
+        updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S, datasetID, oldNumPurchases);
+      } else { // if field doesn't exist (user hasn't purchased yet?), create a new list and add
+        const newDatasetsPurchasedList = [{ S: datasetID }];
+        updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S, datasetID, oldNumPurchases);
+        this.props.alreadyPurchased = true;
+        console.log(this.props.content.alreadyPurchased);
+      }
+    }
+  };
+  getUser(callback, username);
+}

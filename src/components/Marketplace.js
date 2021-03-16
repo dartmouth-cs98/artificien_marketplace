@@ -130,8 +130,6 @@ class Marketplace extends Component {
   };
 
   checkIfAlreadyPurchased = (dataset) => {
-    console.log('checking dataset');
-    console.log(dataset);
     if (dataset && this.state.currentUserDatasetsPurchased) {
       for (const purchased of this.state.currentUserDatasetsPurchased) {
         if (String(purchased) === String(dataset.dataset_id.S)) {
@@ -258,8 +256,16 @@ class Marketplace extends Component {
 
   renderSearchTermDatasets = () => {
     const searchTerm = this.state.finalizedSearchTerm;
-    const allMatchingDatasets = this.state.allDatasets.reduce((finalDatasets, dataset) => {
-      if (dataset.app.S.toLowerCase().includes(searchTerm.toLowerCase())) {
+    console.log(this.state.sortedCategory);
+    let inCategory = [];
+    if (this.state.sortedCategory !== 'All') {
+      inCategory = this.state.allDatasets.filter((dataset) => dataset.category.S === this.state.sortedCategory);
+    } else {
+      inCategory = this.state.allDatasets;
+    }
+    console.log(inCategory);
+    const allMatchingDatasets = inCategory.reduce((finalDatasets, dataset) => {
+      if (dataset.dataset_id.S.toLowerCase().includes(searchTerm.toLowerCase())) {
         finalDatasets.push(
           <DataLibraryCard
             onClick={() => this.setState({ clickedDataset: dataset })}
