@@ -17,6 +17,8 @@ import {
 } from '../database/databaseCalls';
 import { openAppModal } from '../store/reducers/app-reducer';
 import AppModal from '../UtilityComponents/AppModal';
+// import { openDatasetModal } from '../store/reducers/dataset-reducer';
+// import DatasetModal from '../UtilityComponents/DatasetModal';
 
 const artificienTheme = createMuiTheme({
   typography: {
@@ -87,7 +89,6 @@ class ProfileAccordion extends Component {
     // each of these datasets has an app field
     // we want to return the app
     const appList = datasets.map((dataset) => {
-      console.log(dataset);
       return (
         <div style={{
           'text-align': 'left', 'align-items': 'left', display: 'flex', 'justify-content': 'space-between',
@@ -133,7 +134,6 @@ class ProfileAccordion extends Component {
       return null;
     }
     const appList = this.state.purchasedDatasets.map((dataset) => {
-      console.log(dataset);
       return (
         <div style={{
           'text-align': 'left', 'align-items': 'left', display: 'flex', 'justify-content': 'space-between',
@@ -184,7 +184,7 @@ class ProfileAccordion extends Component {
             aria-controls="panel2bh-content"
             id="panel2bh-header"
           >
-            <Typography className={classes.heading}>Payment and Employment</Typography>
+            <Typography className={classes.heading}>Payment Information</Typography>
           </AccordionSummary>
           <AccordionDetails>
             {this.props.content.bank_info || this.props.content.enterprise
@@ -258,6 +258,7 @@ class ProfileAccordion extends Component {
         </Accordion>
         )}
         <AppModal open={this.props.open} dataset={this.state.clickedDataset} />
+        {/* <DatasetModal open={this.props.datasetOpen} dataset={this.state.clickedDataset} /> */}
       </div>
     );
   }
@@ -267,6 +268,7 @@ const mapStateToProps = (state) => {
   return {
     role: state.roleReducer.role,
     open: state.appReducer.open,
+    datasetOpen: state.datasetReducer.open,
   };
 };
 

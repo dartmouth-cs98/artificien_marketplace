@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable new-cap */
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
@@ -9,6 +10,7 @@ import '../style.scss';
 import ChangeUsernameForm from './ChangeUsernameForm';
 import UserMetricsCard from './UserMetricsCard';
 import ProfileAccordion from './ProfileAccordion';
+import ErrorModal from '../UtilityComponents/ErrorModal';
 
 /*
 Component that provides the user their information, will allow editing capabilities in the future.
@@ -70,7 +72,6 @@ class Profile extends Component {
       });
     // get metrics here
   }
-
   // figure out which user is currently logged in and query their models
 
   renderChangeButton = () => {
@@ -96,22 +97,11 @@ class Profile extends Component {
 
   renderClientMetricsCards = () => { // loops over client clientMetricsDict
     const metricCards = [];
-    console.log(this.state.clientMetricsDict);
     if (!this.state.clientMetricsDict.userModels) return null;
 
     for (let i = 0; i < Object.keys(this.state.clientMetricsDict).length; i += 1) {
       if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'userModels') {
-        console.log('models');
         metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models Created" body={this.state.clientMetricsDict.userModels.Items.length} username={this.state.userData.username.S} />);
-      // } else if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'numDevicesReached') {
-      //   console.log('numDevices');
-      //   metricCards.push(<UserMetricsCard id="user-metric" title="Number of Devices Reached" body={this.state.clientMetricsDict.numDevicesReached} username={this.state.userData.username.S} />);
-      // } else if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'averageTrainingTime') {
-      //   console.log('training');
-      //   metricCards.push(<UserMetricsCard id="user-metric" title="Average Training Time" body={this.state.clientMetricsDict.averageTrainingTime} username={this.state.userData.username.S} />);
-      // } else {
-      //   console.log(Object.keys(this.state.clientMetricsDict)[i]);
-      // }
       }
     }
     return metricCards;
@@ -121,15 +111,21 @@ class Profile extends Component {
     const metricCards = [];
     console.log(this.state.devMetricsDict);
     if (!this.state.devMetricsDict.userDatasets) {
-      metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Running" body={0} username={this.state.userData.username.S} />);
+      metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Submitted" body={0} username={this.state.userData.username.S} />);
     } else {
-      metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Running" body={this.state.devMetricsDict.userDatasets.Items.length} username={this.state.userData.username.S} />);
+      let integrated = 0;
+      for (let i = 0; i < this.state.clientMetricsDict.userModels.Items.length; i += 1) {
+        if (this.state.clientMetricsDict.userModels.Items[i].properlySetUp && this.state.clientMetricsDict.userModels.Items[i].properlySetUp.BOOL) integrated += 1;
+      }
+      metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Submitted" body={this.state.devMetricsDict.userDatasets.Items.length} username={this.state.userData.username.S} />);
+      metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Integrated" body={integrated} username={this.state.userData.username.S} />);
     }
     return metricCards;
   }
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
+    console.log(this.props.role);
     if (this.state.userData && this.state.clientMetricsDict.userModels) {
       return (
         <>
@@ -139,6 +135,7 @@ class Profile extends Component {
             {Number.parseInt(this.props.role, 10) === 1 && <div className="user-metric-container">{this.renderDevMetricsCards()}</div>}
           </div>
           <ProfileAccordion content={this.state.userData} id={this.state.accessID} appsManaged={this.state.devMetricsDict.userDatasets} />
+          <ErrorModal open={this.props.error} />
         </>
       );
     } else {
@@ -153,6 +150,7 @@ const mapStateToProps = (state) => {
   return {
     role: state.roleReducer.role,
     open: state.appReducer.open,
+    error: state.modalReducer.open,
   };
 };
 
