@@ -87,9 +87,12 @@ class ProfileAccordion extends Component {
     const appList = datasets.map((dataset) => {
       console.log(dataset);
       return (
-        <div style={{ display: 'flex', 'justify-content': 'space-evenly' }}>
-          <Typography>{dataset.app.S}</Typography>
-          <button type="button" style={{ 'margin-left': '20px' }} onClick={() => this.showAppSummary(dataset)}>Learn More</button>
+        <div style={{
+          'text-align': 'left', 'align-items': 'left', display: 'flex', 'justify-content': 'space-between',
+        }}
+        >
+          <Typography>{dataset.dataset_id.S}</Typography>
+          <button type="button" style={{ 'margin-left': '20px', 'margin-top': '2px', 'margin-bottom': '2px' }} onClick={() => this.showAppSummary(dataset)}>Learn More</button>
         </div>
       );
     });
@@ -127,15 +130,15 @@ class ProfileAccordion extends Component {
       console.log('no datasets');
       return null;
     }
-
-    console.log('datasets!');
-
     const appList = this.state.purchasedDatasets.map((dataset) => {
       console.log(dataset);
       return (
-        <div style={{ display: 'flex', 'justify-content': 'space-evenly' }}>
-          <Typography>{dataset.app.S}</Typography>
-          <button type="button" style={{ 'margin-left': '20px' }} onClick={() => this.showAppSummary(dataset)}>Learn More</button>
+        <div style={{
+          'text-align': 'left', 'align-items': 'left', display: 'flex', 'justify-content': 'space-between',
+        }}
+        >
+          <Typography>{dataset.dataset_id.S}</Typography>
+          <button type="button" style={{ 'margin-left': '20px', 'margin-top': '2px', 'margin-bottom': '2px' }} onClick={() => this.showAppSummary(dataset)}>Learn More</button>
         </div>
       );
     });

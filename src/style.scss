@@ -290,28 +290,58 @@ flex-wrap: wrap;
   margin-bottom: 10px;
 }
 
-#model-p {
+// #model-p-progress {
+//   margin: 15px;
+//   width: 20%;
+//   text-align: left;
+//   font-size: 14px;
+// }
+
+#model-header-p-complete, #model-p-complete {
   margin: 15px;
-  width: 20%;
+  font-size: 13px;
+  width: 200px;
   text-align: left;
 }
 
-#model-header-p {
+#model-header-p-progress, #model-p-progress {
   margin: 15px;
-  width: 20%;
+  font-size: 13px;
+  width: 200px;
   text-align: left;
 }
 
 .models-in-progress-headers {
+  // display: flex;
+  width: 90%;
   display: flex;
-  width: 80%;
-  justify-content: space-between;
+  // justify-content: space-between;
   padding-left: 15px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
+
+.models-inprogress-card-content {
+  display: flex;
+  width: 85%;
+  // justify-content: space-between;
+  padding-left: 15px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
 .models-completed-headers {
   display: flex;
-  width: 80%;
-  justify-content: space-between;
+  width: 85%;
+  // justify-content: space-between;
+  padding-left: 15px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.models-completed-card-content {
+  display: flex;
+  width: 70%;
+  // justify-content: space-between;
   padding-left: 15px;
   margin-top: 8px;
   margin-bottom: 8px;
@@ -540,7 +570,18 @@ amplify-authenticator{
   font-size: 18px;
 }
 
-#signup-signin-button:hover {
+#profile-learnmore-button {
+  border: none;
+  background-color: rgb(224, 221, 221);
+  color: black;
+  padding: 9px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+}
+
+#signup-signin-button:hover, #profile-learnmore-button:hover {
   background-color: rgb(199, 197, 197);
 }
 
@@ -674,6 +715,10 @@ code {
   // text-align: left;
   margin-left: 33%;
   margin-right: 33%;
+}
+
+.app-modal-attributes{
+  margin: 2% 20%;
 }
 
 .artificien-modal {

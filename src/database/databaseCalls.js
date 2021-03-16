@@ -376,7 +376,7 @@ export async function putDataset(callback, app, category, appURL, attributes, at
 
 export function queryModels(callback, PK) {
   const queryParams = { // works just fine
-    IndexName: 'owner_name-active_status-index',
+    IndexName: 'owner-active-index',
     ScanIndexForward: false,
     ExpressionAttributeValues: { ':partitionKeyVal': { S: PK } },
     KeyConditionExpression: 'owner_name = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
@@ -396,8 +396,8 @@ export function queryModels(callback, PK) {
 export function queryDatasetsOwner(callback, PK) {
   console.log(PK);
   const queryParams = { // works just fine
-    IndexName: 'owner_username-num_devices-index',
-    ScanIndexForward: false,
+    IndexName: 'owner_username-index',
+    // ScanIndexForward: false,
     ExpressionAttributeValues: { ':partitionKeyVal': { S: PK } },
     KeyConditionExpression: 'owner_username = :partitionKeyVal', // dereference the "QUILL" part here, not really necessary
     TableName: 'dataset_table',

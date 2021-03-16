@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable consistent-return */
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import '../style.scss';
@@ -50,7 +52,6 @@ class Models extends Component {
       Auth.currentSession()
         .then((data) => {
           console.log(data);
-          console.log(data.accessToken.payload.username);
           this.setState({ currentUser: data.accessToken.payload.username });
           this.setState({ userNotSet: false });
           this.queryUserModels();
@@ -70,7 +71,7 @@ class Models extends Component {
     };
     console.log(this.state.currentUser);
     if (this.state.currentUser) {
-      queryModels(callback, this.state.currentUser.toLowerCase());
+      queryModels(callback, this.state.currentUser);
     }
   }
 
@@ -108,18 +109,32 @@ class Models extends Component {
   }
 
   // get only the models in progress
-  renderModelsInProgress = () => {
-    // console.log(this.state.models.count);
-    if (!this.state.models || !this.state.models.count) { return 'You have no Models in progress. Go to Create Model to make one'; }
-    // if (!this.state.models.Items) { return null; }
+  renderModels = () => {
+    console.log(this.state.models);
+    if (!this.state.models) { return 'You have no Models. Go to Create Model to make one'; }
+    // if (!this.state.models || !this.state.models.count) { return 'You have no Models in progress. Go to Create Model to make one'; }
 
     // if the user has models, map each to a card
-    const renderedModels = this.state.models.Items.map((model) => {
-      if (parseInt(model.percent_complete.N, 10) !== 100) {
+    const renderedModelsInProgress = this.state.models.Items.map((model) => {
+      if (parseInt(model.percent_complete.N, 10) !== 100) { // not yet complete
         console.log(model);
         return (
           <ModelDetailsCard onClick={this.openNav}
-            key={Math.random()}
+            model_id={model.model_id.S}
+            dataset={model.dataset.S}
+            date_submitted={model.date_submitted.S}
+            percent_complete={model.percent_complete.N}
+            accuracy={model.acc_this_cycle.N}
+            loss={model.loss_this_cycle.N}
+          />
+        );
+      }
+    });
+    const renderedModelsCompleted = this.state.models.Items.map((model) => {
+      if (parseInt(model.percent_complete.N, 10) === 100) { // not yet complete
+        console.log(model);
+        return (
+          <ModelDetailsCard onClick={this.openNav}
             model_id={model.model_id.S}
             dataset={model.dataset.S}
             date_submitted={model.date_submitted.S}
@@ -127,31 +142,6 @@ class Models extends Component {
           />
         );
       }
-      return (
-        <>
-          <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
-            key={Math.random()}
-            model_id={model.model_id.S}
-            dataset={model.dataset.S}
-            date_submitted={model.date_submitted.S}
-            percent_complete={60}
-          />
-          <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
-            key={Math.random()}
-            model_id={model.model_id.S}
-            dataset={model.dataset.S}
-            date_submitted={model.date_submitted.S}
-            percent_complete={60}
-          />
-          <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
-            key={Math.random()}
-            model_id={model.model_id.S}
-            dataset={model.dataset.S}
-            date_submitted={model.date_submitted.S}
-            percent_complete={60}
-          />
-        </>
-      );
     });
 
     // put em all together in one container
@@ -159,61 +149,22 @@ class Models extends Component {
       <>
         <h2 style={{ 'margin-bottom': '2px' }} align="left">In Progress</h2>
         <div className="models-in-progress-headers">
-          <p id="model-header-p">NAME</p>
-          <p id="model-header-p">DATE SUBMITTED</p>
-          <p id="model-header-p">DATASET</p>
-          <p id="model-header-p">PROGRESS</p>
+          <p id="model-header-p-progress">NAME</p>
+          <p id="model-header-p-progress">DATE SUBMITTED</p>
+          <p id="model-header-p-progress">DATASET</p>
+          <p id="model-header-p-progress">PROGRESS</p>
+          <p id="model-header-p-progress">LOSS</p>
         </div>
-        {renderedModels}
-      </>
-    );
-    return renderedModelTable;
-  }
-
-  // get only the models completed
-  renderModelsCompleted = () => {
-    if (!this.state.models || !this.state.models.count) { return 'You have no completed models'; }
-
-    if (!this.state.models.Items) {
-      return (
-        <h3>You have no completed models</h3>
-      );
-    }
-
-    const renderedModels = this.state.models.Items.map((model) => {
-      if (parseInt(model.percent_complete.N, 10) === 100) {
-        return (
-          <>
-            <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
-              key={Math.random()}
-              model_id={model.model_id.S}
-              dataset={model.dataset.S}
-              date_submitted={model.date_submitted.S}
-              percent_complete={model.percent_complete.N}
-            />
-            <ModelDetailsCard onClick={this.openNav} // onclick opens sidebar
-              key={Math.random()}
-              model_id={model.model_id.S}
-              dataset={model.dataset.S}
-              date_submitted={model.date_submitted.S}
-              percent_complete={60}
-            />
-          </>
-        );
-      }
-      return null;
-    });
-
-    const renderedModelTable = (
-      <>
+        {renderedModelsInProgress}
         <h2 style={{ 'margin-bottom': '2px' }} align="left">Completed</h2>
         <div className="models-completed-headers">
-          <p id="model-header-p">NAME</p>
-          <p id="model-header-p">DATE SUBMITTED</p>
-          <p id="model-header-p">DATASET</p>
-          <p id="model-header-p">STATUS</p>
+          <p id="model-header-p-complete">NAME</p>
+          <p id="model-header-p-complete">DATE SUBMITTED</p>
+          <p id="model-header-p-complete">DATASET</p>
+          <p id="model-header-p-complete">STATUS</p>
+          <p id="model-header-p-complete">      </p>
         </div>
-        {renderedModels}
+        {renderedModelsCompleted}
       </>
     );
     return renderedModelTable;
@@ -251,8 +202,7 @@ class Models extends Component {
         <div className="body">
           <div>
             <div id="model-row">{this.renderCreateModelButton()}</div>
-            <div id="model-row">{this.renderModelsInProgress()}</div>
-            <div id="model-row">{this.renderModelsCompleted()}</div>
+            <div id="model-row">{this.renderModels()}</div>
           </div>
           <div>
             <ModelSideNav content={clickedModel}

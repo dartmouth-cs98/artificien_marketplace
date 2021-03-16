@@ -40,10 +40,10 @@ class Profile extends Component {
       .then((data) => {
         console.log(data);
         const name = data.accessToken.payload.username;
+        console.log(name);
         // for apiKey
         const clientID = data.accessToken.jwtToken;
         this.setState({ accessID: clientID });
-        //
         this.queryUser(name);
         // check if user has any models, preps metrics cards
         const modelsQueryCallback = (success, error) => {
@@ -122,7 +122,7 @@ class Profile extends Component {
     if (!this.state.devMetricsDict.userDatasets) {
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Running" body={0} username={this.state.userData.username.S} />);
     } else {
-      metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Running" body={this.state.devMetricsDict.userDatasets.length} username={this.state.userData.username.S} />);
+      metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Running" body={this.state.devMetricsDict.userDatasets.Items.length} username={this.state.userData.username.S} />);
     }
     return metricCards;
   }

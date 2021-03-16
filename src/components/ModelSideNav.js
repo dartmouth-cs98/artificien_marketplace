@@ -44,12 +44,13 @@ class ModelSideNav extends Component {
             <p>Model started: {this.props.content.date_submitted.S}</p>
             <p>Training on: {this.props.content.dataset.S}</p>
             <p>Percent Complete: {this.props.content.percent_complete.N}%</p>
+            {this.props.content.loss_this_cycle && <p>Loss: {String(this.props.content.loss_this_cycle.N).slice(0, 8)}</p>}
           </div>
           <div>{parseInt(this.props.content.percent_complete.N, 10) === 100
             ? (
               <div>{this.state.downloadURL
                 ? <a href={this.state.downloadURL} className="rtrvbtn" rel="noreferrer" target="_blank">Download Model</a> // a here should be linked to the db URL
-                : <p>Not ready to download yet</p>}
+                : <p>Not ready to download yet!</p>}
               </div>
             )
             : <p>Not ready to download yet</p>}
