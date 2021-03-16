@@ -53,46 +53,51 @@ class Navbar extends Component {
   renderDev = () => {
     console.log('rendering');
     return (
-      <div className="navbar-complete">
-        <NavLink to="/" exact> <div className="logo" active /> </NavLink>
-        <nav className="nav">
-          <ul className="nav-ul">
-            <li>
-              <NavLink to="/user_guide"> User Guide </NavLink>
-            </li>
-            <li>
-              <NavLink to="/tutorial"> Tutorial </NavLink>
-            </li>
-            <li>
-              <NavLink to="/app_developer_documentation"> Documentation </NavLink>
-            </li>
-            <li>
-              <NavLink to="/profile"> Profile </NavLink>
-            </li>
-            <li>
-              <NavLink to="/register_app"> Register App </NavLink>
-            </li>
-          </ul>
-          <ul className="nav-role-button-ul">
-            <li className="role-button">
-              {this.props.role !== 2 && <RoleButton />}
-            </li>
-            <li className="signout-button">
-              <button
-                type="button"
-                onClick={() => {
-                  Auth.signOut();
-                  this.props.history.push('/');
-                  window.location.reload(false);
-                }}
-                variant="outlined"
-                id="signup-signin-button"
-                color="primary"
-              > Signout
-              </button>
-            </li>
-          </ul>
-        </nav>
+      <div>
+        <div className="alert alert-danger" role="alert">
+          Warning: Artificien is built to be used on a larger screen. Some formatting and features may be limited.
+        </div>
+        <div className="navbar-complete">
+          <NavLink to="/" exact> <div className="logo" active /> </NavLink>
+          <nav className="nav">
+            <ul className="nav-ul">
+              <li>
+                <NavLink to="/user_guide"> User Guide </NavLink>
+              </li>
+              <li>
+                <NavLink to="/tutorial"> Tutorial </NavLink>
+              </li>
+              <li>
+                <NavLink to="/app_developer_documentation"> Documentation </NavLink>
+              </li>
+              <li>
+                <NavLink to="/profile"> Profile </NavLink>
+              </li>
+              <li>
+                <NavLink to="/register_app"> Register App </NavLink>
+              </li>
+            </ul>
+            <ul className="nav-role-button-ul">
+              <li className="role-button">
+                {this.props.role !== 2 && <RoleButton />}
+              </li>
+              <li className="signout-button">
+                <button
+                  type="button"
+                  onClick={() => {
+                    Auth.signOut();
+                    this.props.history.push('/');
+                    window.location.reload(false);
+                  }}
+                  variant="outlined"
+                  id="signup-signin-button"
+                  color="primary"
+                > Sign Out
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     );
   };
@@ -119,7 +124,7 @@ class Navbar extends Component {
               <NavLink to="/marketplace"> Marketplace </NavLink>
             </li>
             <li>
-              <NavLink to="/models"> My Models </NavLink>
+              <NavLink to="/models"> Models </NavLink>
             </li>
           </ul>
           <ul className="nav-role-button-ul">
@@ -131,12 +136,13 @@ class Navbar extends Component {
                 type="button"
                 onClick={() => {
                   Auth.signOut();
+                  this.props.history.push('/');
                   window.location.reload(false);
                 }}
                 variant="outlined"
                 id="signup-signin-button"
                 color="primary"
-              > Signout
+              > Sign Out
               </button>
             </li>
           </ul>

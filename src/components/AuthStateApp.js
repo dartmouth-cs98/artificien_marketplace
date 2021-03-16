@@ -50,9 +50,14 @@ class AuthStateApp extends Component {
         </div>
       );
     }
+
+    const AuthTheme = {
+      toast: { 'margin-top': '110px' },
+    };
+
     return (
       <div style={{ margin: '10px' }}>
-        <AmplifyAuthenticator className="amplifyAuth">
+        <AmplifyAuthenticator theme={AuthTheme} className="amplifyAuth">
           <AmplifySignUp />
           <AmplifyConfirmSignUp />
         </AmplifyAuthenticator>

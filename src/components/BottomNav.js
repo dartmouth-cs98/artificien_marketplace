@@ -40,8 +40,9 @@ class BottomNav extends Component {
                   {/* <img src="assets/img/logo.png" alt="" />
                   <span>FlexStart</span> */}
                 </a>
-                <p id="footer-paragraph">Cras fermentum odio eu feugiat lide par naso tierra.
-                  Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.
+                <p id="footer-paragraph">
+                  The world&#39;s first federated learning marketplace, allowing data analysts to train models on
+                  public application data without compromising user privacy.
                 </p>
                 <div className="social-links mt-3">
                   {/* Social links */}
@@ -53,10 +54,9 @@ class BottomNav extends Component {
               </div>
 
               <div className="col-lg-2 col-6 footer-links">
-                <h4>Useful Links</h4>
-                <a href="/">Home</a><br />
-                <NavLink to="/upload_data"> Upload Data </NavLink><br />
-                <a href="/">About us</a>
+                <h4>Quickstart</h4>
+                <NavLink to="/user_guide"> User Guide </NavLink><br />
+                <NavLink to="/tutorial"> Tutorial </NavLink><br />
                 {/* <ul>
                   <li><a href="/">Home</a></li>
                   <li><a href="/">About us</a></li>
@@ -67,20 +67,20 @@ class BottomNav extends Component {
               </div>
 
               <div className="col-lg-2 col-6 footer-links">
-                <h4>Our Services</h4>
-                <a href="/">Home</a><br />
-                <NavLink to="/upload_data"> Upload Data </NavLink><br />
-                <a href="/">About us</a>
+                <h4>Documentation</h4>
+                <a href="https://github.com/dartmouth-cs98/20f-artificien" target="_blank" rel="noreferrer">Github</a><br />
+                <NavLink to="/app_developer_documentation"> App Developer Docs </NavLink><br />
+                <NavLink to="/data_scientist_documentation"> Data Scientist Docs </NavLink>
               </div>
 
               <div className="col-lg-3 col-md-12 footer-contact text-md-start">
                 <h4>Contact Us</h4>
                 <p>
-                  A108 Adam Street <br />
-                  New York, NY 535022<br />
+                  Dartmouth College <br />
+                  Hanover, NH<br />
                   United States <br />
-                  <strong>Phone:</strong> +1 5589 55488 55<br />
-                  <strong>Email:</strong> info@example.com<br />
+                  <strong>Phone:</strong> +1 862 223 2923<br />
+                  <strong>Email:</strong> help@artificien.com
                 </p>
 
               </div>
