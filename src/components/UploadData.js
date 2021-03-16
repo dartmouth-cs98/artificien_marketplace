@@ -272,7 +272,8 @@ class UploadData extends Component {
       this.state.attributeRangeMins, this.state.attributeRangeMaxes, this.state.attributeDescriptionList,
       this.state.currentUser);
 
-    this.purchaseDataset(this.state.appName, this.props.currentUser, 0);
+    const test = 0;
+    this.purchaseDataset(this.state.appName, this.props.currentUser, test);
     document.getElementById('appNameInput').value = '';
     document.getElementById('appURLInput').value = '';
 
