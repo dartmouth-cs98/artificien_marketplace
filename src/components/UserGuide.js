@@ -63,7 +63,7 @@ class UserGuide extends Component {
               focused update. Only this update to the model is sent to the cloud, using encrypted communication, where it
               is immediately averaged with other user updates to improve the shared model. All the training data remains
               on your device, and no individual updates are stored in the cloud." We highly recommend
-              reading Google's <a href="https://ai.googleblog.com/2017/04/federated-learning-collaborative.html">pioneering article</a> on
+              reading Google's <a href="https://ai.googleblog.com/2017/04/federated-learning-collaborative.html" target="_blank" rel="noreferrer">pioneering article</a> on
               federated learning for more details.
             </p>
             <p>
