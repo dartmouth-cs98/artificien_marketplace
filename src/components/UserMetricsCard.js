@@ -60,10 +60,10 @@ class UserMetricsCard extends Component {
         </CardContent>
         <CardActions>
           <NavLink to="/models">
-            {(this.props.title === 'Number of Models Created') && <Button size="small">See My Models</Button>}
+            {(this.props.title === 'Number of Models Created') && <Button size="small">See All Models</Button>}
           </NavLink>
           <NavLink to="/register_app">
-            {(this.props.title === 'Number of Datasets Submitted') && <Button size="small">Upload a Dataset</Button>}
+            {(this.props.title === 'Number of Datasets Submitted') && <Button size="small">Register New App</Button>}
           </NavLink>
         </CardActions>
       </Card>

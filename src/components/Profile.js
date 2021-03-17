@@ -106,7 +106,7 @@ class Profile extends Component {
     // push three standard cards for user metrics
     metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models Created" body={this.state.clientMetricsDict.userModels.Items.length} username={this.state.userData.username.S} />);
     metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Purchased" body={this.state.userData.datasets_purchased.L.length} username={this.state.userData.username.S} />);
-    metricCards.push(<UserMetricsCard id="user-metric" title="Number of Active Models" body={activeModels} username={this.state.userData.username.S} />);
+    metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models in Progress" body={activeModels} username={this.state.userData.username.S} />);
     return metricCards;
   }
 
@@ -126,7 +126,7 @@ class Profile extends Component {
       // push three standard cards for dev metrics
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Submitted" body={this.state.devMetricsDict.userDatasets.Items.length} username={this.state.userData.username.S} />);
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Integrated" body={integrated} username={this.state.userData.username.S} />);
-      metricCards.push(<UserMetricsCard id="user-metric" title="Your Apps' Total Purchases" body={totalPurchases} username={this.state.userData.username.S} />);
+      metricCards.push(<UserMetricsCard id="user-metric" title="Total Purchases of Your Apps" body={totalPurchases} username={this.state.userData.username.S} />);
     }
     return metricCards;
   }
