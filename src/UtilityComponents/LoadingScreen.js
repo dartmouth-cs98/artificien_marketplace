@@ -1,8 +1,5 @@
 import React from 'react';
-// import { connect } from 'react-redux';
 import LoadingIcon from './LoadingIcon';
-// import LoadedIcon from './LoadedIcon';
-// import Navbar from '../components/Navbar';
 
 const LoadingScreen = (props) => {
   return (

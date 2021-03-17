@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
-// import update from 'react-addons-update'; // ES6
 import { Link } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 import { putDataset, getDataset } from '../database/databaseCalls';
 
-// import { Button } from 'reactstrap';
+/*
+DEPRECATED in favor of RegisterApp.js
+*/
 
 class UploadData extends Component {
   constructor(props) {

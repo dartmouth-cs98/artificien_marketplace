@@ -1,5 +1,9 @@
 import { ADDROLE } from '../actionTypes';
 
+/*
+Adds role to redux store
+*/
+
 export function addRole(pay) {
   return {
     type: ADDROLE,

@@ -11,14 +11,13 @@ import {
   scanDatasets,
 } from '../database/databaseCalls';
 import DataLibraryCard from './DataLibraryCard';
-// import DatasetSideNav from './DatasetSideNav';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import DatasetModal from '../UtilityComponents/DatasetModal';
 
 /*
 Component that renders library of all available datasets to shoppers
 Calls on subcomponents of:
-  - DatasetSideNav
+  - DatasetModal
   - DataLibraryCard
 */
 
@@ -41,18 +40,20 @@ class Marketplace extends Component {
     };
   }
 
+  // display all datasets in db as catalog
   componentDidMount() {
     const callbackMount = (data, error) => {
       if (error) {
         console.log(error);
       } else {
         const approvedDatasets = data.Items.filter((dataset) => dataset.properlySetUp && dataset.properlySetUp.BOOL === true);
-        this.setState({ allDatasets: approvedDatasets }); // display all datasets in db as catalog
+        this.setState({ allDatasets: approvedDatasets });
       }
     };
     queryDatasetsMount(callbackMount);
     document.addEventListener('click', this.closeNav);
 
+    // load in purchased datasets to state
     Auth.currentSession()
       .then((data) => {
         const name = data.accessToken.payload.username;
@@ -66,8 +67,6 @@ class Marketplace extends Component {
             for (const datasetName of success.Items[0].datasets_purchased.L) {
               newList.push(datasetName.S);
             }
-            console.log('You have these');
-            console.log(newList);
             this.setState({ currentUserDatasetsPurchased: newList });
           }
         };
@@ -80,8 +79,6 @@ class Marketplace extends Component {
   }
 
   checkIfAlreadyPurchased = (dataset) => {
-    console.log('checking for purchased: ');
-    console.log(dataset);
     if (dataset && this.state.currentUserDatasetsPurchased) {
       for (const purchased of this.state.currentUserDatasetsPurchased) {
         if (String(purchased) === String(dataset.dataset_id.S)) {
@@ -93,6 +90,7 @@ class Marketplace extends Component {
     return false;
   }
 
+  // initiate category sort
   categoryOnClickFunction = (category) => {
     if (category === 'All') { // get rid of display when user wants no organization
       this.setState({ categoryIsChosen: false });
@@ -105,14 +103,15 @@ class Marketplace extends Component {
     if (this.state.searchTermInput) this.setState({ searchTermInput: false });
   };
 
+  // display all datasets in db as catalog
   mountDisplayDatasets = () => {
     if (!this.state.allDatasets || this.state.allDatasets.length === 0) {
       return null;
     }
 
     // for array
-    const renderedDatasets = this.state.allDatasets.map((dataset) => { // make a card for all datasets
-      return (
+    const renderedDatasets = this.state.allDatasets.map((dataset) => {
+      return ( // make a card for all datasets
         <DataLibraryCard
           onClick={() => this.setState({ clickedDataset: dataset })}
           dataset={dataset}
@@ -129,23 +128,11 @@ class Marketplace extends Component {
     return renderedDatasetTable;
   };
 
-  checkIfAlreadyPurchased = (dataset) => {
-    if (dataset && this.state.currentUserDatasetsPurchased) {
-      for (const purchased of this.state.currentUserDatasetsPurchased) {
-        if (String(purchased) === String(dataset.dataset_id.S)) {
-          console.log('got it');
-          return true;
-        }
-      }
-      return false;
-    }
-    return false;
-  }
-
   searchBarOnChange = (e) => {
     this.setState({ currentSearchTerm: e.target.value });
   }
 
+  // Enter search term
   handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       if (this.state.categoryIsChosen) this.setState({ categoryIsChosen: false });
@@ -254,17 +241,16 @@ class Marketplace extends Component {
     );
   }
 
+  // Cards for subjects of search
   renderSearchTermDatasets = () => {
     const searchTerm = this.state.finalizedSearchTerm;
-    console.log(this.state.sortedCategory);
     let inCategory = [];
-    if (this.state.sortedCategory !== 'All') {
+    if (this.state.sortedCategory !== 'All') { // only display within current category
       inCategory = this.state.allDatasets.filter((dataset) => dataset.category.S === this.state.sortedCategory);
     } else {
       inCategory = this.state.allDatasets;
     }
-    console.log(inCategory);
-    const allMatchingDatasets = inCategory.reduce((finalDatasets, dataset) => {
+    const allMatchingDatasets = inCategory.reduce((finalDatasets, dataset) => { // filter on search term
       if (dataset.dataset_id.S.toLowerCase().includes(searchTerm.toLowerCase())) {
         finalDatasets.push(
           <DataLibraryCard
@@ -329,13 +315,14 @@ class Marketplace extends Component {
           {this.renderUniqueCategories()}
           <br />
           {this.state.categoryIsChosen
-            ? <div>{this.renderAllDatasets()}</div>
+            ? <div>{this.renderAllDatasets()}</div> // if category chosen render full category
             : (
-              <div>{this.state.searchTermInput
+              <div>{this.state.searchTermInput // otherwise render search terms
                 ? this.renderSearchTermDatasets()
                 : this.mountDisplayDatasets()}
               </div>
             )}
+          {/* Modal pops up and displays dataset info when card is clicked */}
           <DatasetModal open={this.props.open} dataset={this.state.clickedDataset} currentUser={this.state.currentUser} alreadyPurchased={alreadyPurchased} />
         </div>
       </>

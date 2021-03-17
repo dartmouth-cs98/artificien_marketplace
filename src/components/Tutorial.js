@@ -4,12 +4,9 @@
 /* eslint-disable new-cap */
 import React, { Component } from 'react';
 import '../style.scss';
-// import DocumentationDrawer from './DocumentationDrawer';
 import { NavLink, withRouter } from 'react-router-dom';
 import { CopyBlock, dracula } from 'react-code-blocks';
 import { connect } from 'react-redux';
-// import BottomNav from './BottomNav';
-// import PersistentDrawerLeft from './PersistentDrawerLeft';
 import enableBackgroundTasksImage from '../img/documentation/EnableBackgroundTasks.png';
 import configureArtificienImage from '../img/documentation/ConfigureArtificienPlist.png';
 import configureInfoImage from '../img/documentation/ConfigureInfoPlist.png';

@@ -6,6 +6,7 @@ import '../style.scss';
 Right-side slide-out component that displays more in-depth information about model.
 Rendered when user clicks on modelDetailsCard component
 */
+
 class ModelSideNav extends Component {
   constructor(props) {
     super(props);

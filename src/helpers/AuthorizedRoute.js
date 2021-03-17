@@ -5,12 +5,15 @@ import React from 'react';
 import { withRouter, Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-// // Higher-order component to role-restrict access to routes
+/*
+DEPRECATED in favor of withAuthorization
+*/
+
 const AuthorizedRoute = ({
   component: Component, path, exact = true, validRoles, role, ...rest
 }) => {
   // const state = store.getState();
-  const isLoggedIn = true; // !!uid; // TODO: GET THIS FROM COGNITO - SHOULD BE ONLY CRITERION FOR WHETHER USER IS A GO TO SEE VARIABLE
+  const isLoggedIn = true;
   const isValidRole = validRoles.includes(role);
 
   const message = isLoggedIn ? 'You do not have access to that page' : 'Please log in to view that page';

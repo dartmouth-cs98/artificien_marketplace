@@ -11,6 +11,8 @@ import RoleButton from './RoleButton';
 
 /*
 Simple top navigation bar
+Uses the subcomponents:
+  - RoleButton
 */
 
 class Navbar extends Component {
@@ -31,15 +33,6 @@ class Navbar extends Component {
         console.log('caught navbar');
       });
   }
-
-  // signOut = async () => {
-  //   try {
-  //     console.log('SIGNING OUT');
-  //     await Auth.signOut();
-  //   } catch (error) {
-  //     console.log('error signing out: ', error);
-  //   }
-  // }
 
   renderDev = () => {
     console.log('rendering');
@@ -153,9 +146,6 @@ class Navbar extends Component {
             </li>
             <li>
               <NavLink to="/user_guide"> User Guide </NavLink>
-            </li>
-            <li>
-              <NavLink to="/tutorial"> Tutorial </NavLink>
             </li>
           </ul>
           <ul className="nav-role-button-ul">

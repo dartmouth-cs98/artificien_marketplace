@@ -1,6 +1,10 @@
 import React from 'react';
 import HomepageIcon from './HomepageIcon';
 
+/*
+DEPRECATED in favor of nice shreyas drawing
+*/
+
 const HomepageAnimation = (props) => {
   return (
     <>

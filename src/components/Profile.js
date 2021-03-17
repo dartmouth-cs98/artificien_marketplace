@@ -13,7 +13,10 @@ import ProfileAccordion from './ProfileAccordion';
 import ErrorModal from '../UtilityComponents/ErrorModal';
 
 /*
-Component that provides the user their information, will allow editing capabilities in the future.
+Component that provides the user their information in a series of cards and a slideout accordion
+Uses the subcomponents:
+  - UserMetricsCard
+  - ProfileAccordion
 */
 
 class Profile extends Component {
@@ -25,12 +28,12 @@ class Profile extends Component {
       accessID: null,
       userData: null,
       usernameChange: false,
-      clientMetricsDict: {
+      clientMetricsDict: { // client-specific info for metric cards
         userModels: null,
         numDevicesReached: 0,
         averageTrainingTime: [0, 0],
       },
-      devMetricsDict: {
+      devMetricsDict: { // dev-specific info for metric cards
         userDatasets: null,
       },
     };
@@ -70,9 +73,7 @@ class Profile extends Component {
         };
         queryDatasetsOwner(datasetsQueryCallback, name);
       });
-    // get metrics here
   }
-  // figure out which user is currently logged in and query their models
 
   renderChangeButton = () => {
     if (this.state.usernameChange) {
@@ -87,8 +88,6 @@ class Profile extends Component {
       if (error) {
         console.log(error);
       } else {
-        console.log('user data:');
-        console.log(data.Items[0]);
         this.setState({ userData: data.Items[0] });
       }
     };
@@ -97,13 +96,14 @@ class Profile extends Component {
 
   renderClientMetricsCards = () => { // loops over client clientMetricsDict
     const metricCards = [];
-    // console.log(this.state.userData.datasets_purchased.L.length);
     if (!this.state.clientMetricsDict.userModels) return null;
 
+    // get num active models for cards
     let activeModels = 0;
     for (let i = 0; i < this.state.clientMetricsDict.userModels.Items.length; i += 1) {
       if (Number.parseInt(this.state.clientMetricsDict.userModels.Items[i].percent_complete.N, 10) === 100) activeModels += 1;
     }
+    // push three standard cards for user metrics
     metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models Created" body={this.state.clientMetricsDict.userModels.Items.length} username={this.state.userData.username.S} />);
     metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Purchased" body={this.state.userData.datasets_purchased.L.length} username={this.state.userData.username.S} />);
     metricCards.push(<UserMetricsCard id="user-metric" title="Number of Active Models" body={activeModels} username={this.state.userData.username.S} />);
@@ -116,12 +116,14 @@ class Profile extends Component {
     if (!this.state.devMetricsDict.userDatasets) {
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Submitted" body={0} username={this.state.userData.username.S} />);
     } else {
+      // number of integrated datasets and sum total purchases
       let integrated = 0;
       let totalPurchases = 0;
       for (let i = 0; i < this.state.devMetricsDict.userDatasets.Items.length; i += 1) {
         totalPurchases += Number.parseInt(this.state.devMetricsDict.userDatasets.Items[i].numPurchases.N, 10);
         if (this.state.devMetricsDict.userDatasets.Items[i].properlySetUp && this.state.devMetricsDict.userDatasets.Items[i].properlySetUp.BOOL) integrated += 1;
       }
+      // push three standard cards for dev metrics
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Submitted" body={this.state.devMetricsDict.userDatasets.Items.length} username={this.state.userData.username.S} />);
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Integrated" body={integrated} username={this.state.userData.username.S} />);
       metricCards.push(<UserMetricsCard id="user-metric" title="Your Apps' Total Purchases" body={totalPurchases} username={this.state.userData.username.S} />);
@@ -131,7 +133,6 @@ class Profile extends Component {
 
   // -------------------------------------------------------- RENDER -------------------------------------------------------- //
   render() {
-    console.log(this.props.role);
     if (this.state.userData && this.state.clientMetricsDict.userModels) {
       return (
         <>

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { CopyBlock, dracula } from 'react-code-blocks';
 
+/*
+UPDATE - decided not to use this, opted for different codebox
+*/
 function codeboxContent(userText) {
   if (userText) {
     return (

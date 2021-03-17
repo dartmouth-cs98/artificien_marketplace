@@ -5,7 +5,10 @@ import { connect } from 'react-redux';
 import { getUser, updateItem } from '../database/databaseCalls';
 import { openDatasetModal } from '../store/reducers/dataset-reducer';
 
-// const { URL } = require('url');
+/*
+App Modal
+- Pops up from marketplace page
+*/
 
 class DatasetModal extends Component {
   constructor(props) {
@@ -111,6 +114,7 @@ class DatasetModal extends Component {
     }
   }
 
+  // display dataset attributes and descriptions
   attributeList = (atrList, atrTypes, atrDescriptions) => {
     const attributeList = [];
     for (let i = 0; i < atrTypes.length; i += 1) {
@@ -191,7 +195,7 @@ class DatasetModal extends Component {
     return (
       <div>
         <Modal
-          open={op} // this.props.open maybe make this props-based. When we redirect, swap a global "isModal" redux var to 1. pass that into here, as this.props.open
+          open={op}
           onClose={handleClose}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"

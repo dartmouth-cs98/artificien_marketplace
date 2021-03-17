@@ -18,10 +18,15 @@ class DatasetSideNav extends Component {
     };
   }
 
+  /* in order to purchase dataset must:
+  1) Pull down user info from db
+  2) Add purchased dataset to user purchased list
+  3) add +1 to number of purchases for that specific dataset
+  */
   purchaseDataset = async (datasetID, username, oldNumPurchases) => {
     this.setState({ alreadyPurchased: true });
     this.setState((state) => {
-      state.recentlyPurchased.push(datasetID);
+      state.recentlyPurchased.push(datasetID); // keeps track of which datasets have been purchased while on the page
       return {
         ...state,
       };
@@ -36,10 +41,10 @@ class DatasetSideNav extends Component {
           const datasetsPurchased = data.Items[0].datasets_purchased.L;
           const datasetsPurchasedNew = [...datasetsPurchased];
           datasetsPurchasedNew.push({ S: datasetID });
-          this.updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S, datasetID, oldNumPurchases);
-        } else { // if field doesn't exist (user hasn't purchased yet?), create a new list and add
+          this.updateDatasetsPurchased(datasetsPurchasedNew, data.Items[0].user_id.S, datasetID, oldNumPurchases); // update user and dataset
+        } else { // if field doesn't exist, create a new list and add
           const newDatasetsPurchasedList = [{ S: datasetID }];
-          this.updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S, datasetID, oldNumPurchases);
+          this.updateDatasetsPurchased(newDatasetsPurchasedList, data.Items[0].user_id.S, datasetID, oldNumPurchases); // update user and dataset
           this.props.alreadyPurchased = true;
           console.log(this.props.content.alreadyPurchased);
         }
@@ -48,6 +53,7 @@ class DatasetSideNav extends Component {
     getUser(callback, username);
   }
 
+  // add the dataset to the user's purchased list, Add 1 to the number of times the dataset has been purchased
   updateDatasetsPurchased = (newDatasetsList, userID, datasetID, oldNumPurchases) => {
     console.log(this.props.datasetID);
     const newNumPurchases = String(Number.parseInt(oldNumPurchases, 10) + 1);
@@ -91,17 +97,14 @@ class DatasetSideNav extends Component {
 
   // make a seperate render for the purchase button!
   renderPurchased = () => {
-    console.log(this.props.alreadyPurchased);
-    console.log(this.state.alreadyPurchased);
-    console.log(this.state.recentlyPurchased);
-    if (this.state.recentlyPurchased.includes(this.props.content.dataset_id.S)) {
+    if (this.state.recentlyPurchased.includes(this.props.content.dataset_id.S)) { // if user has purchased while on the page
       return (
         <div className="dataset_existing">Congratulations on purchasing this dataset!
           Please navigate to <Link className="dataset_navlink" to="/models">models</Link> to be able to
           access the <i>Artificien JupyterHub</i> and upload a model to train on this data.
         </div>
       );
-    } else if (this.props.alreadyPurchased || this.state.alreadyPurchased) {
+    } else if (this.props.alreadyPurchased || this.state.alreadyPurchased) { // if already purchased previously
       return (
         <div className="dataset_existing">You already own access to this dataset!</div>
       );

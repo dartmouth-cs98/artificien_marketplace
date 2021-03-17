@@ -1,3 +1,7 @@
+/*
+DEPRECATED, an experiment in conditional styles/dark mode
+*/
+
 const welcomePageStyles = {
   0: { // default is client
   },

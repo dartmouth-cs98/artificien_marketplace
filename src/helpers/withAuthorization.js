@@ -5,16 +5,19 @@ import { withRouter } from 'react-router-dom';// Redirect, Route } from 'react-r
 import { connect } from 'react-redux';
 import { openModal } from '../store/reducers/modal-reducer';
 
+/*
+Functional Component for route restriction
+Applied to each page to ensure proper users have access
+Redirects to profile page and pops up error modal
+*/
+
 export default function withAuthorization(ComponentToBeRendered, validRoles) { // VR is integer
   class Authorize extends React.Component {
     componentDidMount() {
       try {
         if (!(validRoles.includes(Number.parseInt(this.props.role, 10)))) {
           this.props.history.push('/'); // this isn't allowed
-          console.log('PUSH TO PROFILE A');
           this.props.openModal(true);
-        } else {
-          console.log('allowed');
         }
       } catch (error) {
         this.props.history.push('/');
@@ -24,10 +27,7 @@ export default function withAuthorization(ComponentToBeRendered, validRoles) { /
     componentWillUpdate(nextProps) {
       if (!(validRoles.includes(Number.parseInt(nextProps.role, 10)))) {
         this.props.history.push('/profile');
-        console.log('PUSH TO PROFILE');
         this.props.openModal(true);
-      } else {
-        console.log('still allowed');
       }
     }
 

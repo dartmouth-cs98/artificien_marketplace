@@ -17,8 +17,12 @@ import {
 } from '../database/databaseCalls';
 import { openAppModal } from '../store/reducers/app-reducer';
 import AppModal from '../UtilityComponents/AppModal';
-// import { openDatasetModal } from '../store/reducers/dataset-reducer';
-// import DatasetModal from '../UtilityComponents/DatasetModal';
+
+/*
+Component that provides role-specific dropdowns for different user personas
+Includes payment information, account information, apps managing,
+datasets purchased, means for getting APIkey
+*/
 
 const artificienTheme = createMuiTheme({
   typography: {
@@ -55,39 +59,28 @@ class ProfileAccordion extends Component {
     };
   }
 
+  // db call to retrieve stored user key
   retrieveAPIkey = async () => {
     const name = this.props.content.username.S;
     const callback = async (successData, error) => {
       if (error) {
         console.log(error);
-      } else {
-        console.log(successData);
-        if (successData.Items[0].api_key) {
-          const key = successData.Items[0].api_key.S;
-          this.setState({ currentAPIkey: key });
-        }
+      } else if (successData.Items[0].api_key) {
+        const key = successData.Items[0].api_key.S;
+        this.setState({ currentAPIkey: key });
       }
     };
     getUser(callback, name);
   }
 
-  mapDatasetsPurchased = (datasets) => {
-    const datasetList = datasets.map((dataset) => {
-      return <Typography>{dataset.S}</Typography>;
-    });
-    return <div>{datasetList}</div>;
-  }
-
   showAppSummary = (dataset) => {
     this.setState({ clickedDataset: dataset });
     this.props.openAppModal(true);
-    console.log(dataset);
   }
 
   mapAppsManaged = (datasets) => {
-    // we're gonna loop over a list of dataset objects (from dynamo datasets table)
-    // each of these datasets has an app field
-    // we want to return the app
+    // loop over a list of dataset objects (from dynamo datasets table)
+    // trigger modal popup and display
     const appList = datasets.map((dataset) => {
       return (
         <div style={{
@@ -102,10 +95,9 @@ class ProfileAccordion extends Component {
     return <div>{appList}</div>;
   }
 
+  // keep track of which datasets we've purchased for accordion dropdown
   async setPurchasedDatasetsState(datasetNames) {
     this.setState({ gatheringPurchases: true });
-    console.log('setting state');
-    console.log(datasetNames);
     if (datasetNames.length > 0) {
       for (let i = 0; i < datasetNames.length; i += 1) {
         console.log(datasetNames[i]);
@@ -128,6 +120,7 @@ class ProfileAccordion extends Component {
     }
   }
 
+  // format mini that trigger datasets purchased modal
   makeDatasetsPurchasedCard = () => {
     if (this.state.purchasedDatasets.length === 0) {
       console.log('no datasets');
@@ -156,7 +149,6 @@ class ProfileAccordion extends Component {
     };
     return (
       <div className={classes.root} style={{ margin: '0 10% 0 10%' }}>
-        {/* Account information */}
         <Accordion expanded={this.state.expanded === 'panel1'} onChange={handleChange('panel1')}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -164,7 +156,6 @@ class ProfileAccordion extends Component {
             id="panel1bh-header"
           >
             <Typography className={classes.heading}>Account Information</Typography>
-            {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
           </AccordionSummary>
           <AccordionDetails>
             {this.props.content.username
@@ -177,7 +168,6 @@ class ProfileAccordion extends Component {
               ) : <Typography>You dont have any personal information yet!</Typography>}
           </AccordionDetails>
         </Accordion>
-        {/* Payment information */}
         <Accordion expanded={this.state.expanded === 'panel2'} onChange={handleChange('panel2')}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -257,8 +247,8 @@ class ProfileAccordion extends Component {
           </AccordionDetails>
         </Accordion>
         )}
+        {/* Modal that pops open for app summar display. Good for both datasets purchased and apps managing */}
         <AppModal open={this.props.open} dataset={this.state.clickedDataset} />
-        {/* <DatasetModal open={this.props.datasetOpen} dataset={this.state.clickedDataset} /> */}
       </div>
     );
   }

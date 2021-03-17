@@ -471,6 +471,8 @@ export function updateItem(upParams) {
 
 // -------------------- Purchase Dataset ----------------
 
+// put here for more convenient import/to avoid overcrowding in RegisterApp
+
 export function updateDatasetsPurchased(newDatasetsList, userID, datasetID, oldNumPurchases) {
   const newNumPurchases = String(Number.parseInt(oldNumPurchases, 10) + 1);
   const upParamsUser = {

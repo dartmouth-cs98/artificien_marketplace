@@ -3,7 +3,10 @@ import Modal from '@material-ui/core/Modal';
 import { connect } from 'react-redux';
 import { openAppModal } from '../store/reducers/app-reducer';
 
-// const { URL } = require('url');
+/*
+App Modal
+- Pops up from profile page
+*/
 
 class AppModal extends Component {
   constructor(props) {
@@ -12,6 +15,7 @@ class AppModal extends Component {
     };
   }
 
+  // display dataset attributes and descriptions
   attributeList = (atrList, atrTypes, atrDescriptions) => {
     const attributeList = [];
     for (let i = 0; i < atrTypes.length; i += 1) {
@@ -65,7 +69,6 @@ class AppModal extends Component {
         <>
           <h2 id="simple-modal-title">{this.props.dataset.dataset_id.S}</h2>
           <div style={{ display: 'flex', 'justify-content': 'center' }}>
-            {/* <div style={{ 'backgroud-image': new URL(this.props.dataset.logo_image_url.S) }} active /> */}
             <div className="artificien-modal" active />
           </div>
           <div className="app-modal-description">
@@ -85,7 +88,7 @@ class AppModal extends Component {
     return (
       <div>
         <Modal
-          open={op} // this.props.open maybe make this props-based. When we redirect, swap a global "isModal" redux var to 1. pass that into here, as this.props.open
+          open={op}
           onClose={handleClose}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
