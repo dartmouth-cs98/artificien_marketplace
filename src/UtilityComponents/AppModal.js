@@ -29,9 +29,9 @@ class AppModal extends Component {
       } else if (attrType === 'N') {
         attributeList.push(
           <div style={{ display: 'flex', 'justify-content': 'space-evenly' }}>
-            <p><strong>{attrName}</strong></p>
-            <p>Float</p>
-            <p>{attrDes}</p>
+            <p style={{ width: '15%' }}><strong>{attrName}</strong></p>
+            <p style={{ width: '15%' }}> Float</p>
+            <p style={{ width: '40%' }}>{attrDes}</p>
           </div>,
         );
       }
