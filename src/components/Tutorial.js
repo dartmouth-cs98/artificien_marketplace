@@ -62,8 +62,8 @@ class Tutorial extends Component {
               be downloaded by anyone willing to share their health data for the sake of this federated learning example.
               The app is distributed through TestFlight. Our source code for the application is also entirely open-source,
               so that App Developers can see how the Artificien CocoaPod is implemented in practice. Use this example in
-              conjuntcion with the <NavLink to="/app_developer_documentation">App Developer Documentation</NavLink> to
-              understand how to share your data with Artificien.
+              conjunction with the <NavLink to="/app_developer_documentation">App Developer Documentation</NavLink> to
+              understand how to share your data securely with Artificien.
             </p>
             <a href="https://testflight.apple.com/join/Z6FKIuIw"><button className="data-card-button" type="button">Download the App</button></a>
             <a href="https://github.com/dartmouth-cs98/artificien_ios"><button className="data-card-button" type="button">App Source Code</button></a>
