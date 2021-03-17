@@ -37,9 +37,30 @@ avg_plan = sf.def_avg_plan(model_params)`;
 
     const sendingModel =
 `from artificienlib import syftfunctions as sf
-sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.2, max_updates=10,
-  model_params=model_params, training_plan=training_plan, avg_plan=avg_plan, \`dataset_id\`=dataset_id,
-  \`password\`=cognito_password)`;
+sf.send_model(
+    
+    # Model Information
+    name=name, 
+    dataset_id=dataset, 
+    version=version, 
+    
+    # Determine what training should look like
+    min_workers=1,
+    max_workers=5,
+    num_cycles=5,
+
+    # Set the training and average plans
+    batch_size=1, 
+    learning_rate=0.2,
+    model_params=model_params,
+    features=feature_names, 
+    labels=label_names,
+    avg_plan=avg_plan,
+    training_plan=training_plan,
+    
+    # Authenticate
+    password=password
+)`;
 
     return (
       <div>
@@ -61,14 +82,24 @@ sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.
 
             <h2 id="introduction">Introduction</h2>
             <p>
-              As a data scientist, or client, you will be purchasing access to Artificien datasets and writing models in PyTorch to train
-              on those datasets on-device. The Artificien Python library enables you to set up and trigger a federated learning training
-              cycle with a model of your design. To understand the full app developer flow, reference our <NavLink to="/tutorial">Tutorials</NavLink> page.
+              This documentation describes how to use the Artificien Library, a custom python library that allows
+              authenticated Data Scientists to train AI/ML models using the
+              industry-standard, <a href="https://pytorch.org/" target="_blank" rel="noreferrer">PyTorch</a>, and train them on the
+              datasets they've purchased access to.
             </p>
             <p>
-              The following is a basic use guide for <code>artificienlib</code> in Jupyter. For more step-by-step documentation, refer to the tutorials
-              in <a href="https://github.com/dartmouth-cs98/artificien_experimental">Artificien's experimental repository</a> under
-              the <code>deploymentExamples</code> folder.
+              The following is a basic use guide. For more step-by-step documentation, refer to the tutorials in
+              the <a href="https://github.com/dartmouth-cs98/artificien_tutorials" target="_blank" rel="noreferrer">Artificien Tutorials Repository</a> or
+              the <NavLink to="/tutorial">Tutorial</NavLink> page on Artificien site.
+            </p>
+            <p>
+              <strong>Note:</strong> For security reasons, Artificien Library can currently only be run in Artificien's Jupyter
+              notebooks. When you create a new model through the Artificien <NavLink to="/models">Models</NavLink> page,
+              you'll be taken to this secure JupyterHub environment. Here, you can develop your own custom models to train on
+              datasets you've purchased in the marketplace.
+            </p>
+            <p>
+              <strong>Note:</strong> When developing on the Artificien JupyterHub, skip the installation steps below.
             </p>
 
             <h2 id="setup">Setup</h2>
@@ -102,13 +133,14 @@ sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.
 
             <h2 id="usage">Usage</h2>
             <p>
-              Building a model with Artificien consists of 5 steps.
+              Building a model with <code>artificienlib</code> consists of 5 steps.
             </p>
 
             <h3 id="selectDataset">Select a dataset</h3>
             <p>
               The first step is selecting a dataset. You can build a model to train on any single dataset you've purchased
-              access to. You can check which datasets you've purchased within your Profile page, or programmatically.
+              access to. You can check which datasets you've purchased within your <NavLink to="/profile">Profile</NavLink> page
+              under "Datasets Purchased", or programmatically.
             </p>
             <p>
               To print available datasets programmatically, run the following in Python.
@@ -121,23 +153,36 @@ sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.
               codeBlock
             />
             <p>
-              Record the printed dataset_id of the dataset you'd like to use: you'll need it later.
+              Record the printed <code>dataset_id</code> of the dataset you'd like to use: you'll need it later.
             </p>
 
             <h3 id="buildModel">Build a PyTorch model</h3>
             <p>
               The second step is specifying a standard PyTorch model of some input and output size. This process is
-              no different than using standard PyTorch. Refer to PyTorch documentation for additional information, and to
-              <code>model_lib.ipynb</code> in <a href="https://github.com/dartmouth-cs98/artificien_experimental">Artificien's experimental repository</a> for
+              no different than using standard PyTorch.
+            </p>
+            <p>
+              For every dataset registered on Artificien, we provide a sample dataset to demonstrate to you what the
+              data on user devices will actually look like. Note that the sample dataset is entirely made-up data based
+              on ranges estimated by the App Developer. The real data only ever exists on user devices, and it never
+              goes anywhere else. We keep the user's privacy first and foremost. You can use this sample dataset to
+              define what attributes you'd like to use in your model. Record the names of the attributes you'd like
+              to use for features and for labels, and design your model accordingly. You can also use the sample dataset
+              to validate your model is working properly before sending it for training.
+            </p>
+            <p>
+              Refer to <a href="https://pytorch.org/" target="_blank" rel="noreferrer">PyTorch</a> documentation for additional
+              information on model-building, and to
+              the <a href="https://github.com/dartmouth-cs98/artificien_tutorials" target="_blank" rel="noreferrer">Artificien Tutorials Repository</a> for
               an example.
             </p>
 
             <h3 id="definePlan">Define a training plan</h3>
             <p>
               The third step is defining a training plan. First, we must choose some dummy X and Y representative of our input
-              and output parameters respectively. The X should be sample size 1 example of inputs, and Y the corresponding output.
-              Such values, along with our pytorch model, are passed into our training plan definition. To compile the training plan
-              with default loss function (softmax cross entropy and optimizer (naive stochaistic gradient descent), simply run:
+              and output parameters respectively. The <code>X</code> should be sample size 1 example of inputs, and <code>Y</code> the corresponding output.
+              Such values, along with our PyTorch model, are passed into our training plan definition. To compile the training plan
+              with default loss function (softmax cross entropy) and optimizer (naive stochaistic gradient descent), simply run:
               <code>def_training_plan(model, X, Y)</code>.
             </p>
             <p>
@@ -150,19 +195,17 @@ sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.
             <p>
               <strong>Loss Function.</strong> The loss function is defaulted to softmax cross entropy. To change it, pass in
               a dictionary containing item <code>"loss": my_loss_function</code> where <code>my_loss_function</code> is a functional
-              definition of your loss function that takes input <code>my_loss_function(logits, targets, batch_size)</code>. Logits
-              and targets must be numpy arrays of size <code>batch_size x C</code> and are the output of model and actual targets
+              definition of your loss function that takes input <code>my_loss_function(logits, targets, batch_size)</code>. <code>logits</code>
+              and <code>targets</code> must be numpy arrays of size <code>batch_size x C</code> and are the output of model and actual targets
               respectively. <code>artificienlib</code> also has some standard loss functions available out of the box. For
-              instance, <code>"loss":sf.mse_with_logits</code> will use a standard implementation of mean squared error, no user
-              created function instantiation required.
+              instance, <code>"loss": sf.mse_with_logits</code> will use a standard implementation of mean squared error, no user-created function instantiation required.
             </p>
             <p>
               <strong>Optimizer.</strong> The optimizer is defaulted to naive stochaistic gradient descent. To change it, pass in
               a dictionary (same one as above) containing item <code>"optimizer": my_optimizer_function</code> where
               the <code>my_optimizer_function</code> is a functional definition of your optimizer function that takes
               input <code>my_optimizer_function(param, **kwargs)</code>. <code>kwargs</code> is simply a dictionary of basic
-              parameters. For the purposes of defining an optimizer, <code>kwargs['lr']</code> will give you the learning rate.
-              Param are the coefficients.
+              parameters. For the purposes of defining an optimizer, <code>kwargs['lr']</code> will give you the learning rate. <code>param</code> are the coefficients.
             </p>
             <p>
               <strong>Training Steps.</strong> The training plan defines back propagation (i.e. how training happens at each
@@ -171,7 +214,7 @@ sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.
               <code>syftfunctions.py</code> in <code>artificienlib</code>: the library codebase.
             </p>
             <p>
-              The outputs of a call to <code>def_training_plan(model, X, Y)</code> is our model parameters and a
+              The outputs of a call to <code>def_training_plan(model, X, Y)</code> are our model parameters and a
               training plan object respectively. An example call to <code>def_training_plan(model, X, Y)</code> is below.
             </p>
             <CopyBlock
@@ -204,8 +247,10 @@ sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.
             <h3 id="sendModel">Send the model</h3>
             <p>
               Lastly, we must send our model, training plan, and average plan to be trained. Using the function <code>send_model</code> we
-              must pass in the name, version, batch_size, learning_rate, max_updates, model_params, training_plan, average_plan,
-              dataset_id, and password. An example call is below.
+              must pass in the <code>name</code>, <code>dataset_id</code>, <code>version</code>, <code>min_workers</code>,
+              <code>max_workers</code>, <code>num_cycles</code>, <code>batch_size</code>, <code>learning_rate</code>,
+              <code>model_params</code>, <code>training_plan</code>, <code>average_plan</code>, <code>features</code>, <code>labels</code> and
+              your Artificien <code>password</code>. An example call is below.
             </p>
             <CopyBlock
               text={sendingModel}
@@ -215,8 +260,8 @@ sf.send_model(name="perceptron", version="0.3.0", batch_size=1, learning_rate=0.
               codeBlock
             />
             <p>
-              The above steps are a quick start for developing models with Artificien. Feel free to contact us with any questions,
-              comments, or concerns.
+              The above steps are a quick start for developing models with Artificien. Please see the <NavLink to="/tutorial">Tutorial</NavLink> for
+              a complete example with guided explanations.
             </p>
 
           </div>
