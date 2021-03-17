@@ -169,6 +169,8 @@ class UserGuide extends Component {
             <p>
               Now you can hit "Submit Ranges" and "Submit" the form as a whole, registering your app in our system.
               An App Developer can submit and manage multiple apps on the Artificien platform, always beginning with this step.
+              When you submit an app with Artificien, you also automatically own this app as a Data Scientist, allowing
+              you to create your own federated learning workflows if you desire.
             </p>
 
             <h3 id="integrate-our-code">2. Integrate Our Code</h3>
@@ -285,7 +287,8 @@ class UserGuide extends Component {
               Models that have finished training are displayed in the Completed section. Artificien automatically
               moves models here when their progress reaches 100%. Models in this section are enabled with a download
               link, under "View Model," allowing you to retrieve the final model updated with averaged insights
-              from all user devices. From here, you can take your model off the Artificien platform and mold it to your use case.
+              from all user devices. These will download as a standard Python <code>.pkl</code> file.
+              From here, you can take your model off the Artificien platform and mold it to your use case.
             </p>
             <p>
               The Profile page also shows aggregate information about models created as well as general account information.
