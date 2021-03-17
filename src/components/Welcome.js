@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { addRole } from '../store/reducers/role-reducer';
 import DataCartoon from '../img/landingPage/DataCartoon.png';
 import FlowChart from '../img/landingPage/Artificien-flowChart.png';
-
+import LoginModal from '../UtilityComponents/LoginModal';
 /*
 Welcome component - first thing user sees on login
 */
@@ -85,8 +85,8 @@ class Welcome extends Component {
 
             </div>
           </div>
-
         </section>
+        <LoginModal open={this.props.open} />
       </>
     );
   }
