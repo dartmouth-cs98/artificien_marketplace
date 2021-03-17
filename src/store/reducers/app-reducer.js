@@ -1,5 +1,9 @@
 import { OPENAPPMODAL } from '../actionTypes';
 
+/*
+Triggers App Modal
+*/
+
 export function openAppModal(pay) {
   return {
     type: OPENAPPMODAL,

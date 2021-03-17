@@ -1,16 +1,12 @@
 /* eslint-disable new-cap */
 import '../style.scss';
 import React from 'react';
-// import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Route,
   Switch,
 } from 'react-router-dom';
 
-// import { withAuthenticator } from '@aws-amplify/ui-react';
-
-// import BottomNav from './BottomNav';
 import Marketplace from './Marketplace';
 import Models from './Models';
 import RegisterApp from './RegisterApp';

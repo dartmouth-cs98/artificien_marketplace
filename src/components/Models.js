@@ -112,7 +112,6 @@ class Models extends Component {
   renderModels = () => {
     console.log(this.state.models);
     if (!this.state.models || this.state.models.Items.length === 0) { return 'You have no Models. Go to Create Model to make one'; }
-    // if (!this.state.models || !this.state.models.count) { return 'You have no Models in progress. Go to Create Model to make one'; }
 
     // if the user has models, map each to a card
     const renderedModelsInProgress = this.state.models.Items.map((model) => {
@@ -192,7 +191,7 @@ class Models extends Component {
       // if we've clicked on a model, iterate through queried model to find which one
       for (let i = 0; i < this.state.models.Items.length; i += 1) {
         if (this.state.models.Items[i].model_id.S === this.state.clickedModel) {
-          clickedModel = this.state.models.Items[i]; // this model will be whose details are displayed in sliding sidebar
+          clickedModel = this.state.models.Items[i]; // this model will be whose details are displayed in popup modal
         }
       }
     }

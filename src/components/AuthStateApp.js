@@ -8,6 +8,10 @@ import { onAuthUIStateChange, AuthState } from '@aws-amplify/ui-components';
 import LoadingScreen from '../UtilityComponents/LoadingScreen';
 import '../style.scss';
 
+/*
+Cognito signin/signup form
+*/
+
 class AuthStateApp extends Component {
   constructor(props) {
     super(props);
@@ -41,7 +45,7 @@ class AuthStateApp extends Component {
     }
 
     if (this.state.authState === AuthState.SignedIn && this.state.user) {
-      this.props.history.push('/');
+      this.props.history.push('/'); // redirect to homepage on signin
       window.location.reload(false);
       return (
         <div>
@@ -55,6 +59,7 @@ class AuthStateApp extends Component {
       toast: { 'margin-top': '110px' },
     };
 
+    // default cognito form, username/email/phone number
     return (
       <div style={{ margin: '10px' }}>
         <AmplifyAuthenticator theme={AuthTheme} className="amplifyAuth">

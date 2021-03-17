@@ -4,12 +4,13 @@
 /* eslint-disable new-cap */
 import React, { Component } from 'react';
 import '../style.scss';
-// import DocumentationDrawer from './DocumentationDrawer';
 import { NavLink, withRouter } from 'react-router-dom';
 import { CopyBlock, dracula } from 'react-code-blocks';
 import { connect } from 'react-redux';
-// import BottomNav from './BottomNav';
-// import PersistentDrawerLeft from './PersistentDrawerLeft';
+
+/*
+Documentation for data scientist persona
+*/
 
 class DataScientistDocumentation extends Component {
   constructor(props) {
@@ -238,5 +239,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-// export default withRouter(withAuthenticator(Navbar)); // might be some sort of login flow thing here
 export default withRouter(connect(mapStateToProps)(DataScientistDocumentation)); // might be some sort of login flow thing here

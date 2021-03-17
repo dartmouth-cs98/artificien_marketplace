@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-// import { Auth } from 'aws-amplify';
-// import { getUser } from '../database/databaseCalls';
 import '../style.scss';
 
+/*
+UPDATE - decided not to user this.
+*/
+
 class ChangeUsernameForm extends Component {
-  // going to pull together all the kinds of things we want to display
   constructor(props) {
     super(props);
 
@@ -25,9 +26,7 @@ class ChangeUsernameForm extends Component {
 
   submitChange = () => {
     if (this.state.newUsername && this.state.newUsernameRepeat) {
-      console.log('username changes submitted');
       if (this.state.newUsername === this.state.newUsernameRepeat) {
-        console.log('replacing in DB!');
         this.setState({ readyToSubmit: true });
       }
     }

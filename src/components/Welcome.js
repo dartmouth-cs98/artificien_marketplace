@@ -3,17 +3,14 @@
 import React, { Component } from 'react';
 import '../style.scss';
 import { Auth } from 'aws-amplify';
-// import { withAuthenticator } from '@aws-amplify/ui-react';
 import { connect } from 'react-redux';
-// import {
-//   getUser,
-// } from '../database/databaseCalls';
 import { addRole } from '../store/reducers/role-reducer';
 import DataCartoon from '../img/landingPage/DataCartoon.png';
 import FlowChart from '../img/landingPage/Artificien-flowChart.png';
 
-// welcome variable on homepage
-
+/*
+Welcome component - first thing user sees on login
+*/
 class Welcome extends Component {
   constructor(props) {
     super(props);
@@ -22,30 +19,10 @@ class Welcome extends Component {
     };
   }
 
-  componentDidMount() {
-    // this.checkAuth();
-  }
-
   checkAuth() {
     Auth.currentSession()
       .then((data) => {
-        console.log('adding role welcome');
-        this.props.addRole(1);
-        // const name = data.accessToken.payload.username;
-        // const accessID = data.accessToken.jwtToken;
-        // console.log(name);
-        // const callback = (successData, error) => { // requires current user to be in database
-        //   if (error) {
-        //     console.log(error);
-        //   } else {
-        //     console.log(successData);
-        //     if (this.props.role === 2 && successData.Items.length > 0) {
-        //       this.props.addRole(successData.Items[0].role.S); // can't use ! here, 0 is falsey, add to initial state to redux store
-        //       console.log('adding role');
-        //     }
-        //   }
-        // };
-        // getUser(callback, name);
+        this.props.addRole(0);
       }).catch(() => {
         console.log('caught');
       });
@@ -74,11 +51,9 @@ class Welcome extends Component {
                 </h2>
                 <div data-aos="fade-up" data-aos-delay="600">
                   {Number.parseInt(this.props.role, 10) === 2 && <button type="button" className="submit" onClick={() => this.props.history.push('/auth')}>Sign In</button>}
-                  {/* {this.props.role === 2 && this.renderAuth()} */}
                 </div>
               </div>
               <div className="col-lg-6" data-aos="zoom-out" data-aos-delay="200">
-                {/* <HomepageAnimation /> */}
                 <img src={DataCartoon} className="img-fluid" alt="" />
               </div>
             </div>
@@ -105,12 +80,6 @@ class Welcome extends Component {
                     training the models locally on each user device. As the models iterate, scientists can monitor model
                     progress and loss, before finally downloading an updated model with aggregated training updates.
                   </p>
-                  {/* <div className="text-center text-lg-start">
-                    <a href="/" className="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
-                      <span>Read More</span>
-                      <i className="bi bi-arrow-right" />
-                    </a>
-                  </div> */}
                 </div>
               </div>
 

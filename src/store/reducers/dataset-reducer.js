@@ -1,5 +1,9 @@
 import { OPENDATASETMODAL } from '../actionTypes';
 
+/*
+Triggers Dataset Modal
+*/
+
 export function openDatasetModal(pay) {
   return {
     type: OPENDATASETMODAL,

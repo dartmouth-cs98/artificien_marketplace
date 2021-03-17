@@ -6,6 +6,7 @@ import { openDatasetModal } from '../store/reducers/dataset-reducer';
 /*
 Simple component that displays card-level details for each dataset available
 */
+
 class DataLibraryCard extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +26,7 @@ class DataLibraryCard extends Component {
               className="data-card-button"
               tabIndex={0}
               onClick={() => {
-                this.props.openDatasetModal(true);
+                this.props.openDatasetModal(true); // Open the dataset's modal and project data-specific info
                 this.props.onClick();
               }}
             >Learn More

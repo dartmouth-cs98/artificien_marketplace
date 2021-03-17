@@ -3,6 +3,11 @@ import Modal from '@material-ui/core/Modal';
 import { connect } from 'react-redux';
 import { openModal } from '../store/reducers/modal-reducer';
 
+/*
+Error Modal
+- Pops up when a restricted route is reached
+*/
+
 class ErrorModal extends Component {
   constructor(props) {
     super(props);

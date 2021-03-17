@@ -1,6 +1,10 @@
 import { withStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
 
+/*
+Styles for the role switch
+*/
+
 const AntSwitch = withStyles((theme) => ({
   root: {
     width: 28,

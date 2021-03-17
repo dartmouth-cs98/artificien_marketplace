@@ -1,5 +1,9 @@
 import { OPENERRORMODAL } from '../actionTypes';
 
+/*
+Triggers Error Modal
+*/
+
 export function openModal(pay) {
   return {
     type: OPENERRORMODAL,

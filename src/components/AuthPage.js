@@ -5,6 +5,10 @@ import { connect } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import AuthStateApp from './AuthStateApp';
 
+/*
+Separate page for authentication, includes cognito form
+*/
+
 class AuthPage extends Component {
   constructor(props) {
     super(props);
@@ -13,6 +17,7 @@ class AuthPage extends Component {
     };
   }
 
+  // does not really get used, this page is relevant to signin
   renderSignOutButton = () => {
     return (
       <button
@@ -36,23 +41,6 @@ class AuthPage extends Component {
       <>
         {Number.parseInt(this.props.role, 10) === 2 && <AuthStateApp signin={false} />}
         {Number.parseInt(this.props.role, 10) !== 2 && this.renderSignOutButton() }
-
-        {/* {Number.parseInt(this.props.role, 10) !== 2 && (
-        <li className="signout-button">
-          <button
-            type="button"
-            onClick={() => {
-              Auth.signOut();
-              this.props.history.push('/');
-              window.location.reload(false);
-            }}
-            variant="outlined"
-            id="signup-signin-button"
-            color="primary"
-          > Signout
-          </button>
-        </li>
-        )} */}
       </>
     );
   }

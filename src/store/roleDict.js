@@ -1,3 +1,4 @@
+// Role dictionary object mapping route to allowed numerical roles
 const roleDict = {
   '': [0, 1, 2],
   marketplace: [0],

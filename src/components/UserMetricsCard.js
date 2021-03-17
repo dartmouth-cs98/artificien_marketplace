@@ -7,6 +7,11 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { NavLink } from 'react-router-dom';
 
+/*
+Cards that display nice little user metrics
+App Dev and Data Scientist specific
+*/
+
 class UserMetricsCard extends Component {
   constructor(props) {
     super(props);
