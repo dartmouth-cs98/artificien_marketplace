@@ -44,7 +44,7 @@ function App(props) {
           <Route exact path="/profile" component={withAuthorization(Profile, [Roles.DEVELOPER, Roles.CLIENT])} />
           <Route exact path="/data_scientist_documentation" component={withAuthorization(DataScientistDocumentation, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
           <Route exact path="/app_developer_documentation" component={withAuthorization(AppDeveloperDocumentation, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
-          <Route exact path="/tutorial" component={withAuthorization(Tutorial, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
+          <Route exact path="/tutorial" component={withAuthorization(Tutorial, [Roles.DEVELOPER, Roles.CLIENT])} />
           <Route exact path="/about_us" component={withAuthorization(AboutUs, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
           <Route exact path="/careers" component={withAuthorization(Careers, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />
           <Route exact path="/press" component={withAuthorization(Press, [Roles.DEVELOPER, Roles.CLIENT, Roles.GUEST])} />

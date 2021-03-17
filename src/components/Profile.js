@@ -100,12 +100,13 @@ class Profile extends Component {
     // console.log(this.state.userData.datasets_purchased.L.length);
     if (!this.state.clientMetricsDict.userModels) return null;
 
-    for (let i = 0; i < Object.keys(this.state.clientMetricsDict).length; i += 1) {
-      if (String(Object.keys(this.state.clientMetricsDict)[i]) === 'userModels') {
-        metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models Created" body={this.state.clientMetricsDict.userModels.Items.length} username={this.state.userData.username.S} />);
-      }
+    let activeModels = 0;
+    for (let i = 0; i < this.state.clientMetricsDict.userModels.Items.length; i += 1) {
+      if (Number.parseInt(this.state.clientMetricsDict.userModels.Items[i].percent_complete.N, 10) === 100) activeModels += 1;
     }
+    metricCards.push(<UserMetricsCard id="user-metric" title="Number of Models Created" body={this.state.clientMetricsDict.userModels.Items.length} username={this.state.userData.username.S} />);
     metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Purchased" body={this.state.userData.datasets_purchased.L.length} username={this.state.userData.username.S} />);
+    metricCards.push(<UserMetricsCard id="user-metric" title="Number of Active Models" body={activeModels} username={this.state.userData.username.S} />);
     return metricCards;
   }
 
@@ -116,11 +117,14 @@ class Profile extends Component {
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Submitted" body={0} username={this.state.userData.username.S} />);
     } else {
       let integrated = 0;
+      let totalPurchases = 0;
       for (let i = 0; i < this.state.devMetricsDict.userDatasets.Items.length; i += 1) {
+        totalPurchases += Number.parseInt(this.state.devMetricsDict.userDatasets.Items[i].numPurchases.N, 10);
         if (this.state.devMetricsDict.userDatasets.Items[i].properlySetUp && this.state.devMetricsDict.userDatasets.Items[i].properlySetUp.BOOL) integrated += 1;
       }
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Submitted" body={this.state.devMetricsDict.userDatasets.Items.length} username={this.state.userData.username.S} />);
       metricCards.push(<UserMetricsCard id="user-metric" title="Number of Datasets Integrated" body={integrated} username={this.state.userData.username.S} />);
+      metricCards.push(<UserMetricsCard id="user-metric" title="Your Apps' Total Purchases" body={totalPurchases} username={this.state.userData.username.S} />);
     }
     return metricCards;
   }

@@ -206,7 +206,7 @@ class ProfileAccordion extends Component {
           >
             {Number.parseInt(this.props.role, 10) === 0
               ? <Typography className={classes.heading}>Datasets Purchased</Typography>
-              : <Typography className={classes.heading}>Apps Managing</Typography>}
+              : <Typography className={classes.heading}>Registered Apps</Typography>}
           </AccordionSummary>
           {Number.parseInt(this.props.role, 10) === 0
             ? (
