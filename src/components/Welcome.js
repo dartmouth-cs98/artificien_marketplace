@@ -22,7 +22,7 @@ class Welcome extends Component {
   checkAuth() {
     Auth.currentSession()
       .then((data) => {
-        this.props.addRole(1);
+        this.props.addRole(0);
       }).catch(() => {
         console.log('caught');
       });

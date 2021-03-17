@@ -27,7 +27,7 @@ class Navbar extends Component {
     Auth.currentSession()
       .then((data) => {
         console.log('adding role');
-        this.props.addRole(1);
+        this.props.addRole(0);
         this.props.openModal(false);
       }).catch(() => {
         console.log('caught navbar');
