@@ -22,7 +22,7 @@ class ModelDetailsCard extends Component {
             <p id="model-p-progress">{this.props.date_submitted}</p>
             <p id="model-p-progress">{this.props.dataset}</p>
             <p id="model-p-progress">{this.props.percent_complete}%</p>
-            <p id="model-p-progress">{String(this.props.loss).slice(0, 8)}</p>
+            {this.props.loss === -1 ? <p id="model-p-progress">N/A</p> : <p id="model-p-progress">{String(this.props.loss).slice(0, 8)}</p>}
           </div>
           <button type="button" className="model-card-success-button" tabIndex={0} onClick={() => this.props.onClick(this.props.model_id)}>View Model &rarr;</button>
         </div>
