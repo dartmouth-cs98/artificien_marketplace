@@ -11,6 +11,7 @@ import enableBackgroundTasksImage from '../img/documentation/EnableBackgroundTas
 import configureArtificienImage from '../img/documentation/ConfigureArtificienPlist.png';
 import configureInfoImage from '../img/documentation/ConfigureInfoPlist.png';
 import registerTaskIDImage from '../img/documentation/RegisterATaskID.png';
+import PlistToTarget from '../img/documentation/PlistToTarget.png';
 
 /*
 Documentation page specific to the data scientist user persona
@@ -49,11 +50,9 @@ end`;
 BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.artificien.background", using: DispatchQueue.global()) { task in
 
     let artificien = Artificien(chargeDetection: true, wifiDetection: true)
-    self.executeSyftJob(backgroundTask: task)
 
-    let trainingDictionary = prepareTrainingDictionary() // Write this yourself
-    let validationDictionary = prepareValidationDictionary() // Write this yourself
-    artificien.train(trainingData: trainingDictionary, validationData: validationDictionary, backgroundTask: task)
+    let appData = prepareAppDataAsDictionary() // Write this yourself
+    artificien.train(data: appData, backgroundTask: task)
 
 }`;
 
@@ -81,10 +80,10 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     // Override point for customization after application launch.
     BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.artificien.background", using: DispatchQueue.global()) { task in
                     
-        let artificien = Artificien()
-        self.executeSyftJob(backgroundTask: task)
-                    
-        artificien.train(trainingData: trainDict, validationData: valDict, backgroundTask: task)
+        let artificien = Artificien(chargeDetection: true, wifiDetection: true)
+
+        let appData = prepareAppDataAsDictionary() // Write this yourself
+        artificien.train(data: appData, backgroundTask: task)
 
     }
 
@@ -102,6 +101,16 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     return true
 }`;
 
+    const dataDictionary =
+`
+let appData: [String: Float] = [
+    "Age": 15,
+    "Body Mass Index": 20,
+    "Sex": 1,
+    "Weekly Step Count": 5000
+]
+`;
+
     return (
       <div>
         <h1> App Developer Documentation </h1>
@@ -118,7 +127,8 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
             <strong><a href="#usage">Usage</a></strong>
             <a href="#importArtificien">&nbsp;&nbsp;&nbsp;&nbsp;Import Artificien</a>
             <a href="#scheduleTraining">&nbsp;&nbsp;&nbsp;&nbsp;Schedule training</a>
-            <a href="#dataPreparation">&nbsp;&nbsp;&nbsp;&nbsp;Write data prep functions</a>
+            <a href="#dataPreparation">&nbsp;&nbsp;&nbsp;&nbsp;Write data prep function</a>
+            <a href="#testRun">&nbsp;&nbsp;&nbsp;&nbsp;Do a test run</a>
           </div>
           <div className="documentation">
 
@@ -136,7 +146,8 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
             </p>
             <p>
               Following the below instructions closely is absolutely essential in order to make your app's data available
-              on the Artificien platform. Please reach out if you have any questions, comments, or concerns about this material.
+              on the Artificien platform. Your app will not be available on the marketplace until you've implemented and run
+              Artificien's code, allowing us to verify proper integration.
             </p>
             <p>
               <strong>Note:</strong> Artificien is distributed through the CocoaPods framework and is thus only compatible with Swift
@@ -293,22 +304,38 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
             <h3 id="configureArtificien">Configure Artificien.plist</h3>
             <p>
               The final step before using Artificien in your codebase is to store the keys needed to uniquely identify
-              your app. This is accomplished by creating a new <code>.plist</code> file.
+              your app and account. This is accomplished by creating a new <code>.plist</code> file.
             </p>
             <p>
               Create a new file called <code>Artificien.plist</code>, in the same directory that contains your <code>Info.plist</code> file.
+              In the new file creation process, be sure to add the file to your app's target.
+            </p>
+            <img src={PlistToTarget} alt="Xcode screenshot" />
+            <p>
               This is where your unique key will be stored, and for this reason we recommend keeping this file out of source
               control (typically by adding it to your <code>.gitignore</code>).
             </p>
             <p>
-              After creating and removing the file from source control, locate and open the file as a property list in Xcode
-              and add a single key called "dataset_id" of type String. For the value, input the name of the dataset you are
-              currently setting up. You can find a list of all datasets you've registered on your Profile page.
+              After creating and removing the file from source control, you will locate and open the file as a property list in Xcode
+              and add 2 keys of type String.
+            </p>
+            <p>
+              1. The first key is called "api_key" and is your unique developer API key. This was
+              auto-generated for you when you created your Artificien account. To find it, navigate to
+              your <NavLink to="/profile">Profile</NavLink> page, locate the section "Developer API Key," and hit "Retrieve your
+              API Key". This will temporarily fetch and display your key on the profile page: copy it from here and paste it
+              in <code>Artificien.plist</code>.
+            </p>
+            <p>
+              2. The second property is called "dataset_id". For the value, input the name of the dataset you are
+              currently setting up. You can find a list of all datasets you've registered under "Registered Apps" on your <NavLink to="/profile">Profile</NavLink> page.
+              Be sure to input the app name exactly as you registered it, as this is a unique identifier for your dataset.
             </p>
             <img src={configureArtificienImage} alt="Xcode screenshot" />
             <p>
-              The Artificien library will look for this file and use the key within it to authenticate and filter its
-              communication with the Artificien orchestration layer when downloading models and sending training updates.
+              The Artificien library will look for the <code>Artificien.plist</code> file and use the key within it to
+              authenticate and filter its communication with the Artificien orchestration layer when downloading models
+              and sending training updates.
             </p>
 
             <h2 id="usage">Usage</h2>
@@ -383,23 +410,55 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
               codeBlock
             />
 
-            <h3 id="dataPreparation">Write data preparation functions</h3>
+            <h3 id="dataPreparation">Write data preparation function</h3>
             <p>
-              In the step above, you'll notice the functions <code>prepareTrainingDictionary()</code> and <code>prepareValidationDictionary()</code>,
-              the outputs of which are passed to the Artificien <code>train</code> function. These functions are not a part of
-              the Artificien library, and will throw an error in Xcode — they're placeholders for functions you will write that
-              prepare your app's data to pass to the training function.
+              In the step above, you'll notice the function <code>prepareAppDataAsDictionary()</code>,
+              the output of which is passed to the Artificien <code>train</code> function. This function is not a part of
+              the Artificien library, and will throw an error in Xcode — it's a placeholder for a function you will write that
+              prepares your app's data to pass to the training function.
             </p>
             <p>
-              When you registered your dataset with Artificien, you described your app's attributes: these are what should
-              be passed to Artificien's <code>train</code> function in the form of a Swift dictionary. Below is the expected
-              dictionary format for your application's data. Your <code>prepareTrainingDictionary()</code> and <code>prepareValidationDictionary()</code>
-              functions should collect your on-device data and return it as a dictionary, with these exact keys and values
-              as Booleans, Floats, or Strings.
+              When you registered your app with Artificien, you described your app's attributes: these are what should
+              be passed to Artificien's <code>train</code> function in the form of a Swift dictionary. Artificien is configured
+              to accept a dictionary of type <code>[String: Float]</code>. Each entry in this dictionary should be one of the
+              attributes you've described, with the attribute's name as the key and the attribute's value as the value.
+              Your <code>prepareAppDataAsDictionary()</code> should thus collect your on-device data and package it in this format.
+              The prepared data dictionary for Artificien-Health, our sample app, might look as follows:
+            </p>
+            <CopyBlock
+              text={dataDictionary}
+              language="swift"
+              showLineNumbers
+              theme={dracula}
+              codeBlock
+            />
+            <p>
+              When writing your data preparation function, be sure to include all of the attributes you registered with your app,
+              and to use the same attribute names to identify them in the dictionary. You can review your app's attributes in
+              your <NavLink to="/profile">Profile</NavLink> page under "Registered Apps." Data Scientists will expect these variables
+              as inputs to their models, and the Artificien library will halt model training if any of the expected attributes are
+              missing.
+            </p>
+
+            <h3 id="testRun">Do a test run</h3>
+            <p>
+              Now that you've built Artificien into your app, you should be ready to accept models from Data Scientists. The final
+              step is to verify that you've implemented the library properly by running your fully configured app. If Artificien's
+              orchestration layer receives a successful request from your application with the expected data, your app will be
+              approved for display in the marketplace.
             </p>
             <p>
-              Be sure to expose your data preparation functions to the <code>AppDelegate.swift</code> file, either by
-              writing them directly within the file or importing them from an external file.
+              Because Artificien is configured to run as a background task, performing this test run is as simple as running your
+              application. When a background task is triggered by the system, Artificien will automatically connect to the orchestration
+              layer to search for models, at which point your app will be marked as a successful first contact. Note that Xcode
+              simulators do not support background tasks at this time, and so you must test on a physical iOS device for your app
+              to integrate.
+            </p>
+            <p>
+              You can track whether or not your app has been approved on your <NavLink to="/profile">Profile</NavLink> page under "Registered Apps."
+              Clicking "Learn More" for an app will pull up an info card with the app's details as well as whether or not it has
+              successfuly integrated. Once it has, you will likely want to deploy a production version of your app to your users,
+              and as Data Scientists purchase access to your app the Artificien model training system will be in motion.
             </p>
           </div>
         </div>
