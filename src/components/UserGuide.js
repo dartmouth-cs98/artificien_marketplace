@@ -203,7 +203,7 @@ class UserGuide extends Component {
               For the full, detailed integration instructions see the <NavLink to="/app_developer_documentation">App Developer Documentation</NavLink>.
             </p>
 
-            <h3 id="monitor-your-profile">Monitor Your Profile</h3>
+            <h3 id="monitor-your-profile">3. Monitor Your Profile</h3>
             <p>
               Once your app is deployed and integrated with Artificien, Data Scientists will be able to train models
               on your users' devices. You can at any time view the apps you've submitted and other account information
@@ -270,7 +270,7 @@ class UserGuide extends Component {
               Any models created can always be accessed by returning to the Jupyter environment.
             </p>
 
-            <h3 id="monitor-and-download-your-model">Monitor and Download Your Model</h3>
+            <h3 id="monitor-and-download-your-model">3. Monitor and Download Your Model</h3>
             <p>
               The <NavLink to="/models">Models</NavLink> page will contain information about all the models,
               past and present, you've created with Artificien.
