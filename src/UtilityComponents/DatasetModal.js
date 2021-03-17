@@ -176,6 +176,7 @@ class DatasetModal extends Component {
             {this.renderPurchased()}
             {this.props.dataset.num_devices && <p><strong>Number of users:</strong> {this.props.dataset.num_devices.N}</p>}
             {this.props.dataset.numPurchases && <p><strong>Number of purchases:</strong> {this.props.dataset.numPurchases.N}</p>}
+            {this.props.dataset.appURL && <p><a style={{ 'margin-bottom': '5px' }} href={this.props.dataset.appURL.S}><u>Visit on the App Store</u></a></p>}
             {this.props.dataset.category && <p><strong>Category:</strong> {this.props.dataset.category.S}</p>}
           </div>
           <div className="app-modal-attributes">
