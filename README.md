@@ -3,27 +3,80 @@
 This repository contains the front-end code for the web marketplace platform of Artificien: a place where clients can create, submit, and retrieve models trained on the platform's distributed datasets.
 
 <i>See below for sample screenshots</i>
-Data Library Page:
-![ss2](https://i.ibb.co/B4CB5fT/datalib.png)
-- Customers can explore and learn about datasets available for training. These datasets are sorted by category, and contain information about predictable attributes, number of devices, and the app from which data comes 
+<h3>Data Scientist Pages</h3>
 
-Models Page:
-![](https://i.imgur.com/1mCO2TZ.png)
-- Contains cards for each active and inactive model belonging to current user. Contains information about the dataset the model is training on, percent complete
+Marketplace:
+![ss2](https://i.ibb.co/zsbzy3F/marketplace.png)
+- Customers can explore and learn about datasets that available for training. These datasets can filtered by category, are searchable, and contain a set of information on the dataset. This information includes the attribute names, types, and a brief description of them, the app URL (so you can verify that this app is legit), and the category they are in.
 
-Data Upload Page:
-![ss1](https://i.ibb.co/hYp34HX/dataupload.png)
-- Input form for uploading a dataset for developers. leads to creation of a "fake" dataset on which developers can then optimize models in jupyterhub. 
+Models:
+![](https://i.ibb.co/3YHZBfF/models.jpg)
+- Contains cards for each active and inactive model belonging to current user. Contains information about the dataset the model is training on - the date your model was submitted, percent completed, and the loss of the model.
+
+Data Sci Docs:
+![](https://i.ibb.co/1nBfhjG/data-sci-docs.png)
+- This documentation page guides the data scientist on how to build a model with Artificien in 5 steps (both related to setup and usage) - it contains code blocks to copy paste, giving the user information on how we think about training/averaging plans, and how to send a model.
+
+Data Scientist Profile:
+![](https://i.ibb.co/gr7Bch2/data-sci-profile.png)
+- The Data scientist profile contains some user-specific metric cards, as well as a three profile-accordion groups of information. Personal account info contains your username and email. Payment information contains payment info. "Datasets Purchased" contains a small, detailed card with information about each of the datasets you have purchased. The user-specific information is the number of models you have created using Artificien, the number of datasets you have purchased, and the number of active models running at the time.
+
+<h3>App Developer Pages</h3>
+Register App:
+![ss1](https://i.ibb.co/tXF15gH/register-app.png)
+- Input form for onboarding a dataset for developers. On this page, app developers will provide us with information about the data they have to offer in their app. This information will include app name, a link to the app store page, the category of the app, as well as attribute-specific information (attr names, types, and descriptions). This dataset will then be put into our db, before being screened to make sure all information is in order and then broadcasted to the marketplace. 
+
+App Dev Docs:
+![](https://i.ibb.co/6D9hsPW/app-dev-docs.png)
+- This documentation provides app developers with a detailed walkthrough of the onboarding process for their apps:
+
+`Integrating Artificien's on-device training with your existing iOS app is extremely simple. At a high level, it consists of 2 steps: setting up the Artificien CocoaPod and passing your data to Artificien's training function through a background task. We'll show you how to do both below, in under 10 minutes.`
+
+- This documentation is only available to app developers
+
+App Dev Profile:
+![](https://i.ibb.co/SsTty2H/app-dev-prof.png)
+- The app dev profile contains some user-specific metric cards, as well as four profile-accordion groups of information. Personal account info contains your username and email. Payment information contains payment info. "Registered Apps" contains a small, detailed card with information about each of the apps/datasets you have onboarded, and at the bottom developers will have a button to see their user-specific API key (necessary for syncing your app with Artificien's services).
+
+<b>Role-Agnostic Pages</b>
+
+User Guide:
+![](https://i.ibb.co/c8QhGmX/user-guide.png)
+- The User Guide provides the user with all of the high-level information they need to understand what Artificien does and what advantage we offer over traditional machine learning paradigms. This section includes simple step-by-step processes for app developers to:
+    - `Register Your App`
+    - `Integrate Our Code`
+    - `Monitor Your Profile`
+
+
+- And for data scientists to:
+    - `Purchase A Dataset`
+    - `Create and Deploy Your Model`
+    - `Monitor and Download Your Model`
+
+
+Tutorial:
+![]()
+- The Tutorial page is not yet written
+
+Welcome:
+![](https://i.ibb.co/MCdHwtS/welcome.png)
+- This beautiful landing page has a dual usage of getting the user enticed to stay on the platform, and also contains a significant educational element about what we're doing at Artificien. It highlights the uniqueness of our product, and explains in simple terms how on-device training works and how simple it is to use the product.  
+
+### User Onboarding
+
+The following steps are how to sign up with Artificien:
+- Visit Artificien.com
+- Click on "Sign in or Create Account" on the homepage
+- Provide your username, password, email, and phone number. 
+- Verify your account
+- Explore the site and start training!
+
 
 ## Architecture
 - The marketplace is written in React, and is deployed via AWS Amplify
 - We authenticate users using Cognito
-    - Data Library is the same for all users (this is data they can purchase, which is a feature we will implement later)
-    - Models is user specific, since our enterprise user
-    - Data Upload is for App Developers to make new datasets
-    - Model Upload simply points the user to our Jupyterhub
-- All data is stored in DynamoDB, and the information displayed on the front end is based on calls to the database
-- Our Database has four tables - apps, models, datasets, and users. Dynamo is a noSQL database. Database is constructed and deployed via the AWS CDK in the artificien_infrastructure repo
+- All data is stored in DynamoDB
+- Our Database has three relevant tables - models, datasets, and users. Dynamo is a noSQL database. Database is constructed and deployed via the AWS CDK in the artificien_infrastructure repo
 
 ### Development Setup
 
