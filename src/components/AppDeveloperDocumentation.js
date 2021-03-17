@@ -102,8 +102,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 }`;
 
     const dataDictionary =
-`
-let appData: [String: Float] = [
+`let appData: [String: Float] = [
     "Age": 15,
     "Body Mass Index": 20,
     "Sex": 1,
