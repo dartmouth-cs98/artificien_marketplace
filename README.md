@@ -21,9 +21,10 @@ Data Scientist Profile:
 ![](https://i.ibb.co/gr7Bch2/data-sci-profile.png)
 - The Data scientist profile contains some user-specific metric cards, as well as a three profile-accordion groups of information. Personal account info contains your username and email. Payment information contains payment info. "Datasets Purchased" contains a small, detailed card with information about each of the datasets you have purchased. The user-specific information is the number of models you have created using Artificien, the number of datasets you have purchased, and the number of active models running at the time.
 
-<h3>App Developer Pages</h3>
-Register App:
-![ss1](https://i.ibb.co/tXF15gH/register-app.png)
+### App Developer Pages
+
+Register App: ![](https://i.ibb.co/tXF15gH/register-app.png)
+
 - Input form for onboarding a dataset for developers. On this page, app developers will provide us with information about the data they have to offer in their app. This information will include app name, a link to the app store page, the category of the app, as well as attribute-specific information (attr names, types, and descriptions). This dataset will then be put into our db, before being screened to make sure all information is in order and then broadcasted to the marketplace. 
 
 App Dev Docs:
@@ -52,11 +53,6 @@ User Guide:
     - `Purchase A Dataset`
     - `Create and Deploy Your Model`
     - `Monitor and Download Your Model`
-
-
-Tutorial:
-![]()
-- The Tutorial page is not yet written
 
 Welcome:
 ![](https://i.ibb.co/MCdHwtS/welcome.png)
@@ -114,7 +110,7 @@ Creates and runs the web app locally (localhost)
 yarn deploy
 ```
 
-Deploys the app to the surge URL specified in the `package.json` file: be sure to change this!
+Deploys the app to the surge URL specified in the `package.json` file: be sure to change this! Our architecture uses the AWS Amplify CLI for deployment, which a non-authenticated tester will not have access to.
 
 ## Authors
 
